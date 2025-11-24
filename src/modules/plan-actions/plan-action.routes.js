@@ -82,7 +82,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/plan-actions:
+ * /plan-actions:
  *   post:
  *     summary: Create a new plan action (Manager/Admin only)
  *     tags: [Plan Actions]
@@ -149,7 +149,7 @@ router.post('/', authenticate, authorize('ADMIN', 'MANAGER'), validate(createPla
 
 /**
  * @swagger
- * /api/v1/plan-actions:
+ * /plan-actions:
  *   get:
  *     summary: Get all plan actions with filtering
  *     tags: [Plan Actions]
@@ -242,7 +242,7 @@ router.get('/', authenticate, validate(listPlanActionsSchema), planActionControl
 
 /**
  * @swagger
- * /api/v1/plan-actions/my-actions:
+ * /plan-actions/my-actions:
  *   get:
  *     summary: Get plan actions assigned to me
  *     tags: [Plan Actions]
@@ -256,7 +256,7 @@ router.get('/my-actions', authenticate, planActionController.getMyPlanActions);
 
 /**
  * @swagger
- * /api/v1/plan-actions/my-stats:
+ * /plan-actions/my-stats:
  *   get:
  *     summary: Get my plan action statistics
  *     tags: [Plan Actions]
@@ -295,7 +295,7 @@ router.get('/my-stats', authenticate, planActionController.getMyStats);
 
 /**
  * @swagger
- * /api/v1/plan-actions/stats/overall:
+ * /plan-actions/stats/overall:
  *   get:
  *     summary: Get overall plan action statistics (Manager/Admin only)
  *     tags: [Plan Actions]
@@ -311,7 +311,7 @@ router.get('/stats/overall', authenticate, authorize('ADMIN', 'MANAGER'), planAc
 
 /**
  * @swagger
- * /api/v1/plan-actions/idea/{ideaId}:
+ * /plan-actions/idea/{ideaId}:
  *   get:
  *     summary: Get all plan actions for an idea
  *     tags: [Plan Actions]
@@ -332,7 +332,7 @@ router.get('/idea/:ideaId', authenticate, validate(getPlanActionsByIdeaSchema), 
 
 /**
  * @swagger
- * /api/v1/plan-actions/idea/{ideaId}/stats:
+ * /plan-actions/idea/{ideaId}/stats:
  *   get:
  *     summary: Get plan action statistics for an idea
  *     tags: [Plan Actions]
@@ -380,7 +380,7 @@ router.get('/idea/:ideaId/stats', authenticate, validate(getStatsByIdeaSchema), 
 
 /**
  * @swagger
- * /api/v1/plan-actions/{id}:
+ * /plan-actions/{id}:
  *   get:
  *     summary: Get plan action by ID
  *     tags: [Plan Actions]
@@ -403,7 +403,7 @@ router.get('/:id', authenticate, validate(getPlanActionSchema), planActionContro
 
 /**
  * @swagger
- * /api/v1/plan-actions/{id}:
+ * /plan-actions/{id}:
  *   put:
  *     summary: Update plan action
  *     tags: [Plan Actions]
@@ -447,7 +447,7 @@ router.put('/:id', authenticate, validate(updatePlanActionSchema), planActionCon
 
 /**
  * @swagger
- * /api/v1/plan-actions/{id}/progress:
+ * /plan-actions/{id}/progress:
  *   patch:
  *     summary: Update plan action progress (0-100%)
  *     tags: [Plan Actions]
@@ -483,7 +483,7 @@ router.patch('/:id/progress', authenticate, validate(updateProgressSchema), plan
 
 /**
  * @swagger
- * /api/v1/plan-actions/{id}/assign:
+ * /plan-actions/{id}/assign:
  *   patch:
  *     summary: Assign user to plan action (Manager/Admin only)
  *     tags: [Plan Actions]
@@ -520,7 +520,7 @@ router.patch('/:id/assign', authenticate, authorize('ADMIN', 'MANAGER'), validat
 
 /**
  * @swagger
- * /api/v1/plan-actions/{id}:
+ * /plan-actions/{id}:
  *   delete:
  *     summary: Delete plan action (Manager/Admin only)
  *     tags: [Plan Actions]

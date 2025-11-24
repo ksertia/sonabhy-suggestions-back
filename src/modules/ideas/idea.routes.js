@@ -150,7 +150,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/ideas:
+ * /ideas:
  *   post:
  *     summary: Create a new idea
  *     tags: [Ideas]
@@ -221,7 +221,7 @@ router.post('/', authenticate, validate(createIdeaSchema), ideaController.create
 
 /**
  * @swagger
- * /api/v1/ideas:
+ * /ideas:
  *   get:
  *     summary: Get all ideas with filtering and pagination
  *     tags: [Ideas]
@@ -321,7 +321,7 @@ router.get('/', authenticate, validate(listIdeasSchema), ideaController.getAllId
 
 /**
  * @swagger
- * /api/v1/ideas/stats:
+ * /ideas/stats:
  *   get:
  *     summary: Get idea statistics
  *     tags: [Ideas]
@@ -335,7 +335,7 @@ router.get('/stats', authenticate, ideaController.getStats);
 
 /**
  * @swagger
- * /api/v1/ideas/{id}:
+ * /ideas/{id}:
  *   get:
  *     summary: Get idea by ID
  *     tags: [Ideas]
@@ -372,7 +372,7 @@ router.get('/:id', authenticate, validate(getIdeaSchema), ideaController.getIdea
 
 /**
  * @swagger
- * /api/v1/ideas/{id}:
+ * /ideas/{id}:
  *   put:
  *     summary: Update an idea
  *     tags: [Ideas]
@@ -417,7 +417,7 @@ router.put('/:id', authenticate, validate(updateIdeaSchema), ideaController.upda
 
 /**
  * @swagger
- * /api/v1/ideas/{id}:
+ * /ideas/{id}:
  *   delete:
  *     summary: Delete an idea
  *     tags: [Ideas]
@@ -442,7 +442,7 @@ router.delete('/:id', authenticate, validate(deleteIdeaSchema), ideaController.d
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/status:
+ * /ideas/{id}/status:
  *   patch:
  *     summary: Update idea status (Manager/Admin only)
  *     tags: [Ideas]
@@ -477,7 +477,7 @@ router.patch('/:id/status', authenticate, validate(updateStatusSchema), ideaCont
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/files:
+ * /ideas/{id}/files:
  *   post:
  *     summary: Upload files to an idea (single or multiple)
  *     tags: [Ideas]
@@ -518,7 +518,7 @@ router.post(
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/comments:
+ * /ideas/{id}/comments:
  *   post:
  *     summary: Add a comment to an idea (Manager/Admin only)
  *     tags: [Ideas]
@@ -565,7 +565,7 @@ router.post('/:id/comments', authenticate, validate(addCommentSchema), ideaContr
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/comments:
+ * /ideas/{id}/comments:
  *   get:
  *     summary: Get all comments for an idea
  *     tags: [Ideas]
@@ -602,7 +602,7 @@ router.get('/:id/comments', authenticate, validate(getIdeaSchema), ideaControlle
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/plan-actions:
+ * /ideas/{id}/plan-actions:
  *   post:
  *     summary: Create a plan action from an idea (Manager/Admin only)
  *     tags: [Ideas]
@@ -665,7 +665,7 @@ router.post('/:id/plan-actions', authenticate, validate(createPlanActionSchema),
 
 /**
  * @swagger
- * /api/v1/ideas/{id}/plan-actions:
+ * /ideas/{id}/plan-actions:
  *   get:
  *     summary: Get all plan actions for an idea
  *     tags: [Ideas]

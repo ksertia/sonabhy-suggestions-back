@@ -120,7 +120,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/forms/models:
+ * /forms/models:
  *   post:
  *     summary: Create a new form model (Admin only)
  *     tags: [Forms]
@@ -154,7 +154,7 @@ router.post('/models', authenticate, authorize('ADMIN'), validate(createFormMode
 
 /**
  * @swagger
- * /api/v1/forms/models:
+ * /forms/models:
  *   get:
  *     summary: Get all form models
  *     tags: [Forms]
@@ -177,7 +177,7 @@ router.get('/models', authenticate, validate(listFormModelsSchema), formControll
 
 /**
  * @swagger
- * /api/v1/forms/models/{id}:
+ * /forms/models/{id}:
  *   get:
  *     summary: Get form model by ID
  *     tags: [Forms]
@@ -200,7 +200,7 @@ router.get('/models/:id', authenticate, validate(getFormModelSchema), formContro
 
 /**
  * @swagger
- * /api/v1/forms/models/{id}:
+ * /forms/models/{id}:
  *   put:
  *     summary: Update form model (Admin only)
  *     tags: [Forms]
@@ -236,7 +236,7 @@ router.put('/models/:id', authenticate, authorize('ADMIN'), validate(updateFormM
 
 /**
  * @swagger
- * /api/v1/forms/models/{id}:
+ * /forms/models/{id}:
  *   delete:
  *     summary: Delete form model (Admin only)
  *     tags: [Forms]
@@ -263,7 +263,7 @@ router.delete('/models/:id', authenticate, authorize('ADMIN'), validate(deleteFo
 
 /**
  * @swagger
- * /api/v1/forms/variants:
+ * /forms/variants:
  *   post:
  *     summary: Create a new form variant (Admin/Manager only)
  *     tags: [Forms]
@@ -304,7 +304,7 @@ router.post('/variants', authenticate, authorize('ADMIN', 'MANAGER'), validate(c
 
 /**
  * @swagger
- * /api/v1/forms/models/{modelId}/variants:
+ * /forms/models/{modelId}/variants:
  *   get:
  *     summary: Get all variants for a form model
  *     tags: [Forms]
@@ -325,7 +325,7 @@ router.get('/models/:modelId/variants', authenticate, validate(listFormVariantsS
 
 /**
  * @swagger
- * /api/v1/forms/variants/{id}:
+ * /forms/variants/{id}:
  *   get:
  *     summary: Get form variant by ID
  *     tags: [Forms]
@@ -348,7 +348,7 @@ router.get('/variants/:id', authenticate, validate(getFormVariantSchema), formCo
 
 /**
  * @swagger
- * /api/v1/forms/variants/{id}:
+ * /forms/variants/{id}:
  *   put:
  *     summary: Update form variant (Admin/Manager only)
  *     tags: [Forms]
@@ -386,7 +386,7 @@ router.put('/variants/:id', authenticate, authorize('ADMIN', 'MANAGER'), validat
 
 /**
  * @swagger
- * /api/v1/forms/variants/{id}:
+ * /forms/variants/{id}:
  *   delete:
  *     summary: Delete form variant (Admin only)
  *     tags: [Forms]
@@ -409,7 +409,7 @@ router.delete('/variants/:id', authenticate, authorize('ADMIN'), validate(delete
 
 /**
  * @swagger
- * /api/v1/forms/models/{modelId}/variants/{variantId}/set-default:
+ * /forms/models/{modelId}/variants/{variantId}/set-default:
  *   patch:
  *     summary: Set default variant for a model (Admin/Manager only)
  *     tags: [Forms]
@@ -442,7 +442,7 @@ router.patch('/models/:modelId/variants/:variantId/set-default', authenticate, a
 
 /**
  * @swagger
- * /api/v1/forms/fields:
+ * /forms/fields:
  *   post:
  *     summary: Create a new form field (Admin/Manager only)
  *     tags: [Forms]
@@ -499,7 +499,7 @@ router.post('/fields', authenticate, authorize('ADMIN', 'MANAGER'), validate(cre
 
 /**
  * @swagger
- * /api/v1/forms/variants/{variantId}/fields:
+ * /forms/variants/{variantId}/fields:
  *   get:
  *     summary: Get all fields for a form variant
  *     tags: [Forms]
@@ -520,7 +520,7 @@ router.get('/variants/:variantId/fields', authenticate, validate(listFormFieldsS
 
 /**
  * @swagger
- * /api/v1/forms/fields/{id}:
+ * /forms/fields/{id}:
  *   get:
  *     summary: Get form field by ID
  *     tags: [Forms]
@@ -543,7 +543,7 @@ router.get('/fields/:id', authenticate, validate(getFormFieldSchema), formContro
 
 /**
  * @swagger
- * /api/v1/forms/fields/{id}:
+ * /forms/fields/{id}:
  *   put:
  *     summary: Update form field (Admin/Manager only)
  *     tags: [Forms]
@@ -588,7 +588,7 @@ router.put('/fields/:id', authenticate, authorize('ADMIN', 'MANAGER'), validate(
 
 /**
  * @swagger
- * /api/v1/forms/fields/{id}:
+ * /forms/fields/{id}:
  *   delete:
  *     summary: Delete form field (Admin/Manager only)
  *     tags: [Forms]
@@ -611,7 +611,7 @@ router.delete('/fields/:id', authenticate, authorize('ADMIN', 'MANAGER'), valida
 
 /**
  * @swagger
- * /api/v1/forms/variants/{variantId}/fields/reorder:
+ * /forms/variants/{variantId}/fields/reorder:
  *   post:
  *     summary: Reorder form fields (drag & drop support) (Admin/Manager only)
  *     tags: [Forms]
@@ -661,7 +661,7 @@ router.post('/variants/:variantId/fields/reorder', authenticate, authorize('ADMI
 
 /**
  * @swagger
- * /api/v1/forms/variants/{variantId}/fields/bulk:
+ * /forms/variants/{variantId}/fields/bulk:
  *   post:
  *     summary: Bulk create form fields (Admin/Manager only)
  *     tags: [Forms]
@@ -717,7 +717,7 @@ router.post('/variants/:variantId/fields/bulk', authenticate, authorize('ADMIN',
 
 /**
  * @swagger
- * /api/v1/forms/structure/{variantId}:
+ * /forms/structure/{variantId}:
  *   get:
  *     summary: Get complete form structure by variant ID
  *     tags: [Forms]
@@ -763,7 +763,7 @@ router.get('/structure/:variantId', validate(getFormStructureSchema), formContro
 
 /**
  * @swagger
- * /api/v1/forms/structure/default/{modelId}:
+ * /forms/structure/default/{modelId}:
  *   get:
  *     summary: Get default form structure by model ID
  *     tags: [Forms]
@@ -784,7 +784,7 @@ router.get('/structure/default/:modelId', validate(getDefaultFormStructureSchema
 
 /**
  * @swagger
- * /api/v1/forms/validate/{variantId}:
+ * /forms/validate/{variantId}:
  *   post:
  *     summary: Validate user submission against form structure
  *     tags: [Forms]

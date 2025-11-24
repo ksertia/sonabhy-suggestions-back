@@ -70,7 +70,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/dashboard/overview:
+ * /dashboard/overview:
  *   get:
  *     summary: Get comprehensive overview statistics
  *     tags: [Dashboard]
@@ -124,7 +124,7 @@ router.get('/overview', authenticate, validate(getOverviewStatsSchema), dashboar
 
 /**
  * @swagger
- * /api/v1/dashboard/monthly-trends:
+ * /dashboard/monthly-trends:
  *   get:
  *     summary: Get monthly trends for ideas
  *     tags: [Dashboard]
@@ -183,7 +183,7 @@ router.get('/monthly-trends', authenticate, validate(getMonthlyTrendsSchema), da
 
 /**
  * @swagger
- * /api/v1/dashboard/top-categories:
+ * /dashboard/top-categories:
  *   get:
  *     summary: Get top categories by idea count
  *     tags: [Dashboard]
@@ -245,7 +245,7 @@ router.get('/top-categories', authenticate, validate(getTopCategoriesSchema), da
 
 /**
  * @swagger
- * /api/v1/dashboard/status-distribution:
+ * /dashboard/status-distribution:
  *   get:
  *     summary: Get status distribution with percentages
  *     tags: [Dashboard]
@@ -307,7 +307,7 @@ router.get('/status-distribution', authenticate, validate(getStatusDistributionS
 
 /**
  * @swagger
- * /api/v1/dashboard/plan-actions-progress:
+ * /dashboard/plan-actions-progress:
  *   get:
  *     summary: Get plan actions progress summary
  *     tags: [Dashboard]
@@ -361,7 +361,7 @@ router.get('/plan-actions-progress', authenticate, validate(getPlanActionsProgre
 
 /**
  * @swagger
- * /api/v1/dashboard/ideas-transformed:
+ * /dashboard/ideas-transformed:
  *   get:
  *     summary: Get percentage of ideas transformed into actions
  *     tags: [Dashboard]
@@ -419,7 +419,7 @@ router.get('/ideas-transformed', authenticate, validate(getIdeasTransformedSchem
 
 /**
  * @swagger
- * /api/v1/dashboard/recent-ideas:
+ * /dashboard/recent-ideas:
  *   get:
  *     summary: Get recent ideas
  *     tags: [Dashboard]
@@ -454,7 +454,7 @@ router.get('/recent-ideas', authenticate, validate(getRecentIdeasSchema), dashbo
 
 /**
  * @swagger
- * /api/v1/dashboard/user:
+ * /dashboard/user:
  *   get:
  *     summary: Get user-specific dashboard
  *     tags: [Dashboard]
@@ -491,7 +491,7 @@ router.get('/user', authenticate, dashboardController.getUserDashboard);
 
 /**
  * @swagger
- * /api/v1/dashboard/admin:
+ * /dashboard/admin:
  *   get:
  *     summary: Get admin dashboard with system-wide statistics (Manager/Admin only)
  *     tags: [Dashboard]

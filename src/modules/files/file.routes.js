@@ -203,7 +203,7 @@ router.get('/:id/download', validate(downloadFileSchema), fileController.downloa
 
 /**
  * @swagger
- * /api/v1/files/upload-multiple:
+ * /files/upload-multiple:
  *   post:
  *     summary: Upload multiple files
  *     tags: [Files]
@@ -229,7 +229,7 @@ router.post('/upload-multiple', upload.array('files', 10), fileController.upload
 
 /**
  * @swagger
- * /api/v1/files/my-files:
+ * /files/my-files:
  *   get:
  *     summary: Get my uploaded files
  *     tags: [Files]
@@ -243,7 +243,7 @@ router.get('/my-files', fileController.getMyFiles);
 
 /**
  * @swagger
- * /api/v1/files/stats:
+ * /files/stats:
  *   get:
  *     summary: Get file statistics
  *     tags: [Files]
@@ -257,7 +257,7 @@ router.get('/stats', fileController.getStats);
 
 /**
  * @swagger
- * /api/v1/files/idea/{ideaId}:
+ * /files/idea/{ideaId}:
  *   get:
  *     summary: Get files by idea ID
  *     tags: [Files]

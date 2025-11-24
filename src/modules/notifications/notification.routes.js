@@ -53,7 +53,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/notifications:
+ * /notifications:
  *   get:
  *     summary: Get user notifications
  *     tags: [Notifications]
@@ -126,7 +126,7 @@ router.get('/', authenticate, validate(getNotificationsSchema), notificationCont
 
 /**
  * @swagger
- * /api/v1/notifications/unread-count:
+ * /notifications/unread-count:
  *   get:
  *     summary: Get unread notifications count
  *     tags: [Notifications]
@@ -155,7 +155,7 @@ router.get('/unread-count', authenticate, notificationController.getUnreadCount)
 
 /**
  * @swagger
- * /api/v1/notifications/mark-all-read:
+ * /notifications/mark-all-read:
  *   patch:
  *     summary: Mark all notifications as read
  *     tags: [Notifications]
@@ -169,7 +169,7 @@ router.patch('/mark-all-read', authenticate, notificationController.markAllAsRea
 
 /**
  * @swagger
- * /api/v1/notifications/delete-all:
+ * /notifications/delete-all:
  *   delete:
  *     summary: Delete all notifications
  *     tags: [Notifications]
@@ -183,7 +183,7 @@ router.delete('/delete-all', authenticate, notificationController.deleteAllNotif
 
 /**
  * @swagger
- * /api/v1/notifications/test:
+ * /notifications/test:
  *   post:
  *     summary: Send test notification (for development/testing)
  *     tags: [Notifications]
@@ -216,7 +216,7 @@ router.post('/test', authenticate, validate(sendTestNotificationSchema), notific
 
 /**
  * @swagger
- * /api/v1/notifications/{id}:
+ * /notifications/{id}:
  *   get:
  *     summary: Get notification by ID
  *     tags: [Notifications]
@@ -253,7 +253,7 @@ router.get('/:id', authenticate, validate(getNotificationSchema), notificationCo
 
 /**
  * @swagger
- * /api/v1/notifications/{id}/read:
+ * /notifications/{id}/read:
  *   patch:
  *     summary: Mark notification as read
  *     tags: [Notifications]
@@ -276,7 +276,7 @@ router.patch('/:id/read', authenticate, validate(markAsReadSchema), notification
 
 /**
  * @swagger
- * /api/v1/notifications/{id}:
+ * /notifications/{id}:
  *   delete:
  *     summary: Delete notification
  *     tags: [Notifications]

@@ -77,7 +77,7 @@ const {
 
 /**
  * @swagger
- * /api/v1/classification/categories:
+ * /classification/categories:
  *   post:
  *     summary: Create a new form model (Admin only)
  *     tags: [Classification]
@@ -108,7 +108,7 @@ router.post('/categories/', authenticate, authorize('ADMIN'), validate(createCat
 
 /**
  * @swagger
- * /api/v1/classification/categories:
+ * /classification/categories:
  *   get:
  *     summary: Get all form models
  *     tags: [Classification]
@@ -131,7 +131,7 @@ router.get('/categories/', authenticate, validate(listCategoriesSchema), Classif
 
 /**
  * @swagger
- * /api/v1/classification/categories/{id}:
+ * /classification/categories/{id}:
  *   get:
  *     summary: Get form model by ID
  *     tags: [Classification]
@@ -154,7 +154,7 @@ router.get('/categories/:id', authenticate, validate(getCategorySchema), Classif
 
 /**
  * @swagger
- * /api/v1/classification/categories/{id}:
+ * /classification/categories/{id}:
  *   put:
  *     summary: Update form model (Admin only)
  *     tags: [Classification]
@@ -190,7 +190,7 @@ router.put('/categories/:id', authenticate, authorize('ADMIN'), validate(updateC
 
 /**
  * @swagger
- * /api/v1/classification/categories/{id}:
+ * /classification/categories/{id}:
  *   delete:
  *     summary: Delete form model (Admin only)
  *     tags: [Classification]
