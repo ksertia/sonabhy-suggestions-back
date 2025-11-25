@@ -7,7 +7,7 @@
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
-    "prestart": "prisma generate",
+    "postinstall": "prisma generate && prisma migrate deploy && prisma db seed",
     "start": "prisma migrate deploy && node src/index.js ",
     "dev": "nodemon src/index.js",
     "test": "jest",
