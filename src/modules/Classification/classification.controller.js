@@ -9,7 +9,7 @@ class ClassificationController {
   async createCategory(req, res, next) {
     try {
       const category = await ClassificationService.createCategory(req.body, req.user);
-      successResponse(res, { category }, 'Form model created successfully', 201);
+      successResponse(res, { category }, 'Category created successfully', 201);
     } catch (error) {
       next(error);
     }
@@ -20,8 +20,8 @@ class ClassificationController {
       const filters = {
         search: req.query.search,
       };
-      const categories = await ClassificationService.getAllCategories(filters, req.user);
-      successResponse(res, { categories }, 'Form models retrieved successfully');
+      const categories = await ClassificationService.getAllCategories(filters);
+      successResponse(res, { categories }, 'Categories retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -30,7 +30,7 @@ class ClassificationController {
   async getCategoryById(req, res, next) {
     try {
       const category = await ClassificationService.getCategoryById(req.params.id, req.user);
-      successResponse(res, { category }, 'Form model retrieved successfully');
+      successResponse(res, { category }, 'Category retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -39,7 +39,7 @@ class ClassificationController {
   async updateCategory(req, res, next) {
     try {
       const category = await ClassificationService.updateCategory(req.params.id, req.body, req.user);
-      successResponse(res, { category }, 'Form model updated successfully');
+      successResponse(res, { category }, 'Category updated successfully');
     } catch (error) {
       next(error);
     }
@@ -48,20 +48,20 @@ class ClassificationController {
   async deleteCategory(req, res, next) {
     try {
       const result = await ClassificationService.deleteCategory(req.params.id, req.user);
-      successResponse(res, result, 'Form model deleted successfully');
+      successResponse(res, result, 'Category deleted successfully');
     } catch (error) {
       next(error);
     }
   }
 
   // ============================================
-  // FORM VARIANT CONTROLLERS
+  // Statuses CONTROLLERS
   // ============================================
 
   async createStatus(req, res, next) {
     try {
       const status = await ClassificationService.createStatus(req.body, req.user);
-      successResponse(res, { status }, 'Form model created successfully', 201);
+      successResponse(res, { status }, 'Status created successfully', 201);
     } catch (error) {
       next(error);
     }
@@ -72,8 +72,8 @@ class ClassificationController {
       const filters = {
         search: req.query.search,
       };
-      const statuses = await ClassificationService.getAllStatuses(filters, req.user);
-      successResponse(res, { statuses }, 'Form models retrieved successfully');
+      const statuses = await ClassificationService.getAllStatuses(filters);
+      successResponse(res, { statuses }, 'Statuses retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -82,7 +82,7 @@ class ClassificationController {
   async getStatusById(req, res, next) {
     try {
       const status = await ClassificationService.getStatusById(req.params.id, req.user);
-      successResponse(res, { status }, 'Form model retrieved successfully');
+      successResponse(res, { status }, 'Status retrieved successfully');
     } catch (error) {
       next(error);
     }
@@ -91,7 +91,7 @@ class ClassificationController {
   async updateStatus(req, res, next) {
     try {
       const status = await ClassificationService.updateStatus(req.params.id, req.body, req.user);
-      successResponse(res, { status }, 'Form model updated successfully');
+      successResponse(res, { status }, 'Status updated successfully');
     } catch (error) {
       next(error);
     }
@@ -100,7 +100,7 @@ class ClassificationController {
   async deleteStatus(req, res, next) {
     try {
       const result = await ClassificationService.deleteStatus(req.params.id, req.user);
-      successResponse(res, result, 'Form model deleted successfully');
+      successResponse(res, result, 'Status deleted successfully');
     } catch (error) {
       next(error);
     }

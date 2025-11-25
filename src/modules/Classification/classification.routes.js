@@ -79,7 +79,7 @@ const {
  * @swagger
  * /classification/categories:
  *   post:
- *     summary: Create a new form model (Admin only)
+ *     summary: Create a new Category (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -100,7 +100,7 @@ const {
  *                 type: string
  *     responses:
  *       201:
- *         description: Form model created successfully
+ *         description: Category created successfully
  *       403:
  *         description: Forbidden - Admin only
  */
@@ -110,7 +110,7 @@ router.post('/categories/', authenticate, authorize('ADMIN'), validate(createCat
  * @swagger
  * /classification/categories:
  *   get:
- *     summary: Get all form models
+ *     summary: Get all Categories
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -125,7 +125,7 @@ router.post('/categories/', authenticate, authorize('ADMIN'), validate(createCat
  *           type: string
  *     responses:
  *       200:
- *         description: Form models retrieved successfully
+ *         description: Categories retrieved successfully
  */
 router.get('/categories/', authenticate, validate(listCategoriesSchema), ClassificationController.getAllCategories);
 
@@ -133,7 +133,7 @@ router.get('/categories/', authenticate, validate(listCategoriesSchema), Classif
  * @swagger
  * /classification/categories/{id}:
  *   get:
- *     summary: Get form model by ID
+ *     summary: Get Category by ID
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -146,9 +146,9 @@ router.get('/categories/', authenticate, validate(listCategoriesSchema), Classif
  *           format: uuid
  *     responses:
  *       200:
- *         description: Form model retrieved successfully
+ *         description: Category retrieved successfully
  *       404:
- *         description: Form model not found
+ *         description: Category not found
  */
 router.get('/categories/:id', authenticate, validate(getCategorySchema), ClassificationController.getCategoryById);
 
@@ -156,7 +156,7 @@ router.get('/categories/:id', authenticate, validate(getCategorySchema), Classif
  * @swagger
  * /classification/categories/{id}:
  *   put:
- *     summary: Update form model (Admin only)
+ *     summary: Update Category (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -182,7 +182,7 @@ router.get('/categories/:id', authenticate, validate(getCategorySchema), Classif
  *                 type: boolean
  *     responses:
  *       200:
- *         description: Form model updated successfully
+ *         description: Category updated successfully
  *       403:
  *         description: Forbidden - Admin only
  */
@@ -192,7 +192,7 @@ router.put('/categories/:id', authenticate, authorize('ADMIN'), validate(updateC
  * @swagger
  * /classification/categories/{id}:
  *   delete:
- *     summary: Delete form model (Admin only)
+ *     summary: Delete Category (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -205,7 +205,7 @@ router.put('/categories/:id', authenticate, authorize('ADMIN'), validate(updateC
  *           format: uuid
  *     responses:
  *       200:
- *         description: Form model deleted successfully
+ *         description: Category deleted successfully
  *       403:
  *         description: Forbidden - Admin only
  */
@@ -220,7 +220,7 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
  * @swagger
  * /classification/statuses:
  *   post:
- *     summary: Create a new form model (Admin only)
+ *     summary: Create a new Status (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -241,7 +241,7 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
  *                 type: string
  *     responses:
  *       201:
- *         description: Form model created successfully
+ *         description: Status created successfully
  *       403:
  *         description: Forbidden - Admin only
  */
@@ -251,7 +251,7 @@ router.post('/statuses', authenticate, authorize('ADMIN'), validate(createStatus
  * @swagger
  * /classification/statuses:
  *   get:
- *     summary: Get all form models
+ *     summary: Get all Statuses
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -266,7 +266,7 @@ router.post('/statuses', authenticate, authorize('ADMIN'), validate(createStatus
  *           type: string
  *     responses:
  *       200:
- *         description: Form models retrieved successfully
+ *         description: Statuses retrieved successfully
  */
 router.get('/statuses', authenticate, validate(listStatusesSchema), ClassificationController.getAllStatuses);
 
@@ -274,7 +274,7 @@ router.get('/statuses', authenticate, validate(listStatusesSchema), Classificati
  * @swagger
  * /classification/statuses/{id}:
  *   get:
- *     summary: Get form model by ID
+ *     summary: Get Status by ID
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -287,9 +287,9 @@ router.get('/statuses', authenticate, validate(listStatusesSchema), Classificati
  *           format: uuid
  *     responses:
  *       200:
- *         description: Form model retrieved successfully
+ *         description: Status retrieved successfully
  *       404:
- *         description: Form model not found
+ *         description: Status not found
  */
 router.get('/statuses/:id', authenticate, validate(getStatusSchema), ClassificationController.getStatusById);
 
@@ -297,7 +297,7 @@ router.get('/statuses/:id', authenticate, validate(getStatusSchema), Classificat
  * @swagger
  * /classification/statuses/{id}:
  *   put:
- *     summary: Update form model (Admin only)
+ *     summary: Update status (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -323,7 +323,7 @@ router.get('/statuses/:id', authenticate, validate(getStatusSchema), Classificat
  *                 type: boolean
  *     responses:
  *       200:
- *         description: Form model updated successfully
+ *         description: Status updated successfully
  *       403:
  *         description: Forbidden - Admin only
  */
@@ -333,7 +333,7 @@ router.put('/statuses/:id', authenticate, authorize('ADMIN'), validate(updateSta
  * @swagger
  * /classification/statuses/{id}:
  *   delete:
- *     summary: Delete form model (Admin only)
+ *     summary: Delete Status (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -346,7 +346,7 @@ router.put('/statuses/:id', authenticate, authorize('ADMIN'), validate(updateSta
  *           format: uuid
  *     responses:
  *       200:
- *         description: Form model deleted successfully
+ *         description: Status deleted successfully
  *       403:
  *         description: Forbidden - Admin only
  */

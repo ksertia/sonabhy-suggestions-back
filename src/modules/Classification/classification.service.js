@@ -9,20 +9,20 @@ class ClassificationService {
   async createCategory(data, user) {
     // Only admins can create form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can create form models');
+      throw new ForbiddenError('Only admins can create categories');
     }
 
     // Check if name already exists
     const existing = await ClassificationRepository.findAllCategories({ search: data.name });
     if (existing.some(model => model.name === data.name)) {
-      throw new ConflictError('Form model with this name already exists');
+      throw new ConflictError('categories with this name already exists');
     }
 
     const categories = await ClassificationRepository.createCategory(data);
     return categories;
   }
 
-  async getAllCategories(filters, user) {
+  async getAllCategories(filters) {
     const categories = await ClassificationRepository.findAllCategories(filters);
     return categories;
   }
@@ -31,7 +31,7 @@ class ClassificationService {
     const category = await ClassificationRepository.findCategoryById(id);
     
     if (!category) {
-      throw new NotFoundError('Form model not found');
+      throw new NotFoundError('Category not found');
     }
 
     return category;
@@ -40,13 +40,13 @@ class ClassificationService {
   async updateFormModel(id, data, user) {
     // Only admins can update form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can update form models');
+      throw new ForbiddenError('Only admins can update category');
     }
 
     const category = await ClassificationRepository.findCategoryById(id);
     
     if (!category) {
-      throw new NotFoundError('Form model not found');
+      throw new NotFoundError('Category not found');
     }
 
     const updated = await ClassificationRepository.updateCategory(id, data);
@@ -56,23 +56,17 @@ class ClassificationService {
   async deleteCategory(id, user) {
     // Only admins can delete form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete form models');
+      throw new ForbiddenError('Only admins can delete Categories');
     }
 
     const category = await ClassificationRepository.findCategoryById(id);
     
     if (!category) {
-      throw new NotFoundError('Form model not found');
-    }
-
-    // Check if any variants have associated ideas
-    const hasIdeas = category.variants.some(variant => variant._count.ideas > 0);
-    if (hasIdeas) {
-      throw new BadRequestError('Cannot delete form model with variants that have associated ideas');
+      throw new NotFoundError('Category not found');
     }
 
     await ClassificationRepository.deleteCategory(id);
-    return { message: 'Form model deleted successfully' };
+    return { message: 'Category deleted successfully' };
   }
 
   // ============================================
@@ -82,44 +76,44 @@ class ClassificationService {
   async createStatus(data, user) {
     // Only admins can create form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can create form models');
+      throw new ForbiddenError('Only admins can create status');
     }
 
     // Check if name already exists
     const existing = await ClassificationRepository.findAllStatuses({ search: data.name });
     if (existing.some(model => model.name === data.name)) {
-      throw new ConflictError('Form model with this name already exists');
+      throw new ConflictError('Statuses with this name already exists');
     }
 
-    const categories = await ClassificationRepository.createStatus(data);
-    return categories;
+    const status = await ClassificationRepository.createStatus(data);
+    return status;
   }
 
-  async getAllStatuses(filters, user) {
-    const categories = await ClassificationRepository.findAllStatuses(filters);
-    return categories;
+  async getAllStatuses(filters) {
+    const statuses = await ClassificationRepository.findAllStatuses(filters);
+    return statuses;
   }
 
-  async getStatusById(id, user) {
-    const category = await ClassificationRepository.findStatusById(id);
+  async getStatusById(id) {
+    const status = await ClassificationRepository.findStatusById(id);
     
-    if (!category) {
-      throw new NotFoundError('Form model not found');
+    if (!status) {
+      throw new NotFoundError('Status not found');
     }
 
-    return category;
+    return status;
   }
 
   async updateStatus(id, data, user) {
     // Only admins can update form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can update form models');
+      throw new ForbiddenError('Only admins can update statuses');
     }
 
-    const category = await ClassificationRepository.findStatusById(id);
+    const status = await ClassificationRepository.findStatusById(id);
     
-    if (!category) {
-      throw new NotFoundError('Form model not found');
+    if (!status) {
+      throw new NotFoundError('Status not found');
     }
 
     const updated = await ClassificationRepository.updateStatus(id, data);
@@ -129,23 +123,17 @@ class ClassificationService {
   async deleteStatus(id, user) {
     // Only admins can delete form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete form models');
+      throw new ForbiddenError('Only admins can delete Statuses');
     }
 
-    const category = await ClassificationRepository.findStatusById(id);
+    const status = await ClassificationRepository.findStatusById(id);
     
-    if (!category) {
-      throw new NotFoundError('Form model not found');
-    }
-
-    // Check if any variants have associated ideas
-    const hasIdeas = category.variants.some(variant => variant._count.ideas > 0);
-    if (hasIdeas) {
-      throw new BadRequestError('Cannot delete form model with variants that have associated ideas');
+    if (!status) {
+      throw new NotFoundError('Status not found');
     }
 
     await ClassificationRepository.deleteStatus(id);
-    return { message: 'Form model deleted successfully' };
+    return { message: 'Status deleted successfully' };
   }
 
 

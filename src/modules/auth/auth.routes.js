@@ -24,6 +24,7 @@ const router = express.Router();
  *               - password
  *               - firstName
  *               - lastName
+ *               - username
  *             properties:
  *               email:
  *                 type: string
@@ -40,6 +41,12 @@ const router = express.Router();
  *               lastName:
  *                 type: string
  *                 example: Doe
+ *               username:
+ *                 type: string
+ *                 example: DoeJohn
+ *               phone:
+ *                 type: string
+ *                 example: 700000000
  *               role:
  *                 type: string
  *                 enum: [USER, MANAGER, ADMIN]

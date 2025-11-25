@@ -68,6 +68,12 @@ const options = {
             lastName: {
               type: 'string',
             },
+            username: {
+              type: 'string',
+            },
+            phone: {
+              type: 'string',
+            },
             role: {
               type: 'string',
               enum: ['USER', 'MANAGER', 'ADMIN'],
