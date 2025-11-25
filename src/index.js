@@ -20,7 +20,7 @@ async function startServer() {
   try {
     await testDatabaseConnection();
 
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log('');
       console.log('═══════════════════════════════════════════════════════');
       console.log(`  🚀 Idea Box Backend Server`);

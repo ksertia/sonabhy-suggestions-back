@@ -216,4 +216,140 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
 // FORM STRUCTURE & VALIDATION ROUTES
 // ============================================
 
+/**
+ * @swagger
+ * /classification/statuses:
+ *   post:
+ *     summary: Create a new form model (Admin only)
+ *     tags: [Classification]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 100
+ *               description:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Form model created successfully
+ *       403:
+ *         description: Forbidden - Admin only
+ */
+router.post('/statuses', authenticate, authorize('ADMIN'), validate(createStatusSchema), ClassificationController.createStatus);
+
+/**
+ * @swagger
+ * /classification/statuses:
+ *   get:
+ *     summary: Get all form models
+ *     tags: [Classification]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Form models retrieved successfully
+ */
+router.get('/statuses', authenticate, validate(listStatusesSchema), ClassificationController.getAllStatuses);
+
+/**
+ * @swagger
+ * /classification/statuses/{id}:
+ *   get:
+ *     summary: Get form model by ID
+ *     tags: [Classification]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Form model retrieved successfully
+ *       404:
+ *         description: Form model not found
+ */
+router.get('/statuses/:id', authenticate, validate(getStatusSchema), ClassificationController.getStatusById);
+
+/**
+ * @swagger
+ * /classification/statuses/{id}:
+ *   put:
+ *     summary: Update form model (Admin only)
+ *     tags: [Classification]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Form model updated successfully
+ *       403:
+ *         description: Forbidden - Admin only
+ */
+router.put('/statuses/:id', authenticate, authorize('ADMIN'), validate(updateStatusSchema), ClassificationController.updateStatus);
+
+/**
+ * @swagger
+ * /classification/statuses/{id}:
+ *   delete:
+ *     summary: Delete form model (Admin only)
+ *     tags: [Classification]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Form model deleted successfully
+ *       403:
+ *         description: Forbidden - Admin only
+ */
+router.delete('/statuses/:id', authenticate, authorize('ADMIN'), validate(deleteStatusSchema), ClassificationController.deleteStatus);
+
 module.exports = router;

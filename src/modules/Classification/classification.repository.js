@@ -7,18 +7,7 @@ class ClassificationRepository {
 
   async createCategory(data) {
     return prisma.category.create({
-      data,
-      include: {
-        variants: {
-          include: {
-            fields: {
-              orderBy: {
-                order: 'asc',
-              },
-            },
-          },
-        },
-      },
+      data
     });
   }
 
@@ -34,18 +23,6 @@ class ClassificationRepository {
 
     return prisma.category.findMany({
       where,
-      include: {
-        variants: {
-          include: {
-            _count: {
-              select: {
-                fields: true,
-                ideas: true,
-              },
-            },
-          },
-        },
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -55,22 +32,6 @@ class ClassificationRepository {
   async findCategoryById(id) {
     return prisma.category.findUnique({
       where: { id },
-      include: {
-        variants: {
-          include: {
-            fields: {
-              orderBy: {
-                order: 'asc',
-              },
-            },
-            _count: {
-              select: {
-                ideas: true,
-              },
-            },
-          },
-        },
-      },
     });
   }
 
@@ -78,9 +39,6 @@ class ClassificationRepository {
     return prisma.category.update({
       where: { id },
       data,
-      include: {
-        variants: true,
-      },
     });
   }
 
@@ -97,46 +55,23 @@ class ClassificationRepository {
   async createStatus(data) {
     return prisma.status.create({
       data,
-      include: {
-        variants: {
-          include: {
-            fields: {
-              orderBy: {
-                order: 'asc',
-              },
-            },
-          },
-        },
-      },
     });
   }
 
   async findAllStatuses(filters = {}) {
     const where = {};
 
-    if (filters.search) {
-      where.OR = [
-        { name: { contains: filters.search, mode: 'insensitive' } },
-        { description: { contains: filters.search, mode: 'insensitive' } },
-        { order: { contains: filters.search, mode: 'insensitive' } },
-        { color: { contains: filters.search, mode: 'insensitive' } },
-      ];
-    }
+    // if (filters.search) {
+    //   where.OR = [
+    //     { name: { contains: filters.search, mode: 'insensitive' } },
+    //     { description: { contains: filters.search, mode: 'insensitive' } },
+    //     { order: { contains: filters.search, mode: 'insensitive' } },
+    //     { color: { contains: filters.search, mode: 'insensitive' } },
+    //   ];
+    // }
 
     return prisma.status.findMany({
       where,
-      include: {
-        variants: {
-          include: {
-            _count: {
-              select: {
-                fields: true,
-                ideas: true,
-              },
-            },
-          },
-        },
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -146,22 +81,6 @@ class ClassificationRepository {
   async findStatusById(id) {
     return prisma.status.findUnique({
       where: { id },
-      include: {
-        variants: {
-          include: {
-            fields: {
-              orderBy: {
-                order: 'asc',
-              },
-            },
-            _count: {
-              select: {
-                ideas: true,
-              },
-            },
-          },
-        },
-      },
     });
   }
 
@@ -169,9 +88,6 @@ class ClassificationRepository {
     return prisma.status.update({
       where: { id },
       data,
-      include: {
-        variants: true,
-      },
     });
   }
 

@@ -17,6 +17,10 @@ const options = {
         url: `http://localhost:${process.env.PORT || 3000}${process.env.API_PREFIX || '/api/v1'}`,
         description: 'Development server',
       },
+      {
+        url: `http://192.168.1.14:${process.env.PORT || 3000}${process.env.API_PREFIX || '/api/v1'}`,
+        description: 'Development server',
+      },
     ],
     components: {
       securitySchemes: {
