@@ -93,9 +93,9 @@ router.post('/register', validate(registerSchema), authController.register);
  *               - email
  *               - password
  *             properties:
- *               email:
+ *               login:
  *                 type: string
- *                 format: email
+ *                 format: string
  *                 example: user@example.com
  *               password:
  *                 type: string
