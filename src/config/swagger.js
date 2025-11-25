@@ -18,7 +18,7 @@ const options = {
         description: 'Development server',
       },
       {
-        url: `http://192.168.1.14:${process.env.PORT || 3000}${process.env.API_PREFIX || '/api/v1'}`,
+        url: `https://idea-box-backend.onrender.com${process.env.API_PREFIX || '/api/v1'}`,
         description: 'Development server',
       },
     ],
