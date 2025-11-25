@@ -40,9 +40,9 @@ class AuthService {
     };
   }
 
-  async login(email, password) {
+  async login(login, password) {
     // Find user
-    const user = await authRepository.findUserByEmail(email);
+    const user = await authRepository.findUserByEmail(login);
     if (!user) {
       throw new UnauthorizedError('Invalid credentials');
     }

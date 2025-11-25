@@ -194,8 +194,10 @@ class DashboardRepository {
           select: {
             id: true,
             email: true,
-            firstname: true,
-            lastname: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            phone: true,
           },
         },
         category: {

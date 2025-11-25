@@ -61,7 +61,7 @@ class EmailService {
     const subject = `Idea Submitted: ${idea.title}`;
     const body = `
       <h2>Idea Submitted Successfully</h2>
-      <p>Hello ${user.firstname} ${user.lastname},</p>
+      <p>Hello ${user.firstName} ${user.lastName},</p>
       <p>Your idea has been submitted successfully!</p>
       <h3>Idea Details:</h3>
       <ul>
@@ -84,7 +84,7 @@ class EmailService {
     const subject = `Idea Status Updated: ${idea.title}`;
     const body = `
       <h2>Idea Status Changed</h2>
-      <p>Hello ${user.firstname} ${user.lastname},</p>
+      <p>Hello ${user.firstName} ${user.lastName},</p>
       <p>The status of your idea has been updated.</p>
       <h3>Idea Details:</h3>
       <ul>
@@ -105,7 +105,7 @@ class EmailService {
     const subject = `New Plan Action Assigned: ${planAction.title}`;
     const body = `
       <h2>Plan Action Assigned to You</h2>
-      <p>Hello ${user.firstname} ${user.lastname},</p>
+      <p>Hello ${user.firstName} ${user.lastName},</p>
       <p>A new plan action has been assigned to you.</p>
       <h3>Action Details:</h3>
       <ul>
@@ -128,13 +128,13 @@ class EmailService {
     const subject = `New Comment on Idea: ${idea.title}`;
     const body = `
       <h2>New Comment on Your Idea</h2>
-      <p>Hello ${user.firstname} ${user.lastname},</p>
+      <p>Hello ${user.firstName} ${user.lastName},</p>
       <p>A new comment has been added to your idea.</p>
       <h3>Comment Details:</h3>
       <ul>
         <li><strong>Idea:</strong> ${idea.title}</li>
         <li><strong>Comment:</strong> ${comment.content}</li>
-        <li><strong>By:</strong> ${comment.user?.firstname} ${comment.user?.lastname}</li>
+        <li><strong>By:</strong> ${comment.user?.firstName} ${comment.user?.lastName}</li>
       </ul>
       <p>You can view and reply to this comment in the system.</p>
     `;

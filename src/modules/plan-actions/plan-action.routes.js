@@ -72,9 +72,9 @@ const {
  *               type: string
  *             email:
  *               type: string
- *             firstname:
+ *             firstName:
  *               type: string
- *             lastname:
+ *             lastName:
  *               type: string
  *             role:
  *               type: string

@@ -7,8 +7,10 @@ class AuthRepository {
       select: {
         id: true,
         email: true,
-        firstname: true,
-        lastname: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        phone: true,
         role: true,
         isActive: true,
         createdAt: true,
@@ -17,9 +19,15 @@ class AuthRepository {
     });
   }
 
-  async findUserByEmail(email) {
-    return prisma.user.findUnique({
-      where: { email },
+  async findUserByEmail(login) {
+    return prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: login },
+          { username: login },
+          { phone: login }
+        ]
+      }
     });
   }
 
@@ -29,8 +37,10 @@ class AuthRepository {
       select: {
         id: true,
         email: true,
-        firstname: true,
-        lastname: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        phone: true,
         role: true,
         isActive: true,
         createdAt: true,
@@ -53,8 +63,10 @@ class AuthRepository {
           select: {
             id: true,
             email: true,
-            firstname: true,
-            lastname: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            phone: true,
             role: true,
             isActive: true,
           },

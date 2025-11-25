@@ -9,8 +9,8 @@ class NotificationRepository {
           select: {
             id: true,
             email: true,
-            firstname: true,
-            lastname: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
@@ -57,8 +57,8 @@ class NotificationRepository {
           select: {
             id: true,
             email: true,
-            firstname: true,
-            lastname: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },

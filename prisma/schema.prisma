@@ -53,9 +53,11 @@ enum FieldType {
 
 model User {
   id            String         @id @default(uuid())
-  firstname     String
-  lastname      String
+  firstName     String
+  lastName      String
   email         String         @unique
+  username      String?        @unique
+  phone         String?        @unique
   password      String
   role          Role           @default(USER)
   isActive      Boolean        @default(true)
