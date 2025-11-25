@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "Backend API with Express.js, Prisma, JWT auth, and file upload",
   "main": "src/index.js",
+  "prisma":{
+    "schema": "prisma/schema.prisma"
+  },
   "scripts": {
-    "start": "node src/index.js",
+    "prestart": "prisma generate",
+    "start": "prisma migrate deploy && node src/index.js ",
     "dev": "nodemon src/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
