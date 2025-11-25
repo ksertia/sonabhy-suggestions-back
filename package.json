@@ -7,8 +7,8 @@
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
-    "postinstall": "prisma generate && prisma migrate deploy && prisma db seed",
-    "start": " node src/index.js ",
+    "postinstall": "prisma generate && prisma migrate deploy",
+    "start": "node src/index.js ",
     "dev": "nodemon src/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
