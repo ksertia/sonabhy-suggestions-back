@@ -41,6 +41,7 @@ class FormRepository {
       include: {
         variants: {
           include: {
+            fields: true,
             _count: {
               select: {
                 fields: true,
@@ -274,6 +275,7 @@ class FormRepository {
             id: true,
             name: true,
             description: true,
+            type: true,
           },
         },
         fields: {

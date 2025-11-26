@@ -51,6 +51,8 @@ const {
  *           type: string
  *         isActive:
  *           type: boolean
+ *         type:
+ *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -106,6 +108,11 @@ const {
  *           type: string
  *         order:
  *           type: integer
+ *         visibleFor:
+ *           type: string
+ *           enum: [ADMIN, MANAGER, USER]
+ *         managedOnly:
+ *           type: boolean
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -140,6 +147,8 @@ const {
  *                 minLength: 3
  *                 maxLength: 100
  *               description:
+ *                 type: string
+ *               type:
  *                 type: string
  *               isActive:
  *                 type: boolean
@@ -467,6 +476,12 @@ router.patch('/models/:modelId/variants/:variantId/set-default', authenticate, a
  *               type:
  *                 type: string
  *                 enum: [TEXT, TEXTAREA, NUMBER, EMAIL, DATE, SELECT, MULTISELECT, CHECKBOX, RADIO, FILE]
+ *               visibleFor:
+ *                 type: string
+ *                 enum: [ADMIN, MANAGER, USER]
+ *               managedOnly:
+ *                 type: boolean
+ *                 default: false
  *               required:
  *                 type: boolean
  *                 default: false

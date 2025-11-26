@@ -185,7 +185,6 @@ model PlanAction {
 model FormModel {
   id          String        @id @default(uuid())
   name        String        @unique
-  type        String?        
   description String?       @db.Text
   isActive    Boolean       @default(true)
   createdAt   DateTime      @default(now())
@@ -227,8 +226,6 @@ model FormField {
   placeholder String?
   helpText    String?
   order       Int
-  visibleFor  Role[]
-  managedOnly Boolean?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   
