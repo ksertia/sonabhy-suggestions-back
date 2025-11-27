@@ -258,6 +258,27 @@ class IdeaService {
       byImpact,
     };
   }
+
+  async likeIdea(userId, ideaId) {
+    if(!userId && !ideaId) {
+        throw new NotFoundError('you are not pass userId and ideaId');
+      }
+    return await ideaRepository.likeIdea(userId, ideaId);
+  }
+
+  async updateLike(userId, ideaId) {
+    if(!userId && !ideaId) {
+        throw new NotFoundError('you are not pass userId and ideaId');
+      }
+    return await ideaRepository.updateLike(userId, ideaId);
+  }
+
+  async scoreIdea(ideaId) {
+    if(!ideaId) {
+        throw new NotFoundError('you are not pass userId and ideaId');
+      }
+    return await ideaRepository.countLike(ideaId);
+  }
 }
 
 module.exports = new IdeaService();

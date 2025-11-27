@@ -700,4 +700,67 @@ router.post('/:id/plan-actions', authenticate, validate(createPlanActionSchema),
  */
 router.get('/:id/plan-actions', authenticate, validate(getIdeaSchema), ideaController.getPlanActions);
 
+
+/**
+ * @swagger
+ * /ideas/{ideaId}/score:
+ *   get:
+ *     summary: Get score for an idea
+ *     tags: [Ideas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ideaId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Score retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     score:
+ *                       type: number
+ */
+router.get('/:ideaId/score', authenticate, validate(getIdeaSchema), ideaController.score);
+
+/**
+ * @swagger
+ * /ideas/{ideaId}/user/{userId}:
+ *   post:
+ *     summary: vote idea
+ *     tags: [Ideas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: path
+ *         name: ideaId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       201:
+ *         description: vote added successfully
+ */
+router.post('/:ideaId/user/:userId', authenticate , validate(getIdeaSchema), ideaController.like);
+
 module.exports = router;

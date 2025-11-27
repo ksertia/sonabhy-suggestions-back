@@ -33,9 +33,17 @@ const updateIdeaSchema = z.object({
 // Get Idea by ID Schema
 const getIdeaSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid idea ID'),
-  }),
-});
+    id: z.string().uuid().optional(),
+    ideaId: z.string().uuid().optional(),
+    userId: z.string().uuid().optional(),
+  })
+}).refine(
+  (data) => data.params.id || data.params.ideaId || data.params.userId,
+  {
+    message: "You must provide either id, ideaId, or userId",
+    path: ["params"],
+  }
+);
 
 // Delete Idea Schema
 const deleteIdeaSchema = z.object({

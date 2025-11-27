@@ -314,6 +314,31 @@ class IdeaRepository {
 
     return where;
   }
+
+  async likeIdea (userId, ideaId){
+      return await prisma.vote.create({
+        data: {
+          value: 1,
+          userId,
+          ideaId,
+        }
+    });
+  }
+
+  async updateLike(userId, ideaId) {
+    return await prisma.vote.update({
+      where: { userId_ideaId: { userId, ideaId } },
+      data: { value: -1 },
+    });
+  }
+
+  async countLike(ideaId) {
+    const score = await prisma.vote.aggregate({
+      where: { ideaId },
+      _sum: { value: true },
+    });
+    return score
+  }
 }
 
 module.exports = new IdeaRepository();

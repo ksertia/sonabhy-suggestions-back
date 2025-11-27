@@ -68,6 +68,7 @@ model User {
   refreshTokens RefreshToken[]
   ideas         Idea[]
   comments      Comment[]
+  votes Vote[]
   assignedActions PlanAction[] @relation("AssignedActions")
 
   @@map("users")
@@ -115,6 +116,7 @@ model Idea {
   metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
   planActions   PlanAction[]
   comments      Comment[]
+  votes         Vote[]
 
   @@map("ideas")
   @@index([categoryId])
@@ -151,6 +153,21 @@ model Status {
 
   @@map("statuses")
   @@index([order])
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  value     Int      // +1 ou -1 (ou juste 1 si tu veux seulement "like")
+  userId    String
+  ideaId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ideaId]) // Empêche un utilisateur de voter plusieurs fois pour la même idée
+  @@map("votes")
 }
 
 // ============================================

@@ -8,6 +8,7 @@ const createFormModelSchema = z.object({
   body: z.object({
     name: z.string().min(3, 'Name must be at least 3 characters').max(100),
     description: z.string().optional(),
+    type: z.string().optional(),
     isActive: z.boolean().optional().default(true),
   }),
 });
@@ -19,6 +20,7 @@ const updateFormModelSchema = z.object({
   body: z.object({
     name: z.string().min(3).max(100).optional(),
     description: z.string().optional(),
+    type: z.string().optional(),
     isActive: z.boolean().optional(),
   }),
 });
@@ -104,6 +106,8 @@ const createFormFieldSchema = z.object({
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
     required: z.boolean().optional().default(false),
     options: z.any().optional(), // JSON field
+    visibleFor: z.enum(['ALL', 'ADMIN', 'USER']).optional(), 
+    managedOnly: z.boolean().optional(), 
     placeholder: z.string().optional(),
     helpText: z.string().optional(),
     order: z.number().int().min(1).optional(),
@@ -119,6 +123,8 @@ const updateFormFieldSchema = z.object({
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']).optional(),
     required: z.boolean().optional(),
     options: z.any().optional(),
+    visibleFor: z.enum(['ALL', 'ADMIN', 'USER']).optional(), 
+    managedOnly: z.boolean().optional(), 
     placeholder: z.string().optional(),
     helpText: z.string().optional(),
     order: z.number().int().min(1).optional(),
@@ -168,6 +174,8 @@ const bulkCreateFieldsSchema = z.object({
         type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
         required: z.boolean().optional().default(false),
         options: z.any().optional(),
+        visibleFor: z.enum(['ALL', 'ADMIN', 'USER']).optional(), 
+        managedOnly: z.boolean().optional(), 
         placeholder: z.string().optional(),
         helpText: z.string().optional(),
         order: z.number().int().min(1),

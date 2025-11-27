@@ -128,6 +128,42 @@ class IdeaController {
       next(error);
     }
   }
+
+  async like(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const ideaId = req.params.ideaId;
+
+      const like = await ideaService.likeIdea(userId, ideaId);
+      successResponse(res, { like }, "like succeful");
+    }catch (error) {
+      next(error);
+    }
+  }
+
+  async updateLike(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const ideaId = req.params.ideaId;
+
+      const like = await ideaService.updateLike(userId, ideaId);
+      successResponse(res, { like }, "like update");
+    }catch (error) {
+      next(error);
+    }
+  }
+
+  async score(req, res, next) {
+    try {
+      const ideaId = req.params.ideaId;
+
+      const count = await ideaService.scoreIdea(ideaId);
+      successResponse(res, { count }, "like succeful");
+    }catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 module.exports = new IdeaController();
