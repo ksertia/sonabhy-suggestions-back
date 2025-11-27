@@ -708,6 +708,12 @@ router.post('/variants/:variantId/fields/reorder', authenticate, authorize('ADMI
  *                     type:
  *                       type: string
  *                       enum: [TEXT, TEXTAREA, NUMBER, EMAIL, DATE, SELECT, MULTISELECT, CHECKBOX, RADIO, FILE]
+ *                     visibleFor:
+ *                       type: string
+ *                       enum: [ADMIN, MANAGER, USER]
+ *                     managedOnly:
+ *                       type: boolean
+ *                       default: false
  *                     required:
  *                       type: boolean
  *                     options:
