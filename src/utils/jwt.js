@@ -3,7 +3,7 @@ const { UnauthorizedError } = require('./errors');
 
 const generateAccessToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRATION || '15m',
+    expiresIn: process.env.JWT_ACCESS_EXPIRATION || '1d',
   });
 };
 
