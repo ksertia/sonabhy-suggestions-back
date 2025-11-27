@@ -304,6 +304,22 @@ class FormService {
     return created;
   }
 
+  async bulkUpdateFields(variantId, fields, user) {
+  // Only admins and managers can bulk update fields
+  if (user.role === 'USER') {
+    throw new ForbiddenError('Only admins and managers can update form fields');
+  }
+
+  const variant = await formRepository.findFormVariantById(variantId);
+  if (!variant) {
+    throw new NotFoundError('Form variant not found');
+  }
+
+  const updated = await formRepository.bulkUpdateFields(fields);
+  return updated;
+}
+
+
   // ============================================
   // FORM STRUCTURE & VALIDATION
   // ============================================

@@ -23,6 +23,7 @@ const {
   listFormFieldsSchema,
   reorderFieldsSchema,
   bulkCreateFieldsSchema,
+  bulkUpdateFieldsSchema,
   getFormStructureSchema,
   getDefaultFormStructureSchema,
   validateSubmissionSchema,
@@ -731,6 +732,76 @@ router.post('/variants/:variantId/fields/reorder', authenticate, authorize('ADMI
  *         description: Forbidden - Admin/Manager only
  */
 router.post('/variants/:variantId/fields/bulk', authenticate, authorize('ADMIN', 'MANAGER'), validate(bulkCreateFieldsSchema), formController.bulkCreateFields);
+
+/**
+ * @swagger
+ * /forms/variants/{variantId}/fields/bulk:
+ *   put:
+ *     summary: Bulk update form fields (Admin/Manager only)
+ *     tags: [Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: variantId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - fields
+ *             properties:
+ *               fields:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - id
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       description: ID of the field to update
+ *                     label:
+ *                       type: string
+ *                     type:
+ *                       type: string
+ *                       enum: [TEXT, TEXTAREA, NUMBER, EMAIL, DATE, SELECT, MULTISELECT, CHECKBOX, RADIO, FILE]
+ *                     visibleFor:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         enum: [ADMIN, MANAGER, USER]
+ *                     managedOnly:
+ *                       type: boolean
+ *                     required:
+ *                       type: boolean
+ *                     options:
+ *                       type: object
+ *                     placeholder:
+ *                       type: string
+ *                     helpText:
+ *                       type: string
+ *                     order:
+ *                       type: integer
+ *     responses:
+ *       200:
+ *         description: Fields updated successfully
+ *       403:
+ *         description: Forbidden - Admin/Manager only
+ *       404:
+ *         description: Form variant not found
+ */
+router.put(
+  '/variants/:variantId/fields/bulk',authenticate, authorize('ADMIN', 'MANAGER'), validate(bulkUpdateFieldsSchema), formController.bulkUpdateFields
+);
+
 
 // ============================================
 // FORM STRUCTURE & VALIDATION ROUTES

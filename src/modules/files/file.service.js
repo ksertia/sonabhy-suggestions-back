@@ -89,6 +89,7 @@ class FileService {
   }
 
   async getMyFiles(user) {
+    console.log("les informations",user)
     const files = await fileRepository.findByUserId(user.id);
     return files;
   }

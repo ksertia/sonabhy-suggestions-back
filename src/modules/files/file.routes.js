@@ -229,7 +229,7 @@ router.post('/upload-multiple', upload.array('files', 10), fileController.upload
 
 /**
  * @swagger
- * /files/my-files:
+ * /files/my/files:
  *   get:
  *     summary: Get my uploaded files
  *     tags: [Files]
@@ -239,11 +239,11 @@ router.post('/upload-multiple', upload.array('files', 10), fileController.upload
  *       200:
  *         description: Your files retrieved successfully
  */
-router.get('/my-files', fileController.getMyFiles);
+router.get('/my/files', fileController.getMyFiles);
 
 /**
  * @swagger
- * /files/stats:
+ * /files/my/stats:
  *   get:
  *     summary: Get file statistics
  *     tags: [Files]
@@ -253,7 +253,7 @@ router.get('/my-files', fileController.getMyFiles);
  *       200:
  *         description: File statistics retrieved successfully
  */
-router.get('/stats', fileController.getStats);
+router.get('/my/stats', fileController.getStats);
 
 /**
  * @swagger

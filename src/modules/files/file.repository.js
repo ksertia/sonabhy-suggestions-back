@@ -4,19 +4,6 @@ class FileRepository {
   async create(data) {
     return prisma.fileMetadata.create({
       data,
-      include: {
-        uploadedBy: {
-          select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            username: true,
-            phone: true,
-            role: true,
-          },
-        },
-      },
     });
   }
 
@@ -32,17 +19,17 @@ class FileRepository {
         skip,
         take: limit,
         include: {
-          uploadedBy: {
-            select: {
-              id: true,
-              email: true,
-              firstName: true,
-              lastName: true,
-              username: true,
-              phone: true,
-              role: true,
-            },
-          },
+          // uploadedBy: {
+          //   select: {
+          //     id: true,
+          //     email: true,
+          //     firstName: true,
+          //     lastName: true,
+          //     username: true,
+          //     phone: true,
+          //     role: true,
+          //   },
+          // },
           idea: {
             select: {
               id: true,
@@ -72,17 +59,17 @@ class FileRepository {
     return prisma.fileMetadata.findUnique({
       where: { id },
       include: {
-        uploadedBy: {
-          select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            username: true,
-            phone: true,
-            role: true,
-          },
-        },
+        // uploadedBy: {
+        //   select: {
+        //     id: true,
+        //     email: true,
+        //     firstName: true,
+        //     lastName: true,
+        //     username: true,
+        //     phone: true,
+        //     role: true,
+        //   },
+        // },
         idea: {
           select: {
             id: true,
@@ -101,18 +88,18 @@ class FileRepository {
           id: ideaId,
         },
       },
-      include: {
-        uploadedBy: {
-          select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            username: true,
-            phone: true,
-          },
-        },
-      },
+      // include: {
+      //   uploadedBy: {
+      //     select: {
+      //       id: true,
+      //       email: true,
+      //       firstName: true,
+      //       lastName: true,
+      //       username: true,
+      //       phone: true,
+      //     },
+      //   },
+      // },
       orderBy: {
         createdAt: 'desc',
       },

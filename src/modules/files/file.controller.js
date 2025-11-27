@@ -65,6 +65,7 @@ class FileController {
 
   async getMyFiles(req, res, next) {
     try {
+      console.log("les information", req.user)
       const files = await fileService.getMyFiles(req.user);
       successResponse(res, { files }, 'Your files retrieved successfully');
     } catch (error) {

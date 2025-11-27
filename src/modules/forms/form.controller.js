@@ -180,6 +180,21 @@ class FormController {
     }
   }
 
+  async bulkUpdateFields(req, res, next) {
+  try {
+    const fields = await formService.bulkUpdateFields(
+      req.params.variantId,
+      req.body.fields,
+      req.user
+    );
+
+    successResponse(res, { fields }, 'Fields updated successfully', 200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
   // ============================================
   // FORM STRUCTURE & VALIDATION CONTROLLERS
   // ============================================

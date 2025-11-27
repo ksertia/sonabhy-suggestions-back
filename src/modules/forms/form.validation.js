@@ -190,6 +190,39 @@ const bulkCreateFieldsSchema = z.object({
   }),
 });
 
+const bulkUpdateFieldsSchema = z.object({
+  params: z.object({
+    variantId: z.string().uuid('Invalid variant ID'),
+  }),
+  body: z.object({
+    fields: z.array(
+      z.object({
+        id: z.string().uuid('Invalid field ID'), // obligatoire pour update
+
+        label: z.string().min(1).max(200).optional(),
+        type: z.enum([
+          'TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE',
+          'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'
+        ]).optional(),
+
+        required: z.boolean().optional(),
+        options: z.any().optional(),
+
+        visibleFor: z.array(
+          z.enum(['ADMIN', 'USER', 'MANAGER'])
+        ).optional(),
+
+        managedOnly: z.boolean().optional(),
+        placeholder: z.string().optional(),
+        helpText: z.string().optional(),
+
+        order: z.number().int().min(1).optional(),
+      })
+    ).min(1, 'At least one field is required'),
+  }),
+});
+
+
 // ============================================
 // FORM STRUCTURE & VALIDATION SCHEMAS
 // ============================================
@@ -239,6 +272,7 @@ module.exports = {
   listFormFieldsSchema,
   reorderFieldsSchema,
   bulkCreateFieldsSchema,
+  bulkUpdateFieldsSchema,
   
   // Form Structure & Validation
   getFormStructureSchema,

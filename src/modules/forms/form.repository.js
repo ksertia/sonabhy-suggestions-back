@@ -262,6 +262,25 @@ class FormRepository {
     return createdFields;
   }
 
+  async bulkUpdateFields(fields) {
+    const updatedFields = [];
+
+    for (const field of fields) {
+      const { id, ...data } = field;
+
+      const updated = await prisma.formField.update({
+        where: { id },
+        data,
+      });
+
+      updatedFields.push(updated);
+    }
+
+    return updatedFields;
+  }
+
+
+
   // ============================================
   // FORM STRUCTURE & VALIDATION
   // ============================================
