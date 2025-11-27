@@ -213,8 +213,8 @@ const bulkUpdateFieldsSchema = z.object({
         ).optional(),
 
         managedOnly: z.boolean().optional(),
-        placeholder: z.string().optional(),
-        helpText: z.string().optional(),
+        placeholder: z.string().nullable().optional(),
+        helpText: z.string().nullable().optional(),
 
         order: z.number().int().min(1).optional(),
       })
