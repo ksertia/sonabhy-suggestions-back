@@ -106,7 +106,9 @@ const createFormFieldSchema = z.object({
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
     required: z.boolean().optional().default(false),
     options: z.any().optional(), // JSON field
-    visibleFor: z.enum(['MANAGER', 'ADMIN', 'USER']).optional(), 
+    visibleFor: z.array(
+                  z.enum(['ADMIN', 'USER', 'MANAGER', 'ALL'])
+                ).optional().default([]),
     managedOnly: z.boolean().optional(), 
     placeholder: z.string().optional(),
     helpText: z.string().optional(),
@@ -123,7 +125,9 @@ const updateFormFieldSchema = z.object({
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']).optional(),
     required: z.boolean().optional(),
     options: z.any().optional(),
-    visibleFor: z.enum(['MANAGER', 'ADMIN', 'USER']).optional(), 
+    visibleFor: z.array(
+                    z.enum(['ADMIN', 'USER', 'MANAGER', 'ALL'])
+                  ).optional().default([]),
     managedOnly: z.boolean().optional(), 
     placeholder: z.string().optional(),
     helpText: z.string().optional(),
@@ -174,7 +178,9 @@ const bulkCreateFieldsSchema = z.object({
         type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
         required: z.boolean().optional().default(false),
         options: z.any().optional(),
-        visibleFor: z.enum(['ADMIN', 'USER', 'MANAGER']).optional(), 
+        visibleFor: z.array(
+                        z.enum(['ADMIN', 'USER', 'MANAGER'])
+                      ).optional().default([]),
         managedOnly: z.boolean().optional(), 
         placeholder: z.string().optional(),
         helpText: z.string().optional(),
