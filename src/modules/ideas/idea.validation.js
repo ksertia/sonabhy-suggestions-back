@@ -13,11 +13,11 @@ const createIdeaSchema = z.object({
     data: z.any().optional(),  // tu peux remplacer par z.record(...) si structuré
 
     isAnonymous: z.boolean().default(false),
-    userId: z.string().uuid().optional(),
+    userId: z.string().uuid().nullable().optional(),
     // Optional fields — required only when isAnonymous = true
     firstName: z.string().optional(),
     lastName: z.string().optional(),
-    email: z.string().email("Invalid email format").optional(),
+    email: z.string().email("Invalid email format").nullable().optional(),
 
     formVariantId: z.string().uuid("Invalid form variant ID"),
   })
