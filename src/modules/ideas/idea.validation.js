@@ -14,26 +14,11 @@ const createIdeaSchema = z.object({
 
     isAnonymous: z.boolean().default(false),
     userId: z.string().uuid().nullable().optional(),
-    // Optional fields — required only when isAnonymous = true
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().email("Invalid email format").nullable().optional(),
 
     formVariantId: z.string().uuid("Invalid form variant ID"),
   })
-})
-.refine(
-  (input) => {
-    const b = input.body;
-    if (!b.isAnonymous) return true;
+});
 
-    return !!(b.firstName && b.lastName && b.email);
-  },
-  {
-    message: "firstName, lastName and email are required when isAnonymous = true",
-    path: ["body"], 
-  }
-);
 
 
 // Update Idea Schema
