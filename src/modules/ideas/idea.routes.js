@@ -38,18 +38,14 @@ const {
  *           type: string
  *         description:
  *           type: string
- *         categoryId:
+ *         firstName:
  *           type: string
- *           format: uuid
- *         statusId:
+ *         lastName:
  *           type: string
- *           format: uuid
- *         urgency:
+ *         email:
  *           type: string
- *           enum: [LOW, MEDIUM, HIGH, CRITICAL]
- *         impact:
- *           type: string
- *           enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *         data:
+ *           type: json
  *         isAnonymous:
  *           type: boolean
  *         userId:
@@ -69,36 +65,8 @@ const {
  *         updatedAt:
  *           type: string
  *           format: date-time
- *         category:
- *           $ref: '#/components/schemas/Category'
- *         status:
- *           $ref: '#/components/schemas/Status'
  *         user:
  *           $ref: '#/components/schemas/User'
- *     
- *     Category:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           format: uuid
- *         name:
- *           type: string
- *         description:
- *           type: string
- *     
- *     Status:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           format: uuid
- *         name:
- *           type: string
- *         order:
- *           type: integer
- *         color:
- *           type: string
  *     
  *     Comment:
  *       type: object
@@ -165,7 +133,6 @@ const {
  *             required:
  *               - title
  *               - description
- *               - categoryId
  *               - formVariantId
  *             properties:
  *               title:
@@ -175,20 +142,15 @@ const {
  *               description:
  *                 type: string
  *                 minLength: 10
- *               categoryId:
+ *               firstName:
  *                 type: string
- *                 format: uuid
- *               statusId:
+ *               lastName:
  *                 type: string
- *                 format: uuid
- *               urgency:
+ *               email:
  *                 type: string
- *                 enum: [LOW, MEDIUM, HIGH, CRITICAL]
- *                 default: MEDIUM
- *               impact:
- *                 type: string
- *                 enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
- *                 default: MEDIUM
+ *                 format: email
+ *               data:
+ *                 type: json
  *               isAnonymous:
  *                 type: boolean
  *                 default: false
@@ -217,7 +179,7 @@ const {
  *       401:
  *         description: Unauthorized
  */
-router.post('/', authenticate, validate(createIdeaSchema), ideaController.createIdea);
+router.post('/', validate(createIdeaSchema), ideaController.createIdea);
 
 /**
  * @swagger

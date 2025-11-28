@@ -4,10 +4,14 @@ const path = require('path');
 const fs = require('fs').promises;
 
 class IdeaService {
-  async createIdea(data, userId) {
+  async createIdea(data) {
     // If not anonymous, set userId
-    if (!data.isAnonymous) {
-      data.userId = userId;
+    if (data.isAnonymous) {
+      data.userId = null;
+    } else {
+      data.firstName = null,
+      data.lastName = null,
+      data.email= null
     }
 
     const idea = await ideaRepository.create(data);

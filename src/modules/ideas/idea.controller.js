@@ -4,7 +4,7 @@ const { successResponse } = require('../../utils/response');
 class IdeaController {
   async createIdea(req, res, next) {
     try {
-      const idea = await ideaService.createIdea(req.body, req.user.id);
+      const idea = await ideaService.createIdea(req.body);
       successResponse(res, { idea }, 'Idea created successfully', 201);
     } catch (error) {
       next(error);
@@ -14,10 +14,6 @@ class IdeaController {
   async getAllIdeas(req, res, next) {
     try {
       const filters = {
-        categoryId: req.query.categoryId,
-        statusId: req.query.statusId,
-        urgency: req.query.urgency,
-        impact: req.query.impact,
         formVariantId: req.query.formVariantId,
         userId: req.query.userId,
         isAnonymous: req.query.isAnonymous,

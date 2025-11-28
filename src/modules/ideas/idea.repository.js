@@ -5,8 +5,6 @@ class IdeaRepository {
     return prisma.idea.create({
       data,
       include: {
-        category: true,
-        status: true,
         user: {
           select: {
             id: true,

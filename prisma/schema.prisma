@@ -93,24 +93,57 @@ model RefreshToken {
 // IDEA MANAGEMENT
 // ============================================
 
+//model Idea {
+//  id            String      @id @default(uuid())
+ // title         String
+ // description   String      @db.Text
+ // categoryId    String
+ // statusId      String
+ // urgency       Urgency     @default(MEDIUM)
+ // impact        Impact      @default(MEDIUM)
+ // isAnonymous   Boolean     @default(false)
+ // userId        String?
+ // formVariantId String
+ // metadataId    String?     @unique
+ // createdAt     DateTime    @default(now())
+ // updatedAt     DateTime    @updatedAt
+//  
+//  // Relations
+ // category      Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+ // status        Status      @relation(fields: [statusId], references: [id], onDelete: Restrict)
+ // user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+//  formVariant   FormVariant @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
+ // metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
+ // planActions   PlanAction[]
+//  comments      Comment[]
+ // votes         Vote[]
+//
+//  @@map("ideas")
+//  @@index([categoryId])
+//  @@index([statusId])
+//  @@index([userId])
+//  @@index([formVariantId])
+//  @@index([createdAt])
+//}
+
+
 model Idea {
   id            String      @id @default(uuid())
   title         String
   description   String      @db.Text
-  categoryId    String
-  statusId      String
-  urgency       Urgency     @default(MEDIUM)
-  impact        Impact      @default(MEDIUM)
+  data          Json?
   isAnonymous   Boolean     @default(false)
   userId        String?
   formVariantId String
   metadataId    String?     @unique
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  firstName     String?
+  lastName      String?
+  email         String?
   
   // Relations
-  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  status        Status      @relation(fields: [statusId], references: [id], onDelete: Restrict)
   user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   formVariant   FormVariant @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
   metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
@@ -119,8 +152,6 @@ model Idea {
   votes         Vote[]
 
   @@map("ideas")
-  @@index([categoryId])
-  @@index([statusId])
   @@index([userId])
   @@index([formVariantId])
   @@index([createdAt])
@@ -134,7 +165,7 @@ model Category {
   updatedAt   DateTime @updatedAt
   
   // Relations
-  ideas       Idea[]
+  //ideas       Idea[]
 
   @@map("categories")
 }
@@ -149,7 +180,7 @@ model Status {
   updatedAt   DateTime @updatedAt
   
   // Relations
-  ideas       Idea[]
+  //ideas       Idea[]
 
   @@map("statuses")
   @@index([order])
