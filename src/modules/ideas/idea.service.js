@@ -8,11 +8,7 @@ class IdeaService {
     // If not anonymous, set userId
     if (data.isAnonymous) {
       data.userId = null;
-    } else {
-      data.firstName = null,
-      data.lastName = null,
-      data.email= null
-    }
+    } 
 
     const idea = await ideaRepository.create(data);
     return idea;
