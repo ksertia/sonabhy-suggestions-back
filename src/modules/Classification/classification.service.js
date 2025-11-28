@@ -37,7 +37,7 @@ class ClassificationService {
     return category;
   }
 
-  async updateFormModel(id, data, user) {
+  async updateCategory(id, data, user) {
     // Only admins can update form models
     if (user.role !== 'ADMIN') {
       throw new ForbiddenError('Only admins can update category');

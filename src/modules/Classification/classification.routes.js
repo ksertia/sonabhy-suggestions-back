@@ -116,10 +116,6 @@ router.post('/categories/', authenticate, authorize('ADMIN'), validate(createCat
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: isActive
- *         schema:
- *           type: string
- *       - in: query
  *         name: search
  *         schema:
  *           type: string
@@ -178,8 +174,6 @@ router.get('/categories/:id', authenticate, validate(getCategorySchema), Classif
  *                 type: string
  *               description:
  *                 type: string
- *               isActive:
- *                 type: boolean
  *     responses:
  *       200:
  *         description: Category updated successfully
@@ -239,6 +233,10 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
  *                 maxLength: 100
  *               description:
  *                 type: string
+ *               order:
+ *                 type: number
+ *               color:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Status created successfully
@@ -255,15 +253,6 @@ router.post('/statuses', authenticate, authorize('ADMIN'), validate(createStatus
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: isActive
- *         schema:
- *           type: string
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: Statuses retrieved successfully
@@ -319,8 +308,10 @@ router.get('/statuses/:id', authenticate, validate(getStatusSchema), Classificat
  *                 type: string
  *               description:
  *                 type: string
- *               isActive:
- *                 type: boolean
+ *               order:
+ *                 type: number
+ *               color:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Status updated successfully
