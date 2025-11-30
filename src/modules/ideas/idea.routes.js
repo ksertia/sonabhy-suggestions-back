@@ -63,7 +63,7 @@ const {
  *           enum: [TEAM, PRIVATE, PUBLIC]
  *         impact:
  *           type: string
- *           enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *           enum: [MINOR, MODERATE, MAJOR,TRANSFORMATIONAL]
  *         priority:
  *           type: string
  *           enum: [LOW, MEDIUM? HIGH, CRITICAL]
@@ -174,10 +174,10 @@ const {
  *                 enum: [TEAM, PRIVATE, PUBLIC]
  *               impact:
  *                 type: string
- *                 enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *                 enum: [MINOR, MODERATE, MAJOR, TRANSFORMATIONAL]
  *               priority:
  *                 type: string
- *                 enum: [LOW, MEDIUM? HIGH, CRITICAL]
+ *                 enum: [LOW, MEDIUM, HIGH, CRITICAL]
  *               data:
  *                 type: json
  *               isAnonymous:
@@ -375,7 +375,7 @@ router.get('/:id', authenticate, validate(getIdeaSchema), ideaController.getIdea
  *                 enum: [LOW, MEDIUM, HIGH, CRITICAL]
  *               impact:
  *                 type: string
- *                 enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *                 enum: [MINOR, MODERATE, MAJOR, TRANSFORMATIONAL]
  *     responses:
  *       200:
  *         description: Idea updated successfully
