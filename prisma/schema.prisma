@@ -28,10 +28,10 @@ enum Priority {
 }
 
 enum Impact {
-  LOW
-  MEDIUM
-  HIGH
-  VERY_HIGH
+  MINOR
+  MODERATE
+  MAJOR
+  TRANSFORMATIONAL
 }
 
 enum FieldType {
@@ -54,6 +54,13 @@ enum Status {
   VALIDATED
   ACTION_PLAN
   QUALIFIED
+}
+
+enum Plan_Status {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
 }
 
 enum Visibility {
@@ -85,6 +92,7 @@ model User {
   comments      Comment[]
   votes Vote[]
   assignedActions PlanAction[] @relation("AssignedActions")
+  AssignedTaches Tache[] @relation("AssignedTaches")
 
   @@map("users")
   @@index([email])
@@ -241,22 +249,48 @@ model Vote {
 // ============================================
 
 model PlanAction {
-  id          String    @id @default(uuid())
+  id          String      @id @default(uuid())
   ideaId      String
   title       String
-  description String?   @db.Text
-  progress    Int       @default(0)
+  description String?     @db.Text
+  progress    Int         @default(0)
+  status      Plan_Status @default(PENDING)
+  tacheId     String?       
   deadline    DateTime?
   assignedTo  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   
   // Relations
   idea        Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   assignee    User?     @relation("AssignedActions", fields: [assignedTo], references: [id], onDelete: SetNull)
+  taches      Tache[]
+
 
   @@map("plan_actions")
   @@index([ideaId])
+  @@index([assignedTo])
+  @@index([deadline])
+}
+
+model Tache {
+  id            String       @id @default(uuid())
+  planActionId  String
+  title         String
+  description   String?      @db.Text
+  progress      Int          @default(0)
+  status        Plan_Status  @default(PENDING)
+  deadline      DateTime?
+  assignedTo    String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // Relations
+  planAction    PlanAction   @relation(fields: [planActionId], references: [id], onDelete: Cascade)
+  assignee      User?        @relation("AssignedTaches", fields: [assignedTo], references: [id], onDelete: SetNull)
+
+  @@map("taches")
+  @@index([planActionId])
   @@index([assignedTo])
   @@index([deadline])
 }
