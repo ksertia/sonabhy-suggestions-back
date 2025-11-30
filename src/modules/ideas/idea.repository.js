@@ -134,9 +134,13 @@ class IdeaRepository {
             createdAt: 'desc',
           },
         },
-        votes:{
-          _count: true
-        }
+        _count: {
+            select: {
+              planActions: true,
+              comments: true,
+              votes:true
+            },
+          },
       },
     });
   }
