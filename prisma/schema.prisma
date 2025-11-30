@@ -90,11 +90,13 @@ model User {
   refreshTokens RefreshToken[]
   ideas         Idea[]
   comments      Comment[]
-  votes Vote[]
+  votes         Vote[]
+
   assignedActions PlanAction[] @relation("AssignedActions")
-  AssignedTaches Tache[] @relation("AssignedTaches")
-  QualifiedBy    Idea[] @relation("QualifiedBy")
-  ApprovedBy    Idea[] @relation("ApprovedBy")
+  AssignedTaches Tache[]       @relation("AssignedTaches")
+
+  qualifiedIdeas Idea[] @relation("QualifiedBy")
+  approvedIdeas  Idea[] @relation("ApprovedBy")
 
   @@map("users")
   @@index([email])
@@ -167,22 +169,25 @@ model Idea {
   kindId        String?
   userId        String?
   formVariantId String
-  qualifiedBy   String?
+  qualifiedById String?      // <-- CHANGÉ
   qualifiedAt   DateTime?
-  approvedBy    String?
-  approvedAt   DateTime?
-  metadataId    String?     @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  approvedById  String?      // <-- CHANGÉ
+  approvedAt    DateTime?
+  metadataId    String?      @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   
   // Relations
   user          User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
   formVariant   FormVariant   @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
   metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
-  qualifiedBy   User?         @relation("QualifiedBy", fields: [qualifiedBy], references: [id], onDelete: SetNull)
-  approvedBy    User?         @relation("ApprovedBy", fields: [approvedBy], references: [id], onDelete: SetNull)
+
+  qualifiedBy   User?         @relation("QualifiedBy", fields: [qualifiedById], references: [id], onDelete: SetNull)
+  approvedBy    User?         @relation("ApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
   category      Category?     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   kind          Kind?         @relation(fields: [kindId], references: [id], onDelete: Restrict)
+
   planActions   PlanAction[]
   comments      Comment[]
   votes         Vote[]
@@ -192,8 +197,11 @@ model Idea {
   @@index([categoryId])
   @@index([kindId])
   @@index([formVariantId])
+  @@index([qualifiedById])
+  @@index([approvedById])
   @@index([createdAt])
 }
+
 
 model Category {
   id          String   @id @default(uuid())
