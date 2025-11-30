@@ -229,10 +229,6 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
  *                 maxLength: 100
  *               description:
  *                 type: string
- *               order:
- *                 type: number
- *               color:
- *                 type: string
  *     responses:
  *       201:
  *         description: kind created successfully
@@ -303,10 +299,6 @@ router.get('/kinds/:id', authenticate, validate(getKindSchema), ClassificationCo
  *               name:
  *                 type: string
  *               description:
- *                 type: string
- *               order:
- *                 type: number
- *               color:
  *                 type: string
  *     responses:
  *       200:

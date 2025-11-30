@@ -48,6 +48,25 @@ const {
  *           type: json
  *         isAnonymous:
  *           type: boolean
+ *         forVote:
+ *           type: boolean
+ *         categoryId:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *         kindId:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *         visibility:
+ *           type: string
+ *           enum: [TEAM, PRIVATE, PUBLIC]
+ *         impact:
+ *           type: string
+ *           enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *         priority:
+ *           type: string
+ *           enum: [LOW, MEDIUM? HIGH, CRITICAL]
  *         userId:
  *           type: string
  *           format: uuid
@@ -142,13 +161,23 @@ const {
  *               description:
  *                 type: string
  *                 minLength: 10
- *               firstName:
+ *               categoryId:
  *                 type: string
- *               lastName:
+ *                 format: uuid
+ *               kindId:
  *                 type: string
- *               email:
+ *                 format: uuid
+ *               forVote:
+ *                 type: boolean
+ *               visibility:
  *                 type: string
- *                 format: email
+ *                 enum: [TEAM, PRIVATE, PUBLIC]
+ *               impact:
+ *                 type: string
+ *                 enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
+ *               priority:
+ *                 type: string
+ *                 enum: [LOW, MEDIUM? HIGH, CRITICAL]
  *               data:
  *                 type: json
  *               isAnonymous:

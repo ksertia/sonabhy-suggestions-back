@@ -5,6 +5,8 @@ class IdeaRepository {
     return prisma.idea.create({
       data,
       include: {
+          category: true,
+          kind:true,
         user: {
           select: {
             id: true,
@@ -36,6 +38,8 @@ class IdeaRepository {
         skip,
         take: limit,
         include: {
+          category:true,
+          kind:true,
           user: {
             select: {
               id: true,
@@ -82,6 +86,7 @@ class IdeaRepository {
       where: { id },
       include: {
         category: true,
+        kind:true,
         user: {
           select: {
             id: true,
@@ -151,6 +156,7 @@ class IdeaRepository {
       data,
       include: {
         category: true,
+        kind: true,
         user: {
           select: {
             id: true,

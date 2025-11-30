@@ -1,3 +1,4 @@
+const { Visibility } = require('@prisma/client');
 const { z } = require('zod');
 
 // Create Idea Schema
@@ -6,15 +7,19 @@ const createIdeaSchema = z.object({
     title: z.string()
       .min(3, "Title must be at least 3 characters")
       .max(200, "Title must not exceed 200 characters"),
-
     description: z.string()
       .min(10, "Description must be at least 10 characters"),
-
-    data: z.any().optional(),  // tu peux remplacer par z.record(...) si structuré
-
+    data: z.any().optional(),
     isAnonymous: z.boolean().default(false),
+    forVote: z.boolean().default(false),
+    status: z.enum(['SUBMITTED', 'APPROVED', 'REJECTED', 'VALIDATED', 'ACTION_PLAN', 'QUALIFIED']).default('SUBMITTED'),
+    priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
+    impact: z.enum(['LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH']).optional(),
+    visibility: z.enum(['TEAM', 'PRIVATE', 'PUBLIC']).default('PRIVATE'),
+    categoryId: z.string().uuid().nullable().optional(),
+    kindId: z.string().uuid().nullable().optional(),
     userId: z.string().uuid().nullable().optional(),
-
+    metadataId: z.string().uuid().nullable().optional(),
     formVariantId: z.string().uuid("Invalid form variant ID"),
   })
 });
@@ -31,27 +36,18 @@ const updateIdeaSchema = z.object({
     description: z.string().min(10).optional(),
     data: z.any().optional(),
     isAnonymous: z.boolean().optional(),
-
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().email().optional(),
-
+    forVote: z.boolean().default(false),
+    status: z.enum(['SUBMITTED', 'APPROVED', 'REJECTED', 'VALIDATED', 'ACTION_PLAN', 'QUALIFIED']).default('SUBMITTED'),
+    priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
+    impact: z.enum(['LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH']).optional(),
+    visibility: z.enum(['TEAM', 'PRIVATE', 'PUBLIC']).default('PRIVATE'),
+    categoryId: z.string().uuid().nullable().optional(),
+    kindId: z.string().uuid().nullable().optional(),
+    userId: z.string().uuid().nullable().optional(),
+    metadataId: z.string().uuid().nullable().optional(),
     formVariantId: z.string().uuid().optional(),
   })
-})
-.refine(
-  (input) => {
-    const b = input.body;
-    if (!b.isAnonymous) return true;
-
-    // Si l'utilisateur met isAnonymous = true dans un update → les 3 champs deviennent obligatoires
-    return !!(b.firstName && b.lastName && b.email);
-  },
-  {
-    message: "firstName, lastName and email are required when isAnonymous = true",
-    path: ["body"],
-  }
-);
+});
 
 
 // Get Idea by ID Schema
@@ -85,6 +81,7 @@ const listIdeasSchema = z.object({
     userId: z.string().uuid().optional(),
     isAnonymous: z.string().optional(),
     search: z.string().optional(),
+    status: z.string().optional(),
     startDate: z.string().datetime().optional(),
     endDate: z.string().datetime().optional(),
   }),
