@@ -201,26 +201,6 @@ router.post('/', validate(createIdeaSchema), ideaController.createIdea);
  *           type: integer
  *           default: 10
  *       - in: query
- *         name: categoryId
- *         schema:
- *           type: string
- *           format: uuid
- *       - in: query
- *         name: statusId
- *         schema:
- *           type: string
- *           format: uuid
- *       - in: query
- *         name: urgency
- *         schema:
- *           type: string
- *           enum: [LOW, MEDIUM, HIGH, CRITICAL]
- *       - in: query
- *         name: impact
- *         schema:
- *           type: string
- *           enum: [LOW, MEDIUM, HIGH, VERY_HIGH]
- *       - in: query
  *         name: formVariantId
  *         schema:
  *           type: string

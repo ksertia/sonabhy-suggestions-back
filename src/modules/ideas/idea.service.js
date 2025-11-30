@@ -14,11 +14,11 @@ class IdeaService {
     return idea;
   }
 
-  async getAllIdeas(filters, pagination, user) {
+  async getAllIdeas(filters, pagination) {
     // Regular users can only see their own ideas unless they're managers/admins
-    if (user.role === 'USER' && !filters.userId) {
-      filters.userId = user.id;
-    }
+    // if (user.role === 'USER' && !filters.userId) {
+    //   filters.userId = user.id;
+    // }
 
     const result = await ideaRepository.findAll(filters, pagination);
     return result;

@@ -36,8 +36,6 @@ class IdeaRepository {
         skip,
         take: limit,
         include: {
-          category: true,
-          status: true,
           user: {
             select: {
               id: true,
@@ -57,6 +55,7 @@ class IdeaRepository {
             select: {
               planActions: true,
               comments: true,
+              votes:true
             },
           },
         },
@@ -136,6 +135,9 @@ class IdeaRepository {
             createdAt: 'desc',
           },
         },
+        votes:{
+          _count: true
+        }
       },
     });
   }

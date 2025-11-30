@@ -27,7 +27,7 @@ class IdeaController {
         limit: parseInt(req.query.limit) || 10,
       };
 
-      const result = await ideaService.getAllIdeas(filters, pagination, req.user);
+      const result = await ideaService.getAllIdeas(filters, pagination);
       successResponse(res, result, 'Ideas retrieved successfully');
     } catch (error) {
       next(error);
