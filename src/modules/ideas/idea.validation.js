@@ -10,6 +10,8 @@ const createIdeaSchema = z.object({
     description: z.string()
       .min(10, "Description must be at least 10 characters"),
     data: z.any().optional(),
+    qualifiedAt: z.datetime().optional(),
+    approvedAt: z.datetime().optional(),
     isAnonymous: z.boolean().default(false),
     forVote: z.boolean().default(false),
     status: z.enum(['SUBMITTED', 'APPROVED', 'REJECTED', 'VALIDATED', 'ACTION_PLAN', 'QUALIFIED']).default('SUBMITTED'),
@@ -19,6 +21,8 @@ const createIdeaSchema = z.object({
     categoryId: z.string().uuid().nullable().optional(),
     kindId: z.string().uuid().nullable().optional(),
     userId: z.string().uuid().nullable().optional(),
+    qualifiedBy: z.string().uuid().nullable().optional(),
+    approvedBy: z.string().uuid().nullable().optional(),
     metadataId: z.string().uuid().nullable().optional(),
     formVariantId: z.string().uuid("Invalid form variant ID"),
   })
@@ -35,6 +39,8 @@ const updateIdeaSchema = z.object({
     title: z.string().min(3).max(200).optional(),
     description: z.string().min(10).optional(),
     data: z.any().optional(),
+    qualifiedAt: z.datetime().optional(),
+    approvedAt: z.datetime().optional(),
     isAnonymous: z.boolean().optional(),
     forVote: z.boolean().default(false),
     status: z.enum(['SUBMITTED', 'APPROVED', 'REJECTED', 'VALIDATED', 'ACTION_PLAN', 'QUALIFIED']).default('SUBMITTED'),
@@ -44,11 +50,12 @@ const updateIdeaSchema = z.object({
     categoryId: z.string().uuid().nullable().optional(),
     kindId: z.string().uuid().nullable().optional(),
     userId: z.string().uuid().nullable().optional(),
+    qualifiedBy: z.string().uuid().nullable().optional(),
+    approvedBy: z.string().uuid().nullable().optional(),
     metadataId: z.string().uuid().nullable().optional(),
     formVariantId: z.string().uuid().optional(),
   })
 });
-
 
 // Get Idea by ID Schema
 const getIdeaSchema = z.object({
