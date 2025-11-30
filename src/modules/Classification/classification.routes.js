@@ -331,4 +331,17 @@ router.put('/kinds/:id', authenticate, authorize('ADMIN'), validate(updateKindSc
  */
 router.delete('/kinds/:id', authenticate, authorize('ADMIN'), validate(deleteKindSchema), ClassificationController.deleteKind);
 
+
+/**
+ * @swagger
+ * /classification/enums:
+ *   get:
+ *     summary: Get all enums
+ *     tags: [Classification]
+ *     responses:
+ *       200:
+ *         description: enumerations retrieved successfully
+ */
+router.get('/enums', ClassificationController.findEnum);
+
 module.exports = router;

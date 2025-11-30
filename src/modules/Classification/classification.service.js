@@ -136,6 +136,9 @@ class ClassificationService {
     return { message: 'Kind deleted successfully' };
   }
 
+  async findEnum() {
+    return await ClassificationRepository.findEnum();
+  }
 
 }
 

@@ -158,9 +158,9 @@ class IdeaService {
     }
 
     // Check permissions
-    if (user.role === 'USER' && idea.userId !== user.id) {
-      throw new ForbiddenError('You do not have permission to comment on this idea');
-    }
+    // if (user.role === 'USER' && idea.userId !== user.id) {
+    //   throw new ForbiddenError('You do not have permission to comment on this idea');
+    // }
 
     const comment = await ideaRepository.createComment({
       ideaId,

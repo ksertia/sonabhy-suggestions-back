@@ -1,4 +1,5 @@
 const prisma = require('../../config/database');
+const {Visibility, Role, Priority, Impact, FieldType, Status, Plan_Status } = require("@prisma/client")
 
 class ClassificationRepository {
   // ============================================
@@ -97,6 +98,17 @@ class ClassificationRepository {
     });
   }
 
+
+  async findEnum() {
+    return {
+      status: Object.values(Status),
+      visibility: Object.values(Visibility),
+      priority: Object.values(Priority),
+      impact: Object.values(Impact),
+      role: Object.values(Role),
+      plan_Status: Object.values(Plan_Status)
+    };
+  }
 
 }
 

@@ -58,7 +58,7 @@ enum Status {
 
 enum Plan_Status {
   PENDING
-  IN_PROGRESS
+  IN_PROGRES
   COMPLETED
   CANCELED
 }
@@ -305,6 +305,8 @@ model Tache {
   planAction    PlanAction   @relation(fields: [planActionId], references: [id], onDelete: Cascade)
   assignee      User?        @relation("AssignedTaches", fields: [assignedTo], references: [id], onDelete: SetNull)
 
+  comments      Comment[]
+
   @@map("taches")
   @@index([planActionId])
   @@index([assignedTo])
@@ -401,18 +403,21 @@ model FileMetadata {
 
 model Comment {
   id          String   @id @default(uuid())
-  ideaId      String
+  ideaId      String?
+  tacheId     String?
   userId      String
   content     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   // Relations
-  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea        Idea?     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  tache       Tache?    @relation(fields: [tacheId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("comments")
   @@index([ideaId])
+  @@index([tacheId])
   @@index([userId])
   @@index([createdAt])
 }

@@ -106,6 +106,15 @@ class ClassificationController {
     }
   }
 
+  async findEnum(req, res, next) {
+    try {
+      const enums = await ClassificationService.findEnum();
+      successResponse(res, enums, 'find all enumerations');
+    }catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 module.exports = new ClassificationController();
