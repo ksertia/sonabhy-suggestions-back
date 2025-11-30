@@ -49,16 +49,16 @@ class ClassificationRepository {
   }
 
   // ============================================
-  // Statuses OPERATIONS
+  // Kinds OPERATIONS
   // ============================================
 
-  async createStatus(data) {
-    return prisma.status.create({
+  async createKind(data) {
+    return prisma.kind.create({
       data,
     });
   }
 
-  async findAllStatuses(filters = {}) {
+  async findAllKinds(filters = {}) {
     const where = {};
 
     // if (filters.search) {
@@ -70,7 +70,7 @@ class ClassificationRepository {
     //   ];
     // }
 
-    return prisma.status.findMany({
+    return prisma.kind.findMany({
       where,
       orderBy: {
         createdAt: 'desc',
@@ -78,21 +78,21 @@ class ClassificationRepository {
     });
   }
 
-  async findStatusById(id) {
-    return prisma.status.findUnique({
+  async findKindById(id) {
+    return prisma.kind.findUnique({
       where: { id },
     });
   }
 
-  async updateStatus(id, data) {
-    return prisma.status.update({
+  async updateKind(id, data) {
+    return prisma.kind.update({
       where: { id },
       data,
     });
   }
 
-  async deleteStatus(id) {
-    return prisma.status.delete({
+  async deleteKind(id) {
+    return prisma.kind.delete({
       where: { id },
     });
   }

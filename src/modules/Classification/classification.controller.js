@@ -55,52 +55,52 @@ class ClassificationController {
   }
 
   // ============================================
-  // Statuses CONTROLLERS
+  // Kinds CONTROLLERS
   // ============================================
 
-  async createStatus(req, res, next) {
+  async createKind(req, res, next) {
     try {
-      const status = await ClassificationService.createStatus(req.body, req.user);
-      successResponse(res, { status }, 'Status created successfully', 201);
+      const kind = await ClassificationService.createKind(req.body, req.user);
+      successResponse(res, { kind }, 'Kind created successfully', 201);
     } catch (error) {
       next(error);
     }
   }
 
-  async getAllStatuses(req, res, next) {
+  async getAllKinds(req, res, next) {
     try {
       const filters = {
         search: req.query.search,
       };
-      const statuses = await ClassificationService.getAllStatuses(filters);
-      successResponse(res, { statuses }, 'Statuses retrieved successfully');
+      const kinds = await ClassificationService.getAllKinds(filters);
+      successResponse(res, { kinds }, 'Kinds retrieved successfully');
     } catch (error) {
       next(error);
     }
   }
 
-  async getStatusById(req, res, next) {
+  async getKindById(req, res, next) {
     try {
-      const status = await ClassificationService.getStatusById(req.params.id, req.user);
-      successResponse(res, { status }, 'Status retrieved successfully');
+      const kind = await ClassificationService.getKindById(req.params.id, req.user);
+      successResponse(res, { kind }, 'Kind retrieved successfully');
     } catch (error) {
       next(error);
     }
   }
 
-  async updateStatus(req, res, next) {
+  async updateKind(req, res, next) {
     try {
-      const status = await ClassificationService.updateStatus(req.params.id, req.body, req.user);
-      successResponse(res, { status }, 'Status updated successfully');
+      const kind = await ClassificationService.updateKind(req.params.id, req.body, req.user);
+      successResponse(res, { kind }, 'Kind updated successfully');
     } catch (error) {
       next(error);
     }
   }
 
-  async deleteStatus(req, res, next) {
+  async deleteKind(req, res, next) {
     try {
-      const result = await ClassificationService.deleteStatus(req.params.id, req.user);
-      successResponse(res, result, 'Status deleted successfully');
+      const result = await ClassificationService.deleteKind(req.params.id, req.user);
+      successResponse(res, result, 'Kind deleted successfully');
     } catch (error) {
       next(error);
     }

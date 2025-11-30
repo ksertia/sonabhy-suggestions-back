@@ -82,7 +82,6 @@ class IdeaRepository {
       where: { id },
       include: {
         category: true,
-        status: true,
         user: {
           select: {
             id: true,
@@ -148,7 +147,6 @@ class IdeaRepository {
       data,
       include: {
         category: true,
-        status: true,
         user: {
           select: {
             id: true,
@@ -174,9 +172,6 @@ class IdeaRepository {
     return prisma.idea.update({
       where: { id },
       data: { statusId },
-      include: {
-        status: true,
-      },
     });
   }
 

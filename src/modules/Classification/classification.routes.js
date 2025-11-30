@@ -14,18 +14,18 @@ const {
   listCategoriesSchema,
   
   // Categories Model
-  createStatusSchema,
-  updateStatusSchema,
-  getStatusSchema,
-  deleteStatusSchema,
-  listStatusesSchema
+  createKindSchema,
+  updateKindSchema,
+  getKindSchema,
+  deleteKindSchema,
+  listKindsSchema
 } = require('./classification.validation');
 
 /**
  * @swagger
  * tags:
  *   name: Classification
- *   description: Categories and Statuses builder management
+ *   description: Categories and kinds builder management
  */
 
 /**
@@ -58,10 +58,6 @@ const {
  *         name:
  *           type: string
  *         description:
- *           type: string
- *         order:
- *           type: number
- *         color:
  *           type: string
  *         createdAt:
  *           type: string
@@ -207,14 +203,14 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
 
 
 // ============================================
-// FORM STRUCTURE & VALIDATION ROUTES
+// kinds STRUCTURE & VALIDATION ROUTES
 // ============================================
 
 /**
  * @swagger
- * /classification/statuses:
+ * /classification/kinds:
  *   post:
- *     summary: Create a new Status (Admin only)
+ *     summary: Create a new kind (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -239,31 +235,31 @@ router.delete('/categories/:id', authenticate, authorize('ADMIN'), validate(dele
  *                 type: string
  *     responses:
  *       201:
- *         description: Status created successfully
+ *         description: kind created successfully
  *       403:
  *         description: Forbidden - Admin only
  */
-router.post('/statuses', authenticate, authorize('ADMIN'), validate(createStatusSchema), ClassificationController.createStatus);
+router.post('/kinds', authenticate, authorize('ADMIN'), validate(createKindSchema), ClassificationController.createKind);
 
 /**
  * @swagger
- * /classification/statuses:
+ * /classification/kinds:
  *   get:
- *     summary: Get all Statuses
+ *     summary: Get all kinds
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Statuses retrieved successfully
+ *         description: kinds retrieved successfully
  */
-router.get('/statuses', authenticate, validate(listStatusesSchema), ClassificationController.getAllStatuses);
+router.get('/kinds', authenticate, validate(listKindsSchema), ClassificationController.getAllKinds);
 
 /**
  * @swagger
- * /classification/statuses/{id}:
+ * /classification/kinds/{id}:
  *   get:
- *     summary: Get Status by ID
+ *     summary: Get kind by ID
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -276,17 +272,17 @@ router.get('/statuses', authenticate, validate(listStatusesSchema), Classificati
  *           format: uuid
  *     responses:
  *       200:
- *         description: Status retrieved successfully
+ *         description: kind retrieved successfully
  *       404:
- *         description: Status not found
+ *         description: kind not found
  */
-router.get('/statuses/:id', authenticate, validate(getStatusSchema), ClassificationController.getStatusById);
+router.get('/kinds/:id', authenticate, validate(getKindSchema), ClassificationController.getKindById);
 
 /**
  * @swagger
- * /classification/statuses/{id}:
+ * /classification/kinds/{id}:
  *   put:
- *     summary: Update status (Admin only)
+ *     summary: Update kind (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -314,17 +310,17 @@ router.get('/statuses/:id', authenticate, validate(getStatusSchema), Classificat
  *                 type: string
  *     responses:
  *       200:
- *         description: Status updated successfully
+ *         description: kind updated successfully
  *       403:
  *         description: Forbidden - Admin only
  */
-router.put('/statuses/:id', authenticate, authorize('ADMIN'), validate(updateStatusSchema), ClassificationController.updateStatus);
+router.put('/kinds/:id', authenticate, authorize('ADMIN'), validate(updateKindSchema), ClassificationController.updateKind);
 
 /**
  * @swagger
- * /classification/statuses/{id}:
+ * /classification/kinds/{id}:
  *   delete:
- *     summary: Delete Status (Admin only)
+ *     summary: Delete kind (Admin only)
  *     tags: [Classification]
  *     security:
  *       - bearerAuth: []
@@ -337,10 +333,10 @@ router.put('/statuses/:id', authenticate, authorize('ADMIN'), validate(updateSta
  *           format: uuid
  *     responses:
  *       200:
- *         description: Status deleted successfully
+ *         description: kind deleted successfully
  *       403:
  *         description: Forbidden - Admin only
  */
-router.delete('/statuses/:id', authenticate, authorize('ADMIN'), validate(deleteStatusSchema), ClassificationController.deleteStatus);
+router.delete('/kinds/:id', authenticate, authorize('ADMIN'), validate(deleteKindSchema), ClassificationController.deleteKind);
 
 module.exports = router;

@@ -20,7 +20,7 @@ enum Role {
   ADMIN
 }
 
-enum Urgency {
+enum Priority {
   LOW
   MEDIUM
   HIGH
@@ -45,6 +45,21 @@ enum FieldType {
   CHECKBOX
   RADIO
   FILE
+}
+
+enum Status {
+  SUBMITTED
+  APPROVED
+  REJECTED
+  VALIDATED
+  ACTION_PLAN
+  QUALIFIED
+}
+
+enum Visibility {
+  TEAM
+  PUBLIC
+  PRIVATE
 }
 
 // ============================================
@@ -133,6 +148,13 @@ model Idea {
   description   String      @db.Text
   data          Json?
   isAnonymous   Boolean     @default(false)
+  forVote       Boolean     @default(false)
+  status        Status      @default(SUBMITTED)
+  visibility    Visibility  @default(PRIVATE)
+  priority      Priority?    
+  impact        Impact?      
+  categoryId    String?
+  kindId        String?
   userId        String?
   formVariantId String
   metadataId    String?     @unique
@@ -143,12 +165,16 @@ model Idea {
   user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   formVariant   FormVariant @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
   metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
+  category      Category?    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  kind          Kind?        @relation(fields: [kindId], references: [id], onDelete: Restrict)
   planActions   PlanAction[]
   comments      Comment[]
   votes         Vote[]
 
   @@map("ideas")
   @@index([userId])
+  @@index([categoryId])
+  @@index([kindId])
   @@index([formVariantId])
   @@index([createdAt])
 }
@@ -161,26 +187,39 @@ model Category {
   updatedAt   DateTime @updatedAt
   
   // Relations
-  //ideas       Idea[]
+  ideas       Idea[]
 
   @@map("categories")
 }
 
-model Status {
+model Kind {
   id          String   @id @default(uuid())
   name        String   @unique
-  order       Int      @unique
-  color       String?
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   // Relations
-  //ideas       Idea[]
+  ideas       Idea[]
 
-  @@map("statuses")
-  @@index([order])
+  @@map("kinds")
 }
+
+//model Status {
+//  id          String   @id @default(uuid())
+//  name        String   @unique
+//  order       Int      @unique
+//  color       String?
+//  description String?
+//  createdAt   DateTime @default(now())
+//  updatedAt   DateTime @updatedAt
+//  
+//  // Relations
+//  //ideas       Idea[]
+//
+//  @@map("statuses")
+//  @@index([order])
+//}
 
 model Vote {
   id        String   @id @default(uuid())

@@ -70,70 +70,70 @@ class ClassificationService {
   }
 
   // ============================================
-  // FORM VARIANT OPERATIONS
+  // Kinds OPERATIONS
   // ============================================
 
-  async createStatus(data, user) {
+  async createKind(data, user) {
     // Only admins can create form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can create status');
+      throw new ForbiddenError('Only admins can create Kind');
     }
 
     // Check if name already exists
-    const existing = await ClassificationRepository.findAllStatuses({ search: data.name });
+    const existing = await ClassificationRepository.findAllKinds({ search: data.name });
     if (existing.some(model => model.name === data.name)) {
-      throw new ConflictError('Statuses with this name already exists');
+      throw new ConflictError('Kind with this name already exists');
     }
 
-    const status = await ClassificationRepository.createStatus(data);
-    return status;
+    const kind = await ClassificationRepository.createKind(data);
+    return kind;
   }
 
-  async getAllStatuses(filters) {
-    const statuses = await ClassificationRepository.findAllStatuses(filters);
-    return statuses;
+  async getAllKinds(filters) {
+    const kinds = await ClassificationRepository.findAllKinds(filters);
+    return kinds;
   }
 
-  async getStatusById(id) {
-    const status = await ClassificationRepository.findStatusById(id);
+  async getKindById(id) {
+    const kind = await ClassificationRepository.findKindById(id);
     
-    if (!status) {
-      throw new NotFoundError('Status not found');
+    if (!kind) {
+      throw new NotFoundError('Kind not found');
     }
 
-    return status;
+    return kind;
   }
 
-  async updateStatus(id, data, user) {
+  async updateKind(id, data, user) {
     // Only admins can update form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can update statuses');
+      throw new ForbiddenError('Only admins can update Kind');
     }
 
-    const status = await ClassificationRepository.findStatusById(id);
+    const kind = await ClassificationRepository.findKindById(id);
     
-    if (!status) {
-      throw new NotFoundError('Status not found');
+    if (!kind) {
+      throw new NotFoundError('Kind not found');
     }
 
-    const updated = await ClassificationRepository.updateStatus(id, data);
+    const updated = await ClassificationRepository.updateKind(id, data);
     return updated;
   }
 
-  async deleteStatus(id, user) {
+  async deleteKind(id, user) {
     // Only admins can delete form models
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete Statuses');
+      throw new ForbiddenError('Only admins can delete Kind');
     }
 
-    const status = await ClassificationRepository.findStatusById(id);
+    const kind = await ClassificationRepository.findKindById(id);
     
-    if (!status) {
-      throw new NotFoundError('Status not found');
+    if (!kind) {
+      throw new NotFoundError('Kind not found');
     }
 
-    await ClassificationRepository.deleteStatus(id);
-    return { message: 'Status deleted successfully' };
+    await ClassificationRepository.deleteKind(id);
+    return { message: 'Kind deleted successfully' };
   }
 
 

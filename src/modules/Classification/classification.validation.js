@@ -40,43 +40,39 @@ const listCategoriesSchema = z.object({
 });
 
 // ============================================
-// STATUSES SCHEMAS
+// Kinds SCHEMAS
 // ============================================
 
-const createStatusSchema = z.object({
+const createKindSchema = z.object({
   body: z.object({
     name: z.string().min(3, 'Name must be at least 3 characters').max(100),
     description: z.string().optional(),
-    order: z.number(),
-    color: z.string().optional(),
   }),
 });
 
-const updateStatusSchema = z.object({
+const updateKindSchema = z.object({
   params: z.object({
     id: z.string().uuid('Invalid form model ID'),
   }),
   body: z.object({
     name: z.string().min(3).max(100).optional(),
     description: z.string().optional(),
-    order: z.number(),
-    color: z.string().optional(),
   }),
 });
 
-const getStatusSchema = z.object({
+const getKindSchema = z.object({
   params: z.object({
     id: z.string().uuid('Invalid form model ID'),
   }),
 });
 
-const deleteStatusSchema = z.object({
+const deleteKindSchema = z.object({
   params: z.object({
     id: z.string().uuid('Invalid form model ID'),
   }),
 });
 
-const listStatusesSchema = z.object({
+const listKindsSchema = z.object({
   query: z.object({
     search: z.string().optional(),
   }),
@@ -91,10 +87,10 @@ module.exports = {
   listCategoriesSchema,
   
   // Categories Model
-  createStatusSchema,
-  updateStatusSchema,
-  getStatusSchema,
-  deleteStatusSchema,
-  listStatusesSchema
+  createKindSchema,
+  updateKindSchema,
+  getKindSchema,
+  deleteKindSchema,
+  listKindsSchema
  
 };
