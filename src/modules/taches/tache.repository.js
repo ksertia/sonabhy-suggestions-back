@@ -9,7 +9,7 @@ class TacheRepository {
     return prisma.tache.create({
       data,
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -19,6 +19,12 @@ class TacheRepository {
           },
         },
       },
+    });
+  }
+
+  async findPlanAction(id) {
+    return await prisma.planAction.findUnique({
+      where: { id },
     });
   }
 
@@ -59,7 +65,7 @@ class TacheRepository {
               status: true,
             },
           },
-          assignees: {
+          assignee: {
             select: {
               id: true,
               email: true,
@@ -100,7 +106,7 @@ class TacheRepository {
             idea: true,
           },
         },
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -121,7 +127,7 @@ class TacheRepository {
     return prisma.tache.findMany({
       where: { planActionId },
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -145,7 +151,7 @@ class TacheRepository {
       where: { id },
       data,
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -181,12 +187,12 @@ class TacheRepository {
     return prisma.tache.update({
       where: { id },
       data: {
-        assignees: {
+        assignee: {
           connect: userIds.map(uid => ({ id: uid })),
         },
       },
       include: {
-        assignees: true,
+        assignee: true,
       },
     });
   }
@@ -198,11 +204,11 @@ class TacheRepository {
     return prisma.tache.update({
       where: { id },
       data: {
-        assignees: {
+        assignee: {
           disconnect: userIds.map(uid => ({ id: uid })),
         },
       },
-      include: { assignees: true },
+      include: { assignee: true },
     });
   }
 
@@ -229,7 +235,7 @@ class TacheRepository {
     }
     if (filters.assigneeId) {
       // Many-to-Many filter
-      where.assignees = {
+      where.assignee = {
         some: { id: filters.assigneeId },
       };
     }

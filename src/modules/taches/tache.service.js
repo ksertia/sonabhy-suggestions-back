@@ -1,9 +1,4 @@
-const {
-  NotFoundError,
-  ForbiddenError,
-  BadRequestError,
-} = require('../../utils/errors');
-
+const { NotFoundError, ForbiddenError, BadRequestError, } = require('../../utils/errors');
 const tacheRepository = require('./tache.repository');
 const prisma = require('../../config/database');
 
@@ -20,19 +15,14 @@ class TacheService {
     }
 
     // Check if PlanAction exists
-    const planAction = await prisma.planAction.findUnique({
-      where: { id: data.planActionId },
-    });
+    const planAction = tacheRepository.findPlanAction(data.planActionId);
 
     if (!planAction) {
       throw new NotFoundError('PlanAction not found');
     }
 
     // Validate progress
-    if (
-      data.progress !== undefined &&
-      (data.progress < 0 || data.progress > 100)
-    ) {
+    if ( data.progress !== undefined && (data.progress < 0 || data.progress > 100) ) {
       throw new BadRequestError('Progress must be between 0 and 100');
     }
 
@@ -46,15 +36,11 @@ class TacheService {
   // ---------------------------------------------------
   async createMultipleTaches(planActionId, taches, user) {
     if (user.role === 'USER') {
-      throw new ForbiddenError(
-        'Only managers and admins can create tasks (taches)'
-      );
+      throw new ForbiddenError('Only managers and admins can create tasks (taches)');
     }
 
     // Validate existence of PlanAction
-    const exists = await prisma.planAction.findUnique({
-      where: { id: planActionId },
-    });
+    const exists = tacheRepository.findPlanAction(data.planActionId);
 
     if (!exists) {
       throw new NotFoundError('PlanAction not found');
@@ -92,15 +78,9 @@ class TacheService {
     }
 
     // Permission: user must be one of assignees OR admin/manager
-    if (
-      user.role === 'USER' &&
-      !tache.assignees.some((u) => u.id === user.id)
-    ) {
-      throw new ForbiddenError(
-        'You do not have permission to view this task'
-      );
+    if ( user.role === 'USER' && !tache.assignee === user.id ) {
+      throw new ForbiddenError('You do not have permission to view this task');
     }
-
     return tache;
   }
 
@@ -108,31 +88,29 @@ class TacheService {
   // GET BY PLAN ACTION
   // ---------------------------------------------------
   async getTachesByPlanAction(planActionId, user) {
-    const plan = await prisma.planAction.findUnique({
-      where: { planActionId },
-    });
+    const plan = await tacheRepository.findByPlanActionId(planActionId);
 
     if (!plan) {
       throw new NotFoundError('PlanAction not found');
     }
 
     // Users can only see if they belong to one of the taches OR assigned to planAction
-    if (user.role === 'USER') {
-      const hasAccess = await prisma.tache.findFirst({
-        where: {
-          planActionId,
-          assignees: {
-            some: { id: user.id },
-          },
-        },
-      });
+    // if (user.role === 'USER') {
+    //   const hasAccess = await prisma.tache.findFirst({
+    //     where: {
+    //       planActionId,
+    //       assignee: {
+    //         some: { id: user.id },
+    //       },
+    //     },
+    //   });
 
-      if (!hasAccess) {
-        throw new ForbiddenError(
-          'You do not have permission to view tasks of this planAction'
-        );
-      }
-    }
+    //   if (!hasAccess) {
+    //     throw new ForbiddenError(
+    //       'You do not have permission to view tasks of this planAction'
+    //     );
+    //   }
+    // }
 
     return await tacheRepository.findByPlanActionId(planActionId);
   }

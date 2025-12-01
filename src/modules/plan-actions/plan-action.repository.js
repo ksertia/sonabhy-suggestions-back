@@ -89,7 +89,7 @@ class PlanActionRepository {
       include: {
         idea: {
           include: {
-            status: true,
+            kind: true,
             category: true,
             user: {
               select: {
