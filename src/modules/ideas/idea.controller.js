@@ -63,7 +63,7 @@ class IdeaController {
 
   async updateStatus(req, res, next) {
     try {
-      const idea = await ideaService.updateIdeaStatus(req.params.id, req.body.statusId, req.user);
+      const idea = await ideaService.updateIdeaStatus(req.params.id, req.body.status, req.user);
       successResponse(res, { idea }, 'Idea status updated successfully');
     } catch (error) {
       next(error);

@@ -88,7 +88,7 @@ class IdeaService {
     return { message: 'Idea deleted successfully' };
   }
 
-  async updateIdeaStatus(id, statusId, user) {
+  async updateIdeaStatus(id, status, user) {
     // Only managers and admins can update status
     if (user.role === 'USER') {
       throw new ForbiddenError('Only managers and admins can update idea status');
@@ -231,7 +231,7 @@ class IdeaService {
     const [total, byStatus, byCategory, byUrgency, byImpact] = await Promise.all([
       prisma.idea.count({ where }),
       prisma.idea.groupBy({
-        by: ['statusId'],
+        by: ['status'],
         where,
         _count: true,
       }),
@@ -241,7 +241,7 @@ class IdeaService {
         _count: true,
       }),
       prisma.idea.groupBy({
-        by: ['urgency'],
+        by: ['priority'],
         where,
         _count: true,
       }),
