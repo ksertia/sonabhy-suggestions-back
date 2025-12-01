@@ -273,19 +273,20 @@ model PlanAction {
   status      Plan_Status @default(PENDING)
   tacheId     String?       
   deadline    DateTime?
-  assignedTo  String?
+  //assignedTo  String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   
   // Relations
   idea        Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  assignee    User?     @relation("AssignedActions", fields: [assignedTo], references: [id], onDelete: SetNull)
+// assignee    User?     @relation("AssignedActions", fields: [assignedTo], references: [id], onDelete: SetNull)
+  assignees   User[]      @relation("AssignedActions")
   taches      Tache[]
 
 
   @@map("plan_actions")
   @@index([ideaId])
-  @@index([assignedTo])
+  //@@index([assignedTo])
   @@index([deadline])
 }
 
@@ -297,19 +298,19 @@ model Tache {
   progress      Int          @default(0)
   status        Plan_Status  @default(PENDING)
   deadline      DateTime?
-  assignedTo    String?
+  //assignedTo    String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
   // Relations
   planAction    PlanAction   @relation(fields: [planActionId], references: [id], onDelete: Cascade)
-  assignee      User?        @relation("AssignedTaches", fields: [assignedTo], references: [id], onDelete: SetNull)
-
+  //assignee      User?        @relation("AssignedTaches", fields: [assignedTo], references: [id], onDelete: SetNull)
+  assignees     User[]       @relation("AssignedTaches")
   comments      Comment[]
 
   @@map("taches")
   @@index([planActionId])
-  @@index([assignedTo])
+  //@@index([assignedTo])
   @@index([deadline])
 }
 

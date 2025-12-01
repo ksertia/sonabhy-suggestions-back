@@ -109,7 +109,7 @@ class IdeaRepository {
         metadata: true,
         planActions: {
           include: {
-            assignee: {
+            assignees: {
               select: {
                 id: true,
                 email: true,
@@ -178,10 +178,10 @@ class IdeaRepository {
     });
   }
 
-  async updateStatus(id, statusId) {
+  async updateStatus(id, status) {
     return prisma.idea.update({
       where: { id },
-      data: { statusId },
+      data: { status },
     });
   }
 
@@ -216,7 +216,7 @@ class IdeaRepository {
     return prisma.planAction.create({
       data,
       include: {
-        assignee: {
+        assignees: {
           select: {
             id: true,
             email: true,
@@ -253,7 +253,7 @@ class IdeaRepository {
     return prisma.planAction.findMany({
       where: { ideaId },
       include: {
-        assignee: {
+        assignees: {
           select: {
             id: true,
             email: true,

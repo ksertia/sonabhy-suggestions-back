@@ -183,7 +183,7 @@ router.post('/models', authenticate, authorize('ADMIN'), validate(createFormMode
  *       200:
  *         description: Form models retrieved successfully
  */
-router.get('/models', authenticate, validate(listFormModelsSchema), formController.getAllFormModels);
+router.get('/models', validate(listFormModelsSchema), formController.getAllFormModels);
 
 /**
  * @swagger
@@ -331,7 +331,7 @@ router.post('/variants', authenticate, authorize('ADMIN', 'MANAGER'), validate(c
  *       200:
  *         description: Form variants retrieved successfully
  */
-router.get('/models/:modelId/variants', authenticate, validate(listFormVariantsSchema), formController.getAllFormVariants);
+router.get('/models/:modelId/variants', validate(listFormVariantsSchema), formController.getAllFormVariants);
 
 /**
  * @swagger
@@ -532,7 +532,7 @@ router.post('/fields', authenticate, authorize('ADMIN', 'MANAGER'), validate(cre
  *       200:
  *         description: Form fields retrieved successfully
  */
-router.get('/variants/:variantId/fields', authenticate, validate(listFormFieldsSchema), formController.getAllFormFields);
+router.get('/variants/:variantId/fields', validate(listFormFieldsSchema), formController.getAllFormFields);
 
 /**
  * @swagger

@@ -100,7 +100,7 @@ class IdeaService {
       throw new NotFoundError('Idea not found');
     }
 
-    const updatedIdea = await ideaRepository.updateStatus(id, statusId);
+    const updatedIdea = await ideaRepository.updateStatus(id, status);
     return updatedIdea;
   }
 
