@@ -109,7 +109,7 @@ class IdeaRepository {
         metadata: true,
         planActions: {
           include: {
-            assignees: {
+            assignee: {
               select: {
                 id: true,
                 email: true,
@@ -216,7 +216,7 @@ class IdeaRepository {
     return prisma.planAction.create({
       data,
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -253,7 +253,7 @@ class IdeaRepository {
     return prisma.planAction.findMany({
       where: { ideaId },
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -343,6 +343,20 @@ class IdeaRepository {
       _sum: { value: true },
     });
     return score
+  }
+
+  async responsibilizeUser(ideaId, userIds) {
+    return await prisma.idea.update({
+      where: {id: ideaId},
+      data: {
+        responsibleUsers: {
+          connect: userIds.map(id => ({ id }))
+        }
+      },
+      include:{
+        responsibleUsers:true
+      }
+    })
   }
 }
 

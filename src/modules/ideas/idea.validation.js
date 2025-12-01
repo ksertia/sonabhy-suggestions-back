@@ -103,6 +103,15 @@ const updateStatusSchema = z.object({
   }),
 });
 
+const updateAssignSchema = z.object({
+  params: z.object({
+    ideaId: z.string().uuid('Invalid idea ID'),
+  }),
+  body: z.object({
+    userIds:z.any()
+  }),
+});
+
 // Add Comment Schema
 const addCommentSchema = z.object({
   params: z.object({
@@ -144,4 +153,5 @@ module.exports = {
   addCommentSchema,
   createPlanActionSchema,
   uploadFilesSchema,
+  updateAssignSchema,
 };

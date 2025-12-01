@@ -12,7 +12,7 @@ class PlanActionRepository {
             status: true,
           },
         },
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -54,7 +54,7 @@ class PlanActionRepository {
               },
             },
           },
-          assignees: {
+          assignee: {
             select: {
               id: true,
               email: true,
@@ -101,7 +101,7 @@ class PlanActionRepository {
             },
           },
         },
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -118,7 +118,7 @@ class PlanActionRepository {
     return prisma.planAction.findMany({
       where: { ideaId },
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -165,7 +165,7 @@ class PlanActionRepository {
             status: true,
           },
         },
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -183,7 +183,7 @@ class PlanActionRepository {
       where: { id },
       data: { progress },
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,
@@ -200,7 +200,7 @@ class PlanActionRepository {
       where: { id },
       data: { assignedTo: userId },
       include: {
-        assignees: {
+        assignee: {
           select: {
             id: true,
             email: true,

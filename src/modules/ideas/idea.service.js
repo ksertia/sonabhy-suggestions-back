@@ -281,6 +281,23 @@ class IdeaService {
       }
     return await ideaRepository.countLike(ideaId);
   }
+
+  async responsibilizeUser(ideaId, data, user) {
+    if (user.role === 'USER') {
+      throw new ForbiddenError('You do not have permission to view plan actions for this idea');
+    }
+    
+    if(!ideaId) {
+        throw new NotFoundError('you are not pass userId and ideaId');
+    }
+    console.log(data)
+
+    if (!Array.isArray(data.userIds) || data.userIds.length === 0) {
+      throw new NotFoundError('userIds doit être un tableau non vide');
+    }
+
+    return await ideaRepository.responsibilizeUser(ideaId, data.userIds);
+  }
 }
 
 module.exports = new IdeaService();

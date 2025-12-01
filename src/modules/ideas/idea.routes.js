@@ -15,6 +15,7 @@ const {
   addCommentSchema,
   createPlanActionSchema,
   uploadFilesSchema,
+  updateAssignSchema,
 } = require('./idea.validation');
 
 /**
@@ -733,5 +734,45 @@ router.get('/:ideaId/score', authenticate, validate(getIdeaSchema), ideaControll
  *         description: vote added successfully
  */
 router.post('/:ideaId/user/:userId', authenticate , validate(getIdeaSchema), ideaController.like);
+
+/**
+ * @swagger
+ * /ideas/{ideaId}/assign:
+ *   patch:
+ *     summary: Assigne une liste d'utilisateurs à une idée
+ *     tags: [Ideas]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ideaId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID de l'idée
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userIds
+ *             properties:
+ *               userIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Tableau d'IDs d'utilisateurs à assigner
+ *     responses:
+ *       200:
+ *         description: Utilisateurs assignés avec succès
+ *       400:
+ *         description: Requête invalide
+ *       401:
+ *         description: Non autorisé
+ */
+router.patch('/:ideaId/assign', authenticate, validate(updateAssignSchema), ideaController.assigneToUser);
 
 module.exports = router;

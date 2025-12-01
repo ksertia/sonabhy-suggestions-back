@@ -160,6 +160,17 @@ class IdeaController {
     }
   }
 
+  async assigneToUser(req, res, next) {
+    try {
+      const ideaId = req.params.ideaId;
+      console.log(req.body)
+      const assignedTo = await ideaService.responsibilizeUser(ideaId, req.body, req.user);
+      successResponse(res, { assignedTo }, "assigne user successful");
+    }catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 module.exports = new IdeaController();
