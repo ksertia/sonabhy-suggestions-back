@@ -45,7 +45,26 @@ class AuthRepository {
         isActive: true,
         createdAt: true,
         updatedAt: true,
-      },
+        comments: true,
+        AssignedTaches: true,
+        ideas: true,
+        assignedActions: true,
+        responsibleIdeas: true,
+        qualifiedIdeas: true,
+        approvedIdeas:true,
+        _count: {
+          select: {
+            votes: true,
+            comments: true,
+            AssignedTaches: true,
+            ideas: true,
+            assignedActions: true,
+            responsibleIdeas: true,
+            qualifiedIdeas: true,
+            approvedIdeas:true,
+          }
+        }
+      }
     });
   }
 
