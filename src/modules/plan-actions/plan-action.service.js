@@ -34,9 +34,10 @@ class PlanActionService {
 
     const planAction = await planActionRepository.create(data);
 
-    if (taches.length === 0) {
+    if (Array.isArray(taches) || taches.length !== 0) {
       await tacheService.createMultipleTaches(planAction.id, taches, user);
     }
+    
     return planAction;
   }
 
@@ -127,8 +128,9 @@ class PlanActionService {
         throw new NotFoundError('Assignee user not found');
       }
     }
-    if (taches.length === 0) {
-      await tacheService.createMultipleTaches(id, taches, user);
+    
+    if (Array.isArray(taches) || taches.length !== 0) {
+      await tacheService.createMultipleTaches(planAction.id, taches, user);
     }
 
     const updated = await planActionRepository.update(id, data);
