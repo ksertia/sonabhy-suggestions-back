@@ -169,6 +169,7 @@ class PlanActionRepository {
     return prisma.planAction.findMany({
       where: { ideaId },
       include: {
+        taches:true,
         assignee: {
           select: {
             id: true,
@@ -178,6 +179,11 @@ class PlanActionRepository {
             role: true,
           },
         },
+        _count: {
+          select: {
+            taches:true,
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc',
