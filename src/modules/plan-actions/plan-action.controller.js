@@ -73,6 +73,15 @@ class PlanActionController {
     }
   }
 
+  async completePlanAction (req, res, next) {
+      try {
+        const result = await planActionService.completePlanAction(req.params.id);
+        successResponse(res, { result } , "PlanAction terminée avec succès")
+      } catch (error) {
+        next(error);
+      }
+    }
+
   async updateProgress(req, res, next) {
     try {
       const planAction = await planActionService.updateProgress(req.params.id, req.body.progress, req.user);

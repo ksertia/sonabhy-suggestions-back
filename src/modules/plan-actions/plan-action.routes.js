@@ -78,6 +78,33 @@ const {
  *               type: string
  *             role:
  *               type: string
+ * 
+ *     CreateTache:
+ *       type: object
+ *       required:
+ *         - planActionId
+ *         - title
+ *       properties:
+ *         planActionId:
+ *           type: string
+ *           format: uuid
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         progress:
+ *           type: integer
+ *           minimum: 0
+ *           maximum: 100
+ *         status:
+ *           type: string
+ *           enum: [PENDING, IN_PROGRESS, COMPLETED, CANCELED]
+ *         deadline:
+ *           type: string
+ *           format: date-time
+ *         assignedTo:
+ *           type: string
+ *           format: uuid
  */
 
 /**
@@ -437,6 +464,10 @@ router.get('/:id', authenticate, validate(getPlanActionSchema), planActionContro
  *               assignedTo:
  *                 type: string
  *                 format: uuid
+ *               taches:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/CreateTache'
  *     responses:
  *       200:
  *         description: Plan action updated successfully
@@ -540,5 +571,27 @@ router.patch('/:id/assign', authenticate, authorize('ADMIN', 'MANAGER'), validat
  *         description: Forbidden - Manager/Admin only
  */
 router.delete('/:id', authenticate, authorize('ADMIN', 'MANAGER'), validate(deletePlanActionSchema), planActionController.deletePlanAction);
+
+/**
+ * @swagger
+ * /plan-actions/{id}/complete:
+ *   patch:
+ *     summary: complete plan action
+ *     tags: [Plan Actions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Taches retrieved successfully
+ */
+router.patch("/:id/complete", authenticate, planActionController.completePlanAction);
+
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const planActionRepository = require('./plan-action.repository');
+const tacheService = require('../taches/tache.service');
 const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/errors');
 
 class PlanActionService {
@@ -81,6 +82,9 @@ class PlanActionService {
   }
 
   async updatePlanAction(id, data, user) {
+    const taches = data.taches;
+    delete data.taches;
+    delete data.progress;
     const planAction = await planActionRepository.findById(id);
     
     if (!planAction) {
@@ -118,8 +122,21 @@ class PlanActionService {
       }
     }
 
+    await tacheService.createMultipleTaches(id, taches, user);
+
     const updated = await planActionRepository.update(id, data);
+
+    // await tacheService.createMultipleTaches(id, taches, user);
+
     return updated;
+  }
+
+  async completePlanAction(id) {
+  // 1) Mise à jour de la tâche
+    return await planActionRepository.update(id, {
+      progress: 100,
+      status: "COMPLETED"
+    });
   }
 
   async updateProgress(id, progress, user) {

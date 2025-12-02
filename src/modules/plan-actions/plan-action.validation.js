@@ -9,6 +9,7 @@ const createPlanActionSchema = z.object({
     progress: z.number().int().min(0, 'Progress must be at least 0').max(100, 'Progress must not exceed 100').optional().default(0),
     deadline: z.string().datetime('Invalid datetime format').optional(),
     assignedTo: z.string().uuid('Invalid user ID').optional(),
+    taches: z.array(z.any()).optional(),
   }),
 });
 
@@ -23,6 +24,7 @@ const updatePlanActionSchema = z.object({
     progress: z.number().int().min(0).max(100).optional(),
     deadline: z.string().datetime().optional(),
     assignedTo: z.string().uuid().optional(),
+    taches: z.array(z.any()).optional(),
   }),
 });
 

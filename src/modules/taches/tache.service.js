@@ -28,6 +28,9 @@ class TacheService {
 
     // Create task
     const tache = await tacheRepository.create(data);
+
+    await this.updatePlanActionProgress(data.planActionId);
+
     return tache;
   }
 
@@ -40,18 +43,22 @@ class TacheService {
     }
 
     // Validate existence of PlanAction
-    const exists = tacheRepository.findPlanAction(data.planActionId);
+    const exists = tacheRepository.findPlanAction(planActionId);
 
     if (!exists) {
       throw new NotFoundError('PlanAction not found');
     }
 
+    console.log(taches)
     if (!Array.isArray(taches) || taches.length === 0) {
       throw new BadRequestError('taches doit être un tableau non vide');
     }
 
     // Bulk create
     const result = await tacheRepository.createMany(planActionId, taches);
+
+    await this.updatePlanActionProgress(planActionId);
+
     return result;
   }
 
@@ -127,7 +134,7 @@ class TacheService {
 
     // USER can ONLY update progress + description
     if (user.role === 'USER') {
-      const isAssignee = tache.assignees.some((u) => u.id === user.id);
+      const isAssignee = tache.assignee.id === user.id;
       if (!isAssignee) {
         throw new ForbiddenError('You do not have permission to update this task');
       }
@@ -136,39 +143,70 @@ class TacheService {
       const invalid = Object.keys(data).some((k) => !allowed.includes(k));
 
       if (invalid) {
-        throw new ForbiddenError(
-          'Users can only update progress and description'
-        );
+        throw new ForbiddenError('Users can only update progress and description');
       }
     }
 
     // Validate progress
-    if (
-      data.progress !== undefined &&
-      (data.progress < 0 || data.progress > 100)
-    ) {
+    if ( data.progress !== undefined && (data.progress < 0 || data.progress > 100)) {
       throw new BadRequestError('Progress must be between 0 and 100');
     }
 
     return await tacheRepository.update(id, data);
   }
 
-  // ---------------------------------------------------
-  // UPDATE PROGRESS ONLY
-  // ---------------------------------------------------
-  async updateProgress(id, progress, user) {
+  async changeStatus(id, status, user) {
     const tache = await tacheRepository.findById(id);
-
     if (!tache) {
       throw new NotFoundError('Tache not found');
     }
 
-    const isAssignee = tache.assignees.some((u) => u.id === user.id);
+    if (user.role === 'USER') {
+      throw new ForbiddenError('You do not have permission to update this task');
+    }
 
-    if (user.role === 'USER' && !isAssignee) {
-      throw new ForbiddenError(
-        'You do not have permission to update this task'
-      );
+    return await tacheRepository.changeStatus(id, status);
+  }
+
+  async completeTache(id) {
+    // 1) Mise à jour de la tâche
+    const tache = await tacheRepository.update(id, {
+      progress: 100,
+      status: "COMPLETED"
+    });
+
+    // 2) Recalcul automatique
+    await this.updatePlanActionProgress(tache.planActionId);
+
+    return tache;
+  }
+
+  async updatePlanActionProgress(planActionId) {
+    const taches = await tacheRepository.findProgressByPlanActionId(planActionId);
+
+    const average = taches.length
+      ? Math.round(taches.reduce((a, t) => a + t.progress, 0) / taches.length)
+      : 0;
+
+    await tacheRepository.updatePlanAction(planActionId, {
+      progress: average
+    });
+  }
+
+  // ---------------------------------------------------
+  // UPDATE PROGRESS ONLY
+  // ---------------------------------------------------
+  async updateProgress(id, progress, user) {
+    // const tache = await tacheRepository.findById(id);
+    // console.log(tache)
+    // if (!tache) {
+    //   throw new NotFoundError('Tache not found');
+    // }
+
+    // const isAssignee = tache.assignee.id ? tache.assignee.id === user.id : false;
+
+    if (user.role === 'USER') { 
+      throw new ForbiddenError('You do not have permission to update this task');
     }
 
     // Validate progress
@@ -179,37 +217,44 @@ class TacheService {
     return await tacheRepository.updateProgress(id, progress);
   }
 
-  // ---------------------------------------------------
-  // ASSIGN MULTIPLE USERS
-  // ---------------------------------------------------
-  async assignUsers(id, userIds, user) {
-    const tache = await tacheRepository.findById(id);
 
-    if (!tache) {
-      throw new NotFoundError('Tache not found');
-    }
-
-    if (!Array.isArray(userIds) || userIds.length === 0) {
-      throw new BadRequestError('userIds doit être un tableau non vide');
-    }
-
-    // Only manager/admin can assign
-    if (user.role === 'USER') {
-      throw new ForbiddenError(
-        'Only managers and admins can assign users to tasks'
-      );
-    }
-
-    // Verify all users exist
-    for (const uid of userIds) {
-      const exists = await prisma.user.findUnique({ where: { id: uid } });
-      if (!exists) {
-        throw new NotFoundError(`User not found: ${uid}`);
+  async addComment(tacheId, content, user) {
+      const tache = await tacheRepository.findById(tacheId);
+      
+      if (!tache) {
+        throw new NotFoundError('Idea not found');
       }
+  
+      // Check permissions
+      // if (user.role === 'USER' && idea.userId !== user.id) {
+      //   throw new ForbiddenError('You do not have permission to comment on this idea');
+      // }
+  
+      const comment = await tacheRepository.createComment({
+        tacheId,
+        userId: user.id,
+        content,
+      });
+  
+      return comment;
     }
-
-    return await tacheRepository.assignUsers(id, userIds);
-  }
+  
+    async getComments(tacheId, user) {
+      console
+      const tache = await tacheRepository.findById(tacheId);
+      
+      if (!tache) {
+        throw new NotFoundError('tache not found');
+      }
+  
+      // Check permissions
+      if (user.role === 'USER' && tache.userId !== user.id) {
+        throw new ForbiddenError('You do not have permission to view comments on this tache');
+      }
+  
+      const comments = await tacheRepository.findCommentsByTacheId(tacheId);
+      return comments;
+    }
 
   // ---------------------------------------------------
   // DELETE
@@ -227,8 +272,33 @@ class TacheService {
       );
     }
 
-    return await tacheRepository.delete(id);
+    await tacheRepository.delete(id);
+    return { message: 'Tache deleted successfully' };
   }
+
+  async assignUser(id, userId, user) {
+      // Only managers and admins can assign users
+      if (user.role === 'USER') {
+        throw new ForbiddenError('Only managers and admins can assign users to taches');
+      }
+  
+      const tache = await tacheRepository.findById(id);
+      
+      if (!tache) {
+        throw new NotFoundError('Tache not found');
+      }
+  
+      // Verify user exists
+      const prisma = require('../../config/database');
+      const assignee = await prisma.user.findUnique({ where: { id: userId } });
+      
+      if (!assignee) {
+        throw new NotFoundError('User not found');
+      }
+  
+      const updated = await tacheRepository.assignUser(id, userId);
+      return updated;
+    }
 }
 
 module.exports = new TacheService();

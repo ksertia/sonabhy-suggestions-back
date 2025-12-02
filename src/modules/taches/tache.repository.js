@@ -143,6 +143,19 @@ class TacheRepository {
     });
   }
 
+  async findProgressByPlanActionId(planActionId) {
+    return prisma.tache.findMany({
+      where: { planActionId },
+    });
+  }
+
+  async updatePlanAction(id, data) {
+    return prisma.planAction.update({
+      where: { id },
+      data
+    });
+  }
+
   // ---------------------------------------------------
   // UPDATE
   // ---------------------------------------------------
@@ -172,24 +185,20 @@ class TacheRepository {
       where: { id },
       data: { progress },
       include: {
-        assignees: true,
+        assignee: true,
       },
     });
   }
 
   // ---------------------------------------------------
-  // ASSIGN MULTIPLE USERS
+  // ASSIGN A USER
   // ---------------------------------------------------
-  async assignUsers(id, userIds = []) {
-    if (!Array.isArray(userIds) || userIds.length === 0)
-      throw new Error("userIds doit être un tableau non vide");
+  async assignUser(id, userId) {
 
     return prisma.tache.update({
       where: { id },
       data: {
-        assignee: {
-          connect: userIds.map(uid => ({ id: uid })),
-        },
+        assignedTo: userId
       },
       include: {
         assignee: true,
@@ -210,6 +219,51 @@ class TacheRepository {
       },
       include: { assignee: true },
     });
+  }
+
+
+  async createComment(data) {
+      return prisma.comment.create({
+        data,
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+              role: true,
+            },
+          },
+        },
+      });
+    }
+
+    async findCommentsByTacheId(tacheId) {
+    return prisma.comment.findMany({
+      where: { tacheId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            role: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
+  async changeStatus(tacheId, status) {
+    return prisma.tache.update({
+      where: {id:tacheId},
+      data : {status}
+    })
   }
 
   // ---------------------------------------------------
@@ -244,4 +298,4 @@ class TacheRepository {
   }
 }
 
-export default new TacheRepository();
+module.exports = new TacheRepository();

@@ -18,21 +18,38 @@ const createTacheSchema = z.object({
 // ---------------------------------------------------
 // CREATE MULTIPLE TACHES (bulk)
 // ---------------------------------------------------
+// const createMultipleTachesSchema = z.object({
+//   params: z.object({
+//     planActionId: z.string().uuid('Invalid plan action ID'),
+//   }),
+//   body: z.object({
+//     taches: z.array(z.object({
+//       title: z.string()
+//         .min(3, 'Title must be at least 3 characters')
+//         .max(200, 'Title must not exceed 200 characters'),
+//       description: z.string().optional(),
+//       progress: z.number().int().min(0).max(100).optional().default(0),
+//       deadline: z.string().datetime().optional(),
+//     })).min(1, 'At least one tache is required'),
+//   }),
+// });
+
 const createMultipleTachesSchema = z.object({
   params: z.object({
     planActionId: z.string().uuid('Invalid plan action ID'),
   }),
-  body: z.object({
-    taches: z.array(z.object({
-      title: z.string()
-        .min(3, 'Title must be at least 3 characters')
-        .max(200, 'Title must not exceed 200 characters'),
-      description: z.string().optional(),
-      progress: z.number().int().min(0).max(100).optional().default(0),
-      deadline: z.string().datetime().optional(),
-    })).min(1, 'At least one tache is required'),
-  }),
+  body: z.array(z.object({
+    title: z.string()
+      .min(3, 'Title must be at least 3 characters')
+      .max(200, 'Title must not exceed 200 characters'),
+    description: z.string().optional(),
+    progress: z.number().int().min(0).max(100).optional().default(0),
+    deadline: z.string().datetime().optional(),
+    status: z.enum(["PENDING", "IN_PROGRESS", "DONE"]).optional(),
+    assignedTo: z.string().uuid().optional()
+  })).min(1, 'At least one tache is required'),
 });
+
 
 // ---------------------------------------------------
 // UPDATE TACHE
@@ -63,16 +80,13 @@ const updateProgressSchema = z.object({
   }),
 });
 
-// ---------------------------------------------------
-// ASSIGN MULTIPLE USERS
-// ---------------------------------------------------
-const assignUsersSchema = z.object({
+// Add Comment Schema
+const addCommentSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid tache ID'),
+    id: z.string().uuid('Invalid idea ID'),
   }),
   body: z.object({
-    userIds: z.array(z.string().uuid('Invalid user ID'))
-      .min(1, 'At least one user ID is required'),
+    content: z.string().min(1, 'Comment content is required').max(2000, 'Comment must not exceed 2000 characters'),
   }),
 });
 
@@ -81,5 +95,5 @@ module.exports = {
   createMultipleTachesSchema,
   updateTacheSchema,
   updateProgressSchema,
-  assignUsersSchema,
+  addCommentSchema,
 };

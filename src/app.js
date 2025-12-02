@@ -14,6 +14,7 @@ const ideaRoutes = require('./modules/ideas/idea.routes');
 const formRoutes = require('./modules/forms/form.routes');
 const classificationRoutes = require('./modules/Classification/classification.routes')
 const planActionRoutes = require('./modules/plan-actions/plan-action.routes');
+const tacheRoutes = require('./modules/taches/tache.routes');
 const dashboardRoutes = require('./modules/dashboard/dashboard.routes');
 const notificationRoutes = require('./modules/notifications/notification.routes');
 
@@ -71,6 +72,7 @@ app.use(`${apiPrefix}/ideas`, ideaRoutes);
 app.use(`${apiPrefix}/classification`, classificationRoutes);
 app.use(`${apiPrefix}/forms`, formRoutes);
 app.use(`${apiPrefix}/plan-actions`, planActionRoutes);
+app.use(`${apiPrefix}/taches`, tacheRoutes);
 app.use(`${apiPrefix}/dashboard`, dashboardRoutes);
 app.use(`${apiPrefix}/notifications`, notificationRoutes);
 
