@@ -62,6 +62,35 @@ class TacheService {
     return result;
   }
 
+  async updateMultipleTaches(planActionId, taches, user) {
+  if (user.role === 'USER') {
+    throw new ForbiddenError('Only managers and admins can update tasks (taches)');
+  }
+
+  // Vérifier si le planAction existe
+  const exists = await tacheRepository.findPlanAction(planActionId);
+  if (!exists) {
+    throw new NotFoundError('PlanAction not found');
+  }
+
+  // Vérification du tableau
+  if (!Array.isArray(taches) || taches.length === 0) {
+    throw new BadRequestError('taches doit être un tableau non vide');
+  }
+
+  // Chaque tâche doit impérativement avoir un ID
+  if (taches.some(t => !t.id)) {
+    throw new BadRequestError('Chaque tache doit contenir un id pour être mise à jour');
+  }
+
+  const updated = await tacheRepository.updateMany(planActionId, taches);
+
+  await this.updatePlanActionProgress(planActionId);
+
+  return updated;
+}
+
+
   // ---------------------------------------------------
   // GET ALL (with restrictions)
   // ---------------------------------------------------

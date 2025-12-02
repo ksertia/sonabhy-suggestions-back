@@ -29,6 +29,18 @@ class TacheController {
     }
   }
 
+  async updateMultipleTaches(req, res, next) {
+  try {
+    const { planActionId } = req.params;
+
+    const updated = await tacheService.updateMultipleTaches( planActionId, req.body, req.user );
+    successResponse(res, { updated }, 'Taches updated successfully', 200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
   // ---------------------------------------------------
   // LIST ALL TACHES (with filters)
   // ---------------------------------------------------

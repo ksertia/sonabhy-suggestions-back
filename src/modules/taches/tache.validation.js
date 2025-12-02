@@ -50,6 +50,36 @@ const createMultipleTachesSchema = z.object({
   })).min(1, 'At least one tache is required'),
 });
 
+const updateMultipleTachesSchema = z.object({
+  params: z.object({
+    planActionId: z.string().uuid('Invalid plan action ID'),
+  }),
+  body: z.array(z.object({
+    id: z.string()
+      .uuid('Invalid tache ID')
+      .nonempty('Tache ID is required'),
+
+    title: z.string()
+      .min(3, 'Title must be at least 3 characters')
+      .max(200, 'Title must not exceed 200 characters')
+      .optional(),
+
+    description: z.string().optional(),
+
+    progress: z.number()
+      .int()
+      .min(0, 'Progress must be between 0 and 100')
+      .max(100, 'Progress must be between 0 and 100')
+      .nullable()
+      .optional(),
+
+    deadline: z.string().datetime().nullable().optional(),
+
+    status: z.enum(["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"]).nullable().optional(),
+
+    assignedTo: z.string().uuid().nullable().optional(),
+  })).min(1, 'At least one tache is required'),
+});
 
 // ---------------------------------------------------
 // UPDATE TACHE
@@ -96,4 +126,5 @@ module.exports = {
   updateTacheSchema,
   updateProgressSchema,
   addCommentSchema,
+  updateMultipleTachesSchema
 };

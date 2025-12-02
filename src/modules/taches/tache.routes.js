@@ -10,6 +10,7 @@ const {
   updateTacheSchema,
   updateProgressSchema,
   addCommentSchema,
+  updateMultipleTachesSchema
 } = require('./tache.validation');
 
 /**
@@ -74,6 +75,33 @@ const {
  *             $ref: '#/components/schemas/Comment'
  *
  *
+ *     UpdateTache:
+ *       type: object
+ *       required:
+ *         - planActionId
+ *         - title
+ *       properties:
+ *         planActionId:
+ *           type: string
+ *           format: uuid
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         progress:
+ *           type: integer
+ *           minimum: 0
+ *           maximum: 100
+ *         status:
+ *           type: string
+ *           enum: [PENDING, IN_PROGRESS, COMPLETED, CANCELED]
+ *         deadline:
+ *           type: string
+ *           format: date-time
+ *         assignedTo:
+ *           type: string
+ *           format: uuid
+ * 
  *     CreateTache:
  *       type: object
  *       required:
@@ -175,6 +203,37 @@ router.post('/', authenticate, authorize('ADMIN', 'MANAGER'), validate(createTac
  *         description: Multiple taches created successfully
  */
 router.post('/bulk/:planActionId', authenticate, authorize('ADMIN', 'MANAGER'), validate(createMultipleTachesSchema), tacheController.createMultipleTaches);
+
+/**
+ * @swagger
+ * /taches/bulk/{planActionId}:
+ *   put:
+ *     summary: Update multiple taches under a plan action (Manager/Admin only)
+ *     tags: [Taches]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: planActionId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/UpdateTache'
+ *     responses:
+ *       200:
+ *         description: Multiple taches updated successfully
+ */
+router.put('/bulk/:planActionId', authenticate, authorize('ADMIN', 'MANAGER'), validate(updateMultipleTachesSchema), tacheController.updateMultipleTaches
+);
+
 
 /**
  * @swagger

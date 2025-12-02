@@ -43,6 +43,24 @@ class TacheRepository {
     });
   }
 
+  async updateMany(planActionId, taches = []) {
+  const queries = taches.map(t =>
+    prisma.tache.update({
+      where: {
+        id: t.id,
+        planActionId
+      },
+      data: {
+        ...t,
+        planActionId
+      }
+    })
+  );
+
+  return prisma.$transaction(queries);
+}
+
+
   // ---------------------------------------------------
   // FIND ALL
   // ---------------------------------------------------
