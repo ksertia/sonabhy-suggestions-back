@@ -145,6 +145,10 @@ const {
  *               assignedTo:
  *                 type: string
  *                 format: uuid
+ *               taches:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/CreateTache'
  *           example:
  *             ideaId: "uuid"
  *             title: "Research AI chatbot solutions"

@@ -5,6 +5,8 @@ const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/
 class PlanActionService {
   async createPlanAction(data, user) {
     // Only managers and admins can create plan actions
+    const taches = data.taches;
+    delete data.taches;
     if (user.role === 'USER') {
       throw new ForbiddenError('Only managers and admins can create plan actions');
     }
@@ -31,6 +33,10 @@ class PlanActionService {
     }
 
     const planAction = await planActionRepository.create(data);
+
+    if (taches.length === 0) {
+      await tacheService.createMultipleTaches(planAction.id, taches, user);
+    }
     return planAction;
   }
 
@@ -121,8 +127,9 @@ class PlanActionService {
         throw new NotFoundError('Assignee user not found');
       }
     }
-
-    await tacheService.createMultipleTaches(id, taches, user);
+    if (taches.length === 0) {
+      await tacheService.createMultipleTaches(id, taches, user);
+    }
 
     const updated = await planActionRepository.update(id, data);
 

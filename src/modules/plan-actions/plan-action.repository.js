@@ -37,6 +37,7 @@ class PlanActionRepository {
         skip,
         take: limit,
         include: {
+          taches:true,
           idea: {
             select: {
               id: true,
@@ -87,6 +88,7 @@ class PlanActionRepository {
     return prisma.planAction.findUnique({
       where: { id },
       include: {
+        taches:true,
         idea: {
           include: {
             kind: true,
@@ -158,6 +160,7 @@ class PlanActionRepository {
       where: { id },
       data,
       include: {
+        taches:true,
         idea: {
           select: {
             id: true,
