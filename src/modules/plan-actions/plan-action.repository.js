@@ -5,6 +5,18 @@ class PlanActionRepository {
     return prisma.planAction.create({
       data,
       include: {
+        taches:{
+          include: {
+            assignee:{
+              select: {
+                id: true,
+                email:true,
+                firstName:true,
+                lastName:true,
+              }
+            }
+          }
+        },
         idea: {
           select: {
             id: true,
@@ -20,6 +32,11 @@ class PlanActionRepository {
             lastName: true,
             role: true,
           },
+        },
+        _count: {
+          select: {
+            taches: true,
+          }
         },
       },
     });
@@ -37,7 +54,18 @@ class PlanActionRepository {
         skip,
         take: limit,
         include: {
-          taches:true,
+          taches:{
+            include: {
+              assignee:{
+                select: {
+                  id: true,
+                  email:true,
+                  firstName:true,
+                  lastName:true,
+                }
+              }
+            }
+          },
           idea: {
             select: {
               id: true,
@@ -64,6 +92,11 @@ class PlanActionRepository {
               role: true,
             },
           },
+          _count: {
+          select: {
+            taches: true,
+          }
+        },
         },
         orderBy: [
           { deadline: 'asc' },
@@ -88,7 +121,18 @@ class PlanActionRepository {
     return prisma.planAction.findUnique({
       where: { id },
       include: {
-        taches:true,
+        taches:{
+          include: {
+            assignee:{
+              select: {
+                id: true,
+                email:true,
+                firstName:true,
+                lastName:true,
+              }
+            }
+          }
+        },
         idea: {
           include: {
             kind: true,
@@ -111,6 +155,11 @@ class PlanActionRepository {
             lastName: true,
             role: true,
           },
+        },
+        _count: {
+          select: {
+            taches: true,
+          }
         },
       },
     });
@@ -160,7 +209,18 @@ class PlanActionRepository {
       where: { id },
       data,
       include: {
-        taches:true,
+        taches:{
+          include: {
+            assignee:{
+              select: {
+                id: true,
+                email:true,
+                firstName:true,
+                lastName:true,
+              }
+            }
+          }
+        },
         idea: {
           select: {
             id: true,
@@ -176,6 +236,11 @@ class PlanActionRepository {
             lastName: true,
             role: true,
           },
+        },
+         _count: {
+          select: {
+            taches: true,
+          }
         },
       },
     });
