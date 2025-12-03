@@ -123,7 +123,11 @@ class PlanActionRepository {
       include: {
         taches:{
           include: {
-            comments:true,
+            comments: {
+              include: {
+                user: true,
+              }
+            },
             assignee:{
               select: {
                 id: true,
