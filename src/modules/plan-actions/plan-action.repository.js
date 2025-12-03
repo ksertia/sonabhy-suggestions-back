@@ -125,7 +125,14 @@ class PlanActionRepository {
           include: {
             comments: {
               include: {
-                user: true,
+                user: {
+                  select: {
+                    id: true,
+                    email:true,
+                    firstName:true,
+                    lastName:true,
+                  }
+                }
               }
             },
             assignee:{
