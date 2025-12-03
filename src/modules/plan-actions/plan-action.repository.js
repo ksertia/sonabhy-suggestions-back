@@ -123,6 +123,7 @@ class PlanActionRepository {
       include: {
         taches:{
           include: {
+            comments:true,
             assignee:{
               select: {
                 id: true,
@@ -195,12 +196,7 @@ class PlanActionRepository {
     return prisma.planAction.findMany({
       where: { assignedTo: assigneeId },
       include: {
-        taches: {
-          include: {
-            comments:true,
-            assignee:true,
-          }
-        },
+        taches:true,
         idea: {
           select: {
             id: true,
