@@ -1,5 +1,7 @@
 const ideaService = require('./idea.service');
 const { successResponse } = require('../../utils/response');
+const { category } = require('../../config/database');
+const { Priority } = require('@prisma/client');
 
 class IdeaController {
   async createIdea(req, res, next) {
@@ -16,8 +18,12 @@ class IdeaController {
       const filters = {
         formVariantId: req.query.formVariantId,
         userId: req.query.userId,
+        categoryId: req.query.categoryId,
         isAnonymous: req.query.isAnonymous,
+        forVote: req.query.forVote,
         search: req.query.search,
+        status: req.query.status,
+        priority: req.query.priority,
         startDate: req.query.startDate,
         endDate: req.query.endDate,
       };
