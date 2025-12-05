@@ -284,6 +284,10 @@ class IdeaRepository {
       where.priority = filters.priority;
     }
 
+    if (filters.forVote) {
+      where.forVote = filters.forVote;
+    }
+
     if (filters.impact) {
       where.impact = filters.impact;
     }

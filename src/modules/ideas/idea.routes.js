@@ -262,6 +262,10 @@ router.post('/', validate(createIdeaSchema), ideaController.createIdea);
  *         schema:
  *           type: string
  *       - in: query
+ *         name: forVote
+ *         schema:
+ *           type: boolean
+ *       - in: query
  *         name: startDate
  *         schema:
  *           type: string

@@ -90,6 +90,7 @@ const listIdeasSchema = z.object({
     isAnonymous: z.string().optional(),
     search: z.string().optional(),
     status: z.string().optional(),
+    status: z.boolean().optional(),
     priority: z.string().optional(),
     startDate: z.string().datetime().optional(),
     endDate: z.string().datetime().optional(),
