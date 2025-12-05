@@ -276,12 +276,12 @@ class IdeaRepository {
       where.categoryId = filters.categoryId;
     }
 
-    if (filters.statusId) {
-      where.statusId = filters.statusId;
+    if (filters.status) {
+      where.status = filters.status;
     }
 
-    if (filters.urgency) {
-      where.urgency = filters.urgency;
+    if (filters.priority) {
+      where.priority = filters.priority;
     }
 
     if (filters.impact) {

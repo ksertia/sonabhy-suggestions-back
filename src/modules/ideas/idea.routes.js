@@ -241,11 +241,24 @@ router.post('/', validate(createIdeaSchema), ideaController.createIdea);
  *           type: string
  *           format: uuid
  *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: query
  *         name: isAnonymous
  *         schema:
  *           type: string
  *       - in: query
  *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: priority
  *         schema:
  *           type: string
  *       - in: query

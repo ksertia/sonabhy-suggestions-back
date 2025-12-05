@@ -8,7 +8,7 @@ class FormService {
 
   async createFormModel(data, user) {
     // Only admins can create form models
-    if (user.role !== 'ADMIN') {
+    if (user.role === 'USER') {
       throw new ForbiddenError('Only admins can create form models');
     }
 
@@ -39,7 +39,7 @@ class FormService {
 
   async updateFormModel(id, data, user) {
     // Only admins can update form models
-    if (user.role !== 'ADMIN') {
+    if (user.role === 'USER') {
       throw new ForbiddenError('Only admins can update form models');
     }
 
@@ -55,8 +55,8 @@ class FormService {
 
   async deleteFormModel(id, user) {
     // Only admins can delete form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete form models');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins and managers can delete form models');
     }
 
     const formModel = await formRepository.findFormModelById(id);
@@ -133,8 +133,8 @@ class FormService {
 
   async deleteFormVariant(id, user) {
     // Only admins can delete variants
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete form variants');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins and managers can delete form variants');
     }
 
     const variant = await formRepository.findFormVariantById(id);

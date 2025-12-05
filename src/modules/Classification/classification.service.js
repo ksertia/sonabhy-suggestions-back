@@ -8,8 +8,8 @@ class ClassificationService {
 
   async createCategory(data, user) {
     // Only admins can create form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can create categories');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins or mangers can create categories');
     }
 
     // Check if name already exists
@@ -39,8 +39,8 @@ class ClassificationService {
 
   async updateCategory(id, data, user) {
     // Only admins can update form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can update category');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins or managers can update category');
     }
 
     const category = await ClassificationRepository.findCategoryById(id);
@@ -55,8 +55,8 @@ class ClassificationService {
 
   async deleteCategory(id, user) {
     // Only admins can delete form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete Categories');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins or manager can delete Categories');
     }
 
     const category = await ClassificationRepository.findCategoryById(id);
@@ -75,8 +75,8 @@ class ClassificationService {
 
   async createKind(data, user) {
     // Only admins can create form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can create Kind');
+    if (user.role === 'ADMIN') {
+      throw new ForbiddenError('Only admins or managers can create Kind');
     }
 
     // Check if name already exists
@@ -106,8 +106,8 @@ class ClassificationService {
 
   async updateKind(id, data, user) {
     // Only admins can update form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can update Kind');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins or managers can update Kind');
     }
 
     const kind = await ClassificationRepository.findKindById(id);
@@ -122,8 +122,8 @@ class ClassificationService {
 
   async deleteKind(id, user) {
     // Only admins can delete form models
-    if (user.role !== 'ADMIN') {
-      throw new ForbiddenError('Only admins can delete Kind');
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins or managers can delete Kind');
     }
 
     const kind = await ClassificationRepository.findKindById(id);
