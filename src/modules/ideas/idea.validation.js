@@ -88,9 +88,14 @@ const listIdeasSchema = z.object({
     userId: z.string().uuid().optional(),
     categoryId: z.string().uuid().optional(),
     isAnonymous: z.string().optional(),
+    // forVote: z.string().optional(),
+    forVote: z
+  .union([z.string(), z.boolean()])
+  .transform(val => val === "true" || val === true)
+  .optional(),
+
     search: z.string().optional(),
     status: z.string().optional(),
-    status: z.boolean().optional(),
     priority: z.string().optional(),
     startDate: z.string().datetime().optional(),
     endDate: z.string().datetime().optional(),
