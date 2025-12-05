@@ -90,10 +90,13 @@ const listIdeasSchema = z.object({
     isAnonymous: z.string().optional(),
     // forVote: z.string().optional(),
     forVote: z
-  .union([z.string(), z.boolean()])
-  .transform(val => val === "true" || val === true)
-  .optional(),
-
+    .union([z.string(), z.boolean()])
+    .transform(val => {
+      if (val === true || val === "true") return true;
+      if (val === false || val === "false") return false;
+      return undefined; // si la valeur n'existe pas
+    })
+    .optional(),
     search: z.string().optional(),
     status: z.string().optional(),
     priority: z.string().optional(),
