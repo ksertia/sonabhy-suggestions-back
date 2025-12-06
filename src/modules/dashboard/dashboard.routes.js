@@ -567,7 +567,7 @@ router.get('/admin', authenticate, authorize('ADMIN', 'MANAGER'), dashboardContr
  *                       type: integer
  *                       example: 128
  */
-router.get('/home', dashboardController.getCountHome);
+router.get('/home', authenticate, dashboardController.getCountHome);
 
 
 module.exports = router;
