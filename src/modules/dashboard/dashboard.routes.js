@@ -1,4 +1,4 @@
-iconst express = require('express');
+const express = require('express');
 const router = express.Router();
 const dashboardController = require('./dashboard.controller');
 const { authenticate } = require('../../middleware/auth.middleware');
