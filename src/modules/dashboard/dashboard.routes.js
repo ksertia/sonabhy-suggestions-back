@@ -1,4 +1,4 @@
-const express = require('express');
+iconst express = require('express');
 const router = express.Router();
 const dashboardController = require('./dashboard.controller');
 const { authenticate } = require('../../middleware/auth.middleware');
@@ -567,7 +567,7 @@ router.get('/admin', authenticate, authorize('ADMIN', 'MANAGER'), dashboardContr
  *                       type: integer
  *                       example: 128
  */
-router.get('/home', authenticate, dashboardController.getCountHome);
+router.get('/home', dashboardController.getCountHome);
 
 
 module.exports = router;
