@@ -232,6 +232,10 @@ class DashboardService {
       recentIdeas,
     };
   }
+
+  async getCountHome() {
+    return await dashboardRepository.getCountHome();
+  }
 }
 
 module.exports = new DashboardService();

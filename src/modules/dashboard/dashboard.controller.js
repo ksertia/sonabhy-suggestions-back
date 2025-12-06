@@ -131,6 +131,15 @@ class DashboardController {
       next(error);
     }
   }
+
+  async getCountHome(req, res, next) {
+    try {
+      const stat = await dashboardService.getCountHome();
+      successResponse(res, { stat }, 'Les data retrived successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new DashboardController();

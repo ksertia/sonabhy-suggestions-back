@@ -338,6 +338,21 @@ class DashboardRepository {
     return ideasByRole;
   }
 
+  async getCountHome() {
+    const [
+      usersCount,
+      ideaCount,
+      ideaValideCount
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.idea.count(),
+      prisma.idea.count({ where: { status: 'APPROVED' } })
+    ]);
+
+    return { usersCount, ideaCount, ideaValideCount };
+  }
+
+
   buildWhereClause(filters) {
     const where = {};
 

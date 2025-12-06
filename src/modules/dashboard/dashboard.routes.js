@@ -532,4 +532,42 @@ router.get('/user', authenticate, dashboardController.getUserDashboard);
  */
 router.get('/admin', authenticate, authorize('ADMIN', 'MANAGER'), dashboardController.getAdminDashboard);
 
+/**
+ * @swagger
+ * /dashboard/home:
+ *   get:
+ *     summary: Get home dashboard statistics
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard stats retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Dashboard loaded successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     usersCount:
+ *                       type: integer
+ *                       example: 154
+ *                     ideaCount:
+ *                       type: integer
+ *                       example: 432
+ *                     ideaValideCount:
+ *                       type: integer
+ *                       example: 128
+ */
+router.get('/home', dashboardController.getCountHome);
+
+
 module.exports = router;
