@@ -75,7 +75,7 @@ class ClassificationService {
 
   async createKind(data, user) {
     // Only admins can create form models
-    if (user.role === 'ADMIN') {
+    if (user.role === 'USER') {
       throw new ForbiddenError('Only admins or managers can create Kind');
     }
 

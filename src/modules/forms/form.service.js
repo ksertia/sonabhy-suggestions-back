@@ -176,43 +176,98 @@ class FormService {
   // FORM FIELD OPERATIONS
   // ============================================
 
+  // async createFormField(data, user) {
+  //   // Only admins and managers can create fields
+  //   if (user.role === 'USER') {
+  //     throw new ForbiddenError('Only admins and managers can create form fields');
+  //   }
+
+  //   // Verify variant exists
+  //   const variant = await formRepository.findFormVariantById(data.variantId);
+  //   if (!variant) {
+  //     throw new NotFoundError('Form variant not found');
+  //   }
+
+  //   // Validate field type
+  //   const validTypes = ['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'];
+  //   if (!validTypes.includes(data.type)) {
+  //     throw new BadRequestError(`Invalid field type. Must be one of: ${validTypes.join(', ')}`);
+  //   }
+
+  //   // Validate options for select/radio/checkbox fields
+  //   if (['SELECT', 'MULTISELECT', 'RADIO', 'CHECKBOX'].includes(data.type)) {
+  //     if (!data.options || !data.options.choices || !Array.isArray(data.options.choices)) {
+  //       throw new BadRequestError('Select, radio, and checkbox fields must have options.choices array');
+  //     }
+  //   }
+
+  //   // If no order specified, add to end
+  //   if (!data.order) {
+  //     const fields = await formRepository.findAllFormFields(data.variantId);
+  //     data.order = fields.length + 1;
+  //   }
+
+  //   const field = await formRepository.createFormField(data);
+  //   return field;
+  // }
+
   async createFormField(data, user) {
-    // Only admins and managers can create fields
-    if (user.role === 'USER') {
-      throw new ForbiddenError('Only admins and managers can create form fields');
-    }
-
-    // Verify variant exists
-    const variant = await formRepository.findFormVariantById(data.variantId);
-    if (!variant) {
-      throw new NotFoundError('Form variant not found');
-    }
-
-    // Validate field type
-    const validTypes = ['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'];
-    if (!validTypes.includes(data.type)) {
-      throw new BadRequestError(`Invalid field type. Must be one of: ${validTypes.join(', ')}`);
-    }
-
-    // Validate options for select/radio/checkbox fields
-    if (['SELECT', 'MULTISELECT', 'RADIO', 'CHECKBOX'].includes(data.type)) {
-      if (!data.options || !data.options.choices || !Array.isArray(data.options.choices)) {
-        throw new BadRequestError('Select, radio, and checkbox fields must have options.choices array');
-      }
-    }
-
-    // If no order specified, add to end
-    if (!data.order) {
-      const fields = await formRepository.findAllFormFields(data.variantId);
-      data.order = fields.length + 1;
-    }
-
-    const field = await formRepository.createFormField(data);
-    return field;
+  // Seuls les admins et managers peuvent créer des champs
+  if (user.role === 'USER') {
+    throw new ForbiddenError('Only admins and managers can create form fields');
   }
 
+  // Vérifier que la variante existe
+  const variant = await formRepository.findFormVariantById(data.variantId);
+  if (!variant) {
+    throw new NotFoundError('Form variant not found');
+  }
+
+  // Valider le type de champ
+  const validTypes = ['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'];
+  if (!validTypes.includes(data.type)) {
+    throw new BadRequestError(`Invalid field type. Must be one of: ${validTypes.join(', ')}`);
+  }
+
+  // Valider options pour les champs SELECT/RADIO/CHECKBOX/MULTISELECT
+  if (['SELECT', 'MULTISELECT', 'RADIO', 'CHECKBOX'].includes(data.type)) {
+    if (!data.options || !data.options.choices || !Array.isArray(data.options.choices)) {
+      throw new BadRequestError('Select, radio, and checkbox fields must have options.choices array');
+    }
+  }
+
+  // Définir l'ordre si non fourni
+  if (!data.order) {
+    const fields = await formRepository.findAllFormFields(data.variantId);
+    data.order = fields.length + 1;
+  }
+
+  // ✅ Convertir visibleFor en string pour MySQL
+  const visibleForString = Array.isArray(data.visibleFor) ? JSON.stringify(data.visibleFor) : '[]';
+
+  // Créer le champ
+  const field = await formRepository.createFormField({
+    ...data,
+    visibleFor: visibleForString
+  });
+
+  // ✅ Convertir visibleFor en array pour le retour
+  if (field.visibleFor && typeof field.visibleFor === 'string') {
+    field.visibleFor = JSON.parse(field.visibleFor);
+  }
+
+  return field;
+}
+
+
   async getAllFormFields(variantId, user) {
-    const fields = await formRepository.findAllFormFields(variantId);
+    const fields = (await formRepository.findAllFormFields(variantId)).map(el => {
+      if (el.visibleFor && typeof el.visibleFor === 'string') {
+        el.visibleFor = JSON.parse(el.visibleFor);
+
+        return el;
+      }
+    });
     return fields;
   }
 
@@ -221,6 +276,10 @@ class FormService {
     
     if (!field) {
       throw new NotFoundError('Form field not found');
+    }
+
+    if (field.visibleFor && typeof field.visibleFor === 'string') {
+      field.visibleFor = JSON.parse(field.visibleFor);
     }
 
     return field;
@@ -246,7 +305,16 @@ class FormService {
       }
     }
 
+     if (data.visibleFor) {
+        data.visibleFor = Array.isArray(data.visibleFor) ? JSON.stringify(data.visibleFor) : '[]';
+      }
+
     const updated = await formRepository.updateFormField(id, data);
+
+    if (updated.visibleFor && typeof updated.visibleFor === 'string') {
+      updated.visibleFor = JSON.parse(updated.visibleFor);
+    }
+
     return updated;
   }
 
@@ -290,7 +358,6 @@ class FormService {
   }
 
   async bulkCreateFields(variantId, fields, user) {
-    // Only admins and managers can bulk create fields
     if (user.role === 'USER') {
       throw new ForbiddenError('Only admins and managers can create form fields');
     }
@@ -300,24 +367,61 @@ class FormService {
       throw new NotFoundError('Form variant not found');
     }
 
-    const created = await formRepository.bulkCreateFields(variantId, fields);
-    return created;
+    const preparedFields = fields.map(f => ({
+      ...f,
+      visibleFor: f.visibleFor ? JSON.stringify(f.visibleFor) : '[]',
+    }));
+
+    const created = await formRepository.bulkCreateFields(variantId, preparedFields);
+
+    // Reconversion visibleFor pour retour API
+    return created.map(f => ({
+      ...f,
+      visibleFor: f.visibleFor ? JSON.parse(f.visibleFor) : []
+    }));
   }
 
+
+
   async bulkUpdateFields(variantId, fields, user) {
-  // Only admins and managers can bulk update fields
+  // Seuls les admins et managers peuvent mettre à jour
   if (user.role === 'USER') {
     throw new ForbiddenError('Only admins and managers can update form fields');
   }
 
+  // Vérifier que la variante existe
   const variant = await formRepository.findFormVariantById(variantId);
   if (!variant) {
     throw new NotFoundError('Form variant not found');
   }
 
-  const updated = await formRepository.bulkUpdateFields(fields);
-  return updated;
+  const validTypes = ['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'];
+
+  // Préparer les champs pour MySQL
+  const preparedFields = fields.map(field => {
+    // Valider type si présent
+    if (field.type && !validTypes.includes(field.type)) {
+      throw new BadRequestError(`Invalid field type for field ${field.id}. Must be one of: ${validTypes.join(', ')}`);
+    }
+
+    // Convertir visibleFor en string
+    if (field.visibleFor) {
+      field.visibleFor = Array.isArray(field.visibleFor) ? JSON.stringify(field.visibleFor) : '[]';
+    }
+
+    return field;
+  });
+
+  // Mettre à jour en bulk
+  const updated = await formRepository.bulkUpdateFields(preparedFields);
+
+  // Reconversion pour le retour
+  return updated.map(field => ({
+    ...field,
+    visibleFor: field.visibleFor ? JSON.parse(field.visibleFor) : []
+  }));
 }
+
 
 
   // ============================================
