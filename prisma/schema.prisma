@@ -5,8 +5,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//  provider = "postgresql"
+//  url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -366,7 +371,8 @@ model FormField {
   placeholder String?
   helpText    String?
   order       Int
-  visibleFor  Role[]    @default([])
+// visibleFor  Role[]    @default([]) //pour postgresql
+  visibleFor  String? @default("[]")
   managedOnly Boolean?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
