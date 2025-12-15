@@ -1,23 +1,299 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
-
-// datasource db {
-//  provider = "postgresql"
-//  url      = env("DATABASE_URL")
-// }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// ENUMS
-// ============================================
+model User {
+  id               String         @id @default(uuid())
+  firstName        String
+  lastName         String
+  email            String         @unique
+  username         String?        @unique
+  phone            String?        @unique
+  password         String
+  role             Role           @default(USER)
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  comments         Comment[]
+  approvedIdeas    Idea[]         @relation("ApprovedBy")
+  qualifiedIdeas   Idea[]         @relation("QualifiedBy")
+  ideas            Idea[]
+  assignedActions  PlanAction[]   @relation("AssignedActions")
+  refreshTokens    RefreshToken[]
+  AssignedTaches   Tache[]        @relation("AssignedTaches")
+  votes            Vote[]
+  responsibleIdeas Idea[]         @relation("IdeaResponsibles")
+  notifications Notification[]
+
+
+  @@index([email])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @db.Text
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Idea {
+  id               String        @id @default(uuid())
+  title            String
+  description      String        @db.Text
+  data             Json?
+  isAnonymous      Boolean       @default(false)
+  forVote          Boolean       @default(false)
+  status           Status        @default(SUBMITTED)
+  visibility       Visibility    @default(PRIVATE)
+  priority         Priority?
+  impact           Impact?
+  categoryId       String?
+  kindId           String?
+  userId           String?
+  formVariantId    String
+  qualifiedById    String?
+  qualifiedAt      DateTime?
+  approvedById     String?
+  approvedAt       DateTime?
+  firstName        String?
+  lastName         String?
+  email            String?
+  metadataId       String?       @unique
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  comments         Comment[]
+  approvedBy       User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
+  category         Category?     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  formVariant      FormVariant   @relation(fields: [formVariantId], references: [id])
+  kind             Kind?         @relation(fields: [kindId], references: [id], onDelete: Restrict)
+  metadata         FileMetadata? @relation(fields: [metadataId], references: [id])
+  qualifiedBy      User?         @relation("QualifiedBy", fields: [qualifiedById], references: [id])
+  user             User?         @relation(fields: [userId], references: [id])
+  planActions      PlanAction[]
+  votes            Vote[]
+  responsibleUsers User[]        @relation("IdeaResponsibles")
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([kindId])
+  @@index([formVariantId])
+  @@index([qualifiedById])
+  @@index([approvedById])
+  @@index([createdAt])
+  @@map("ideas")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ideas       Idea[]
+
+  @@map("categories")
+}
+
+model Kind {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ideas       Idea[]
+
+  @@map("kinds")
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  value     Int
+  userId    String
+  ideaId    String
+  createdAt DateTime @default(now())
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ideaId])
+  @@index([ideaId], map: "votes_ideaId_fkey")
+  @@map("votes")
+}
+
+model PlanAction {
+  id          String      @id @default(uuid())
+  ideaId      String
+  title       String
+  description String?     @db.Text
+  progress    Int         @default(0)
+  status      Plan_Status @default(PENDING)
+  tacheId     String?
+  deadline    DateTime?
+  assignedTo  String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  assignee    User?       @relation("AssignedActions", fields: [assignedTo], references: [id])
+  idea        Idea        @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  taches      Tache[]
+
+  @@index([ideaId])
+  @@index([assignedTo])
+  @@index([deadline])
+  @@map("plan_actions")
+}
+
+model Tache {
+  id           String      @id @default(uuid())
+  planActionId String
+  title        String
+  description  String?     @db.Text
+  progress     Int         @default(0)
+  status       Plan_Status @default(PENDING)
+  deadline     DateTime?
+  assignedTo   String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  comments     Comment[]
+  assignee     User?       @relation("AssignedTaches", fields: [assignedTo], references: [id])
+  planAction   PlanAction  @relation(fields: [planActionId], references: [id], onDelete: Cascade)
+
+  @@index([planActionId])
+  @@index([assignedTo])
+  @@index([deadline])
+  @@map("taches")
+}
+
+model FormModel {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  type        String?
+  description String?       @db.Text
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  variants    FormVariant[]
+
+  @@map("form_models")
+}
+
+model FormVariant {
+  id          String      @id @default(uuid())
+  modelId     String
+  name        String
+  description String?     @db.Text
+  isDefault   Boolean     @default(false)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  fields      FormField[]
+  model       FormModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  ideas       Idea[]
+
+  @@unique([modelId, name])
+  @@index([modelId])
+  @@map("form_variants")
+}
+
+model FormField {
+  id          String      @id @default(uuid())
+  variantId   String
+  label       String
+  type        FieldType
+  required    Boolean     @default(false)
+  options     Json?
+  placeholder String?
+  helpText    String?
+  order       Int
+  visibleFor  String?     @default("[]")
+  managedOnly Boolean?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  variant     FormVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([variantId, order])
+  @@index([variantId])
+  @@map("form_fields")
+}
+
+model FileMetadata {
+  id           String   @id @default(uuid())
+  originalName String
+  storageName  String   @unique
+  mimeType     String
+  size         Int
+  path         String
+  uploadedById String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  idea         Idea?
+
+  @@index([storageName])
+  @@map("file_metadata")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  ideaId    String?
+  tacheId   String?
+  userId    String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  idea      Idea?    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  tache     Tache?   @relation(fields: [tacheId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([ideaId])
+  @@index([tacheId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("comments")
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  title       String
+  message     String     @db.Text
+  type        NotificationType
+  userId      String?    // si la notif est pour un utilisateur spécifique
+  role        Role?      // si la notif est pour un rôle (MANAGER, ADMIN)
+  target      NotificationTarget @default(USER)
+  entityId    String?    // id d'une entité liée (Idea, Comment, Action…)
+  entityType  String?    // ex: "IDEA" | "COMMENT" | "ACTION"
+  isRead      Boolean    @default(false)
+  readAt      DateTime?
+  createdAt   DateTime   @default(now())
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([role])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+enum NotificationTarget {
+  USER       // une seule personne
+  ROLE       // tous les membres d'un rôle
+  SYSTEM     // tout le monde dans le système
+}
+
 
 enum Role {
   USER
@@ -72,361 +348,4 @@ enum Visibility {
   TEAM
   PUBLIC
   PRIVATE
-}
-
-// ============================================
-// USER & AUTHENTICATION
-// ============================================
-
-model User {
-  id            String         @id @default(uuid())
-  firstName     String
-  lastName      String
-  email         String         @unique
-  username      String?        @unique
-  phone         String?        @unique
-  password      String
-  role          Role           @default(USER)
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  
-  // Relations
-  refreshTokens RefreshToken[]
-  ideas         Idea[]
-  comments      Comment[]
-  votes         Vote[]
-
-  responsibleIdeas Idea[] @relation("IdeaResponsibles") 
-
-  assignedActions PlanAction[] @relation("AssignedActions")
-  AssignedTaches Tache[]       @relation("AssignedTaches")
-
-  qualifiedIdeas Idea[] @relation("QualifiedBy")
-  approvedIdeas  Idea[] @relation("ApprovedBy")
-
-  @@map("users")
-  @@index([email])
-}
-
-model RefreshToken {
-  id        String   @id @default(uuid())
-  token     String   @db.Text
-  userId    String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("refresh_tokens")
-  @@index([userId])
-}
-
-// ============================================
-// IDEA MANAGEMENT
-// ============================================
-
-//model Idea {
-//  id            String      @id @default(uuid())
- // title         String
- // description   String      @db.Text
- // categoryId    String
- // statusId      String
- // urgency       Urgency     @default(MEDIUM)
- // impact        Impact      @default(MEDIUM)
- // isAnonymous   Boolean     @default(false)
- // userId        String?
- // formVariantId String
- // metadataId    String?     @unique
- // createdAt     DateTime    @default(now())
- // updatedAt     DateTime    @updatedAt
-//  
-//  // Relations
- // category      Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
- // status        Status      @relation(fields: [statusId], references: [id], onDelete: Restrict)
- // user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-//  formVariant   FormVariant @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
- // metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
- // planActions   PlanAction[]
-//  comments      Comment[]
- // votes         Vote[]
-//
-//  @@map("ideas")
-//  @@index([categoryId])
-//  @@index([statusId])
-//  @@index([userId])
-//  @@index([formVariantId])
-//  @@index([createdAt])
-//}
-
-
-model Idea {
-  id            String      @id @default(uuid())
-  title         String
-  description   String      @db.Text
-  data          Json?
-  isAnonymous   Boolean     @default(false)
-  forVote       Boolean     @default(false)
-  status        Status      @default(SUBMITTED)
-  visibility    Visibility  @default(PRIVATE)
-  priority      Priority?    
-  impact        Impact?      
-  categoryId    String?
-  kindId        String?
-  userId        String?
-  formVariantId String
-  qualifiedById String?      // <-- CHANGÉ
-  qualifiedAt   DateTime?
-  approvedById  String?      // <-- CHANGÉ
-  approvedAt    DateTime?
-  metadataId    String?      @unique
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  
-  // Relations
-  user          User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  formVariant   FormVariant   @relation(fields: [formVariantId], references: [id], onDelete: Restrict)
-  metadata      FileMetadata? @relation(fields: [metadataId], references: [id], onDelete: SetNull)
-
-  qualifiedBy   User?         @relation("QualifiedBy", fields: [qualifiedById], references: [id], onDelete: SetNull)
-  approvedBy    User?         @relation("ApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
-
-  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  kind          Kind?         @relation(fields: [kindId], references: [id], onDelete: Restrict)
-
-  responsibleUsers User[] @relation("IdeaResponsibles")
-
-  planActions   PlanAction[]
-  comments      Comment[]
-  votes         Vote[]
-
-  @@map("ideas")
-  @@index([userId])
-  @@index([categoryId])
-  @@index([kindId])
-  @@index([formVariantId])
-  @@index([qualifiedById])
-  @@index([approvedById])
-  @@index([createdAt])
-}
-
-
-model Category {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  ideas       Idea[]
-
-  @@map("categories")
-}
-
-model Kind {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  ideas       Idea[]
-
-  @@map("kinds")
-}
-
-//model Status {
-//  id          String   @id @default(uuid())
-//  name        String   @unique
-//  order       Int      @unique
-//  color       String?
-//  description String?
-//  createdAt   DateTime @default(now())
-//  updatedAt   DateTime @updatedAt
-//  
-//  // Relations
-//  //ideas       Idea[]
-//
-//  @@map("statuses")
-//  @@index([order])
-//}
-
-model Vote {
-  id        String   @id @default(uuid())
-  value     Int      // +1 ou -1 (ou juste 1 si tu veux seulement "like")
-  userId    String
-  ideaId    String
-  createdAt DateTime @default(now())
-
-  // Relations
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, ideaId]) // Empêche un utilisateur de voter plusieurs fois pour la même idée
-  @@map("votes")
-}
-
-// ============================================
-// ACTION PLANNING
-// ============================================
-
-model PlanAction {
-  id          String      @id @default(uuid())
-  ideaId      String
-  title       String
-  description String?     @db.Text
-  progress    Int         @default(0)
-  status      Plan_Status @default(PENDING)
-  tacheId     String?       
-  deadline    DateTime?
-  assignedTo  String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Relations
-  idea        Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  assignee    User?     @relation("AssignedActions", fields: [assignedTo], references: [id], onDelete: SetNull)
-  taches      Tache[]
-
-
-  @@map("plan_actions")
-  @@index([ideaId])
-  @@index([assignedTo])
-  @@index([deadline])
-}
-
-model Tache {
-  id            String       @id @default(uuid())
-  planActionId  String
-  title         String
-  description   String?      @db.Text
-  progress      Int          @default(0)
-  status        Plan_Status  @default(PENDING)
-  deadline      DateTime?
-  assignedTo    String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-
-  // Relations
-  planAction    PlanAction   @relation(fields: [planActionId], references: [id], onDelete: Cascade)
-  assignee      User?        @relation("AssignedTaches", fields: [assignedTo], references: [id], onDelete: SetNull)
-
-  comments      Comment[]
-
-  @@map("taches")
-  @@index([planActionId])
-  @@index([assignedTo])
-  @@index([deadline])
-}
-
-// ============================================
-// DYNAMIC FORMS
-// ============================================
-
-model FormModel {
-  id          String        @id @default(uuid())
-  name        String        @unique
-  type        String?        
-  description String?       @db.Text
-  isActive    Boolean       @default(true)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  
-  // Relations
-  variants    FormVariant[]
-
-  @@map("form_models")
-}
-
-model FormVariant {
-  id          String      @id @default(uuid())
-  modelId     String
-  name        String
-  description String?     @db.Text
-  isDefault   Boolean     @default(false)
-  isActive    Boolean     @default(true)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Relations
-  model       FormModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
-  fields      FormField[]
-  ideas       Idea[]
-
-  @@map("form_variants")
-  @@unique([modelId, name])
-  @@index([modelId])
-}
-
-model FormField {
-  id          String      @id @default(uuid())
-  variantId   String
-  label       String
-  type        FieldType
-  required    Boolean     @default(false)
-  options     Json?
-  placeholder String?
-  helpText    String?
-  order       Int
-// visibleFor  Role[]    @default([]) //pour postgresql
-  visibleFor  String? @default("[]")
-  managedOnly Boolean?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Relations
-  variant     FormVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-
-  @@map("form_fields")
-  @@unique([variantId, order])
-  @@index([variantId])
-}
-
-// ============================================
-// FILE MANAGEMENT
-// ============================================
-
-model FileMetadata {
-  id            String   @id @default(uuid())
-  originalName  String
-  storageName   String   @unique
-  mimeType      String
-  size          Int
-  path          String
-  uploadedById  String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  // Relations
-  idea          Idea?
-
-  @@map("file_metadata")
-  @@index([storageName])
-}
-
-// ============================================
-// COMMENTS & COLLABORATION
-// ============================================
-
-model Comment {
-  id          String   @id @default(uuid())
-  ideaId      String?
-  tacheId     String?
-  userId      String
-  content     String   @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  idea        Idea?     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  tache       Tache?    @relation(fields: [tacheId], references: [id], onDelete: Cascade)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("comments")
-  @@index([ideaId])
-  @@index([tacheId])
-  @@index([userId])
-  @@index([createdAt])
 }

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Starting database seed...\n');
+  console.log('Starting corrected database seed...\n');
 
   // ============================================
   // USERS
@@ -26,7 +26,6 @@ async function main() {
       isActive: true,
     },
   });
-  console.log('✓ Admin user created:', admin.email);
 
   const managerPassword = await bcrypt.hash('Manager@123', 10);
   const manager = await prisma.user.upsert({
@@ -43,7 +42,6 @@ async function main() {
       isActive: true,
     },
   });
-  console.log('✓ Manager user created:', manager.email);
 
   const userPassword = await bcrypt.hash('User@123', 10);
   const user = await prisma.user.upsert({
@@ -60,7 +58,8 @@ async function main() {
       isActive: true,
     },
   });
-  console.log('✓ Regular user created:', user.email);
+
+  console.log('✓ Users created');
 
   // ============================================
   // CATEGORIES
@@ -109,81 +108,13 @@ async function main() {
       },
     }),
   ]);
+
   console.log(`✓ ${categories.length} categories created`);
 
   // ============================================
-  // STATUSES
+  // FORM MODEL & VARIANT
   // ============================================
-  console.log('\nCreating statuses...');
-
-  const statuses = await Promise.all([
-    prisma.status.upsert({
-      where: { name: 'Submitted' },
-      update: {},
-      create: {
-        name: 'Submitted',
-        order: 1,
-        color: '#3B82F6',
-        description: 'Idea has been submitted',
-      },
-    }),
-    prisma.status.upsert({
-      where: { name: 'Under Review' },
-      update: {},
-      create: {
-        name: 'Under Review',
-        order: 2,
-        color: '#F59E0B',
-        description: 'Idea is being reviewed',
-      },
-    }),
-    prisma.status.upsert({
-      where: { name: 'Approved' },
-      update: {},
-      create: {
-        name: 'Approved',
-        order: 3,
-        color: '#10B981',
-        description: 'Idea has been approved',
-      },
-    }),
-    prisma.status.upsert({
-      where: { name: 'In Progress' },
-      update: {},
-      create: {
-        name: 'In Progress',
-        order: 4,
-        color: '#8B5CF6',
-        description: 'Idea is being implemented',
-      },
-    }),
-    prisma.status.upsert({
-      where: { name: 'Completed' },
-      update: {},
-      create: {
-        name: 'Completed',
-        order: 5,
-        color: '#059669',
-        description: 'Idea has been implemented',
-      },
-    }),
-    prisma.status.upsert({
-      where: { name: 'Rejected' },
-      update: {},
-      create: {
-        name: 'Rejected',
-        order: 6,
-        color: '#EF4444',
-        description: 'Idea has been rejected',
-      },
-    }),
-  ]);
-  console.log(`✓ ${statuses.length} statuses created`);
-
-  // ============================================
-  // FORM MODELS & VARIANTS
-  // ============================================
-  console.log('\nCreating form models and variants...');
+  console.log('\nCreating form model and variant...');
 
   const formModel = await prisma.formModel.upsert({
     where: { name: 'Standard Idea Form' },
@@ -194,30 +125,32 @@ async function main() {
       isActive: true,
     },
   });
-  console.log('✓ Form model created:', formModel.name);
 
   const formVariant = await prisma.formVariant.upsert({
-    where: { 
+    where: {
       modelId_name: {
         modelId: formModel.id,
-        name: 'Default Variant'
-      }
+        name: 'Default Variant',
+      },
     },
     update: {},
     create: {
       modelId: formModel.id,
       name: 'Default Variant',
-      description: 'Default form variant with standard fields',
+      description: 'Default variant for idea submission',
       isDefault: true,
       isActive: true,
     },
   });
-  console.log('✓ Form variant created:', formVariant.name);
+
+  console.log('✓ Form model & variant created');
 
   // ============================================
   // FORM FIELDS
   // ============================================
   console.log('\nCreating form fields...');
+
+  await prisma.formField.deleteMany({ where: { variantId: formVariant.id } });
 
   const fields = await Promise.all([
     prisma.formField.create({
@@ -226,7 +159,7 @@ async function main() {
         label: 'Idea Title',
         type: 'TEXT',
         required: true,
-        placeholder: 'Enter a concise title for your idea',
+        placeholder: 'Enter a concise title',
         order: 1,
       },
     }),
@@ -236,8 +169,7 @@ async function main() {
         label: 'Description',
         type: 'TEXTAREA',
         required: true,
-        placeholder: 'Describe your idea in detail',
-        helpText: 'Provide as much detail as possible',
+        placeholder: 'Describe your idea',
         order: 2,
       },
     }),
@@ -254,52 +186,54 @@ async function main() {
     prisma.formField.create({
       data: {
         variantId: formVariant.id,
-        label: 'Implementation Difficulty',
+        label: 'Difficulty',
         type: 'SELECT',
         required: false,
-        options: {
-          choices: ['Easy', 'Medium', 'Hard', 'Very Hard']
-        },
+        options: { choices: ['Easy', 'Medium', 'Hard'] },
         order: 4,
       },
     }),
   ]);
+
   console.log(`✓ ${fields.length} form fields created`);
 
   // ============================================
-  // SAMPLE IDEAS
+  // IDEAS
   // ============================================
-  console.log('\nCreating sample ideas...');
+  console.log('\nCreating ideas...');
 
   const idea1 = await prisma.idea.create({
     data: {
       title: 'Implement AI-powered customer support',
-      description: 'Use AI chatbots to handle common customer queries and reduce response time',
-      categoryId: categories[4].id, // Technology
-      statusId: statuses[1].id, // Under Review
-      urgency: 'HIGH',
-      impact: 'VERY_HIGH',
+      description: 'Use AI chatbots to handle common customer queries and reduce response time.',
+      categoryId: categories[4].id,
+      priority: 'HIGH',
+      impact: 'MAJOR',
       isAnonymous: false,
+      visibility: 'PUBLIC',
       userId: user.id,
       formVariantId: formVariant.id,
+      status: 'SUBMITTED',
     },
   });
-  console.log('✓ Sample idea 1 created:', idea1.title);
 
   const idea2 = await prisma.idea.create({
     data: {
       title: 'Reduce packaging waste',
-      description: 'Switch to biodegradable packaging materials to reduce environmental impact',
-      categoryId: categories[2].id, // Cost Reduction
-      statusId: statuses[2].id, // Approved
-      urgency: 'MEDIUM',
-      impact: 'HIGH',
-      isAnonymous: false,
+      description: 'Switch to biodegradable packaging materials.',
+      categoryId: categories[2].id,
+      priority: 'MEDIUM',
+      impact: 'MODERATE',
+      visibility: 'TEAM',
       userId: manager.id,
       formVariantId: formVariant.id,
+      status: 'APPROVED',
+      approvedById: admin.id,
+      approvedAt: new Date(),
     },
   });
-  console.log('✓ Sample idea 2 created:', idea2.title);
+
+  console.log('✓ Ideas created');
 
   // ============================================
   // PLAN ACTIONS
@@ -310,76 +244,116 @@ async function main() {
     data: {
       ideaId: idea2.id,
       title: 'Research biodegradable materials',
-      description: 'Find suitable biodegradable packaging suppliers',
+      description: 'Find suitable biodegradable packaging suppliers.',
       progress: 30,
-      deadline: new Date('2024-03-31'),
+      deadline: new Date('2025-03-15'),
       assignedTo: manager.id,
     },
   });
-  console.log('✓ Plan action created:', action1.title);
 
   const action2 = await prisma.planAction.create({
     data: {
       ideaId: idea2.id,
       title: 'Cost-benefit analysis',
-      description: 'Analyze costs vs environmental benefits',
+      description: 'Analyze the financial impact of switching materials.',
       progress: 0,
-      deadline: new Date('2024-04-15'),
+      deadline: new Date('2025-04-10'),
       assignedTo: admin.id,
     },
   });
-  console.log('✓ Plan action created:', action2.title);
 
   // ============================================
   // COMMENTS
   // ============================================
   console.log('\nCreating comments...');
 
-  const comment1 = await prisma.comment.create({
+  await prisma.comment.create({
     data: {
       ideaId: idea1.id,
       userId: manager.id,
-      content: 'Great idea! This could significantly improve our customer satisfaction scores.',
+      content: 'Great idea! It will improve response time drastically.',
     },
   });
-  console.log('✓ Comment created');
 
-  const comment2 = await prisma.comment.create({
+  await prisma.comment.create({
     data: {
       ideaId: idea2.id,
       userId: admin.id,
-      content: 'I approve this initiative. Let\'s move forward with the research phase.',
+      content: 'Approved. Let’s begin with supplier research.',
     },
   });
-  console.log('✓ Comment created');
+
+  console.log('✓ Comments created');
+
+  // ============================================
+// NOTIFICATIONS
+// ============================================
+console.log('\nCreating notifications...');
+
+// Notification pour un utilisateur
+await prisma.notification.create({
+  data: {
+    title: "Idée approuvée",
+    message: "Votre idée a été approuvée par un manager.",
+    type: "SUCCESS",
+    target: "USER",
+    userId: user.id,
+    entityId: idea1.id,
+    entityType: "IDEA",
+  },
+});
+
+// Notification pour un rôle (MANAGER)
+await prisma.notification.create({
+  data: {
+    title: "Nouvelle idée soumise",
+    message: "Une nouvelle idée est en attente de validation.",
+    type: "INFO",
+    target: "ROLE",
+    role: "MANAGER",
+    entityId: idea2.id,
+    entityType: "IDEA",
+  },
+});
+
+// Notification système
+await prisma.notification.create({
+  data: {
+    title: "Mise à jour du système",
+    message: "Le système a été mis à jour avec une nouvelle fonctionnalité.",
+    type: "INFO",
+    target: "SYSTEM",
+  },
+});
+
+console.log("✓ Notifications seeded");
+
 
   // ============================================
   // SUMMARY
   // ============================================
   console.log('\n' + '='.repeat(50));
-  console.log('Seed completed successfully!');
+  console.log('SEED COMPLETED SUCCESSFULLY');
   console.log('='.repeat(50));
-  console.log('\n📊 Summary:');
-  console.log(`   Users: 3`);
-  console.log(`   Categories: ${categories.length}`);
-  console.log(`   Statuses: ${statuses.length}`);
-  console.log(`   Form Models: 1`);
-  console.log(`   Form Variants: 1`);
-  console.log(`   Form Fields: ${fields.length}`);
-  console.log(`   Ideas: 2`);
-  console.log(`   Plan Actions: 2`);
-  console.log(`   Comments: 2`);
-  
-  console.log('\n🔐 Test credentials:');
-  console.log('   Admin:   admin@ideabox.com / Admin@123');
-  console.log('   Manager: manager@ideabox.com / Manager@123');
-  console.log('   User:    user@ideabox.com / User@123');
-  console.log('\n');
+
+  console.log(`
+Users: 3
+Categories: ${categories.length}
+Form fields: ${fields.length}
+Ideas: 2
+Actions: 2
+Comments: 2
+
+🔐 Test Accounts:
+Admin → admin@ideabox.com / Admin@123
+Manager → manager@ideabox.com / Manager@123
+User → user@ideabox.com / User@123
+  `);
 }
 
 main()
   .catch((e) => {
-    console.error('Error seeding database:', e);
+    console.error('Error seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

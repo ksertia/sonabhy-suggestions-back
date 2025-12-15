@@ -9,6 +9,7 @@ const {
   markAsReadSchema,
   deleteNotificationSchema,
   sendTestNotificationSchema,
+  createNotificationSchema,
 } = require('./notification.validation');
 
 /**
