@@ -55,15 +55,46 @@ class FormService {
 
 
 
+  // async getFormModelById(id, user) {
+  //   const formModel = await formRepository.findFormModelById(id);
+    
+  //   if (!formModel) {
+  //     throw new NotFoundError('Form model not found');
+  //   }
+
+  //   return formModel;
+  // }
+
   async getFormModelById(id, user) {
     const formModel = await formRepository.findFormModelById(id);
-    
+
     if (!formModel) {
       throw new NotFoundError('Form model not found');
     }
 
-    return formModel;
+    const parseVisibleFor = (value) => {
+      if (!value) return [];
+
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    };
+
+    return {
+      ...formModel,
+      variants: formModel.variants.map(variant => ({
+        ...variant,
+        fields: variant.fields.map(field => ({
+          ...field,
+          visibleFor: parseVisibleFor(field.visibleFor),
+        })),
+      })),
+    };
   }
+
 
   async updateFormModel(id, data, user) {
     // Only admins can update form models
