@@ -22,10 +22,38 @@ class FormService {
     return formModel;
   }
 
+  // async getAllFormModels(filters, user) {
+  //   const formModels = await formRepository.findAllFormModels(filters);
+  //   return formModels;
+  // }
+
   async getAllFormModels(filters, user) {
-    const formModels = await formRepository.findAllFormModels(filters);
-    return formModels;
-  }
+  const formModels = await formRepository.findAllFormModels(filters);
+
+  const parseVisibleFor = (value) => {
+    if (!value) return [];
+
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  return formModels.map(formModel => ({
+    ...formModel,
+    variants: formModel.variants.map(variant => ({
+      ...variant,
+      fields: variant.fields.map(field => ({
+        ...field,
+        visibleFor: parseVisibleFor(field.visibleFor),
+      })),
+    })),
+  }));
+}
+
+
 
   async getFormModelById(id, user) {
     const formModel = await formRepository.findFormModelById(id);
