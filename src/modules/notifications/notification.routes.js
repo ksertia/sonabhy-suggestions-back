@@ -39,7 +39,7 @@ const {
  *           type: string
  *         metadata:
  *           type: object
- *         isRead:
+ *         read:
  *           type: boolean
  *         readAt:
  *           type: string
@@ -72,7 +72,7 @@ const {
  *           type: integer
  *           default: 20
  *       - in: query
- *         name: isRead
+ *         name: read
  *         schema:
  *           type: string
  *           enum: [true, false]
@@ -297,5 +297,47 @@ router.patch('/:id/read', authenticate, validate(markAsReadSchema), notification
  *         description: Notification not found
  */
 router.delete('/:id', authenticate, validate(deleteNotificationSchema), notificationController.deleteNotification);
+
+
+/**
+ * @swagger
+ * /notifications:
+ *   post:
+ *     summary: Send test notification (for development/testing)
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - type
+ *               - message
+ *               - target
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 example: "SYSTEM"
+ *               message:
+ *                 type: string
+ *                 example: "This is a test notification"
+ *               title:
+ *                 type: string
+ *                 example: "SYSTEM"
+ *               target:
+ *                 type: string
+ *                 example: "SYSTEM"
+ *               metadata:
+ *                 type: object
+ *                 example: { "key": "value" }
+ *     responses:
+ *       201:
+ *         description: Test notification sent successfully
+ */
+router.post('/', authenticate, validate(sendTestNotificationSchema), notificationController.createNotification);
 
 module.exports = router;

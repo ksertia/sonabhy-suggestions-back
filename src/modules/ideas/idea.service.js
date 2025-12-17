@@ -1,4 +1,5 @@
 const ideaRepository = require('./idea.repository');
+const notificationService = require('../notifications/notification.service');
 const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/errors');
 const path = require('path');
 const fs = require('fs').promises;
@@ -24,6 +25,17 @@ class IdeaService {
         data.userId = null;
       }
     }
+
+    const message = 'Une nouvelle idée a été cree'
+    const dataNotification = {
+      // userId: data.userId || null,
+      message,
+      title: 'creationIdea',
+      type: 'IDEA',
+      target: 'SYSTEM'
+    };
+
+    await notificationService.createNotification(dataNotification);
 
     const idea = await ideaRepository.create(data);
     return idea;
@@ -216,6 +228,8 @@ class IdeaService {
       ...data,
       ideaId,
     });
+
+
 
     return planAction;
   }

@@ -1,9 +1,7 @@
 const { z } = require("zod");
 
 // Allowed enums for safety
-const NotificationTypeEnum = z.enum(["INFO", "SUCCESS", "WARNING", "ERROR"]);
 const NotificationTargetEnum = z.enum(["USER", "ROLE", "SYSTEM"]);
-const RoleEnum = z.enum(["USER", "MANAGER", "ADMIN"]);
 
 
 const createNotificationSchema = z.object({
@@ -11,18 +9,11 @@ const createNotificationSchema = z.object({
     title: z.string().min(1, "Title is required"),
     message: z.string().min(1, "Message is required"),
 
-    type: NotificationTypeEnum.default("INFO"),
+    type: z.string().min(1, "Message is required"),
     target: NotificationTargetEnum.default("USER"),
 
     // Only required if target = USER
     userId: z.string().uuid().optional(),
-
-    // Only required if target = ROLE
-    role: RoleEnum.optional(),
-
-    // Optional contextual data
-    entityId: z.string().optional(),
-    entityType: z.string().optional(),
   }),
 });
 
@@ -45,14 +36,14 @@ const getNotificationsSchema = z.object({
       .optional()
       .default("20"),
 
-    isRead: z
+    read: z
       .string()
       .optional()
       .transform((v) =>
         v === undefined ? undefined : v === "true" ? true : false
       ),
 
-    type: NotificationTypeEnum.optional(),
+    type: z.string().optional(),
     target: NotificationTargetEnum.optional(),
 
     startDate: z.string().optional(),
@@ -94,8 +85,9 @@ const sendTestNotificationSchema = z.object({
   body: z.object({
     title: z.string().min(1, "Title is required"),
     message: z.string().min(1, "Message is required"),
+    type: z.string().min(1, "type is required"),
 
-    type: NotificationTypeEnum.default("INFO"),
+    // type: NotificationTypeEnum.default("INFO"),
     target: NotificationTargetEnum.default("USER"),
 
     userId: z.string().uuid().optional(),

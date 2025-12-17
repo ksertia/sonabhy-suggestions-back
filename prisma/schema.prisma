@@ -264,33 +264,21 @@ model Notification {
   id          String    @id @default(uuid())
   title       String
   message     String     @db.Text
-  type        NotificationType
-  userId      String?    // si la notif est pour un utilisateur spécifique
-  role        Role?      // si la notif est pour un rôle (MANAGER, ADMIN)
+  type        String
+  userId      String?    
   target      NotificationTarget @default(USER)
-  entityId    String?    // id d'une entité liée (Idea, Comment, Action…)
-  entityType  String?    // ex: "IDEA" | "COMMENT" | "ACTION"
-  isRead      Boolean    @default(false)
-  readAt      DateTime?
+  read      Boolean    @default(false)
   createdAt   DateTime   @default(now())
   user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([role])
   @@index([createdAt])
   @@map("notifications")
 }
 
-enum NotificationType {
-  INFO
-  SUCCESS
-  WARNING
-  ERROR
-}
 
 enum NotificationTarget {
   USER       // une seule personne
-  ROLE       // tous les membres d'un rôle
   SYSTEM     // tout le monde dans le système
 }
 

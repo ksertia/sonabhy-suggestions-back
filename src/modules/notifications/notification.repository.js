@@ -21,11 +21,19 @@ class NotificationRepository {
     const { page = 1, limit = 20 } = pagination;
     const skip = (page - 1) * limit;
 
+    // const where = {
+    //   userId,
+    //   ...this.buildWhereClause(filters),
+    // };
+
     const where = {
-      userId,
-      ...this.buildWhereClause(filters),
+      OR: [
+        { userId },
+        this.buildWhereClause(filters),
+      ],
     };
 
+    console.log(where)
     const [notifications, total] = await Promise.all([
       prisma.notification.findMany({
         where,
@@ -69,8 +77,7 @@ class NotificationRepository {
     return prisma.notification.update({
       where: { id },
       data: {
-        isRead: true,
-        readAt: new Date(),
+        read: true,
       },
     });
   }
@@ -79,11 +86,10 @@ class NotificationRepository {
     return prisma.notification.updateMany({
       where: {
         userId,
-        isRead: false,
+        read: false,
       },
       data: {
-        isRead: true,
-        readAt: new Date(),
+        read: true,
       },
     });
   }
@@ -92,7 +98,7 @@ class NotificationRepository {
     return prisma.notification.count({
       where: {
         userId,
-        isRead: false,
+        read: false,
       },
     });
   }
@@ -112,8 +118,12 @@ class NotificationRepository {
   buildWhereClause(filters) {
     const where = {};
 
-    if (filters.isRead !== undefined) {
-      where.isRead = filters.isRead === 'true' || filters.isRead === true;
+    if (filters.read !== undefined) {
+      where.read = filters.read === 'true' || filters.read === true;
+    }
+
+    if (filters.role !== 'USER') {
+      where.target = 'SYSTEM';
     }
 
     if (filters.type) {
