@@ -3,22 +3,22 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id               String         @id @default(uuid())
+  firstName        String
+  lastName         String
   email            String         @unique
+  username         String?        @unique
+  phone            String?        @unique
   password         String
   role             Role           @default(USER)
   isActive         Boolean        @default(true)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-  firstName        String
-  lastName         String
-  phone            String?        @unique
-  username         String?        @unique
   comments         Comment[]
   approvedIdeas    Idea[]         @relation("ApprovedBy")
   qualifiedIdeas   Idea[]         @relation("QualifiedBy")
@@ -28,6 +28,8 @@ model User {
   AssignedTaches   Tache[]        @relation("AssignedTaches")
   votes            Vote[]
   responsibleIdeas Idea[]         @relation("IdeaResponsibles")
+  notifications Notification[]
+
 
   @@index([email])
   @@map("users")
@@ -35,39 +37,41 @@ model User {
 
 model RefreshToken {
   id        String   @id @default(uuid())
-  token     String   @unique
+  token     String   @db.Text
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([token])
   @@map("refresh_tokens")
 }
 
 model Idea {
   id               String        @id @default(uuid())
   title            String
-  description      String
+  description      String        @db.Text
+  data             Json?
   isAnonymous      Boolean       @default(false)
+  forVote          Boolean       @default(false)
+  status           Status        @default(SUBMITTED)
+  visibility       Visibility    @default(PRIVATE)
+  priority         Priority?
+  impact           Impact?
+  categoryId       String?
+  kindId           String?
   userId           String?
   formVariantId    String
+  qualifiedById    String?
+  qualifiedAt      DateTime?
+  approvedById     String?
+  approvedAt       DateTime?
+  firstName        String?
+  lastName         String?
+  email            String?
   metadataId       String?       @unique
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  data             Json?
-  forVote          Boolean       @default(false)
-  categoryId       String?
-  impact           Impact?
-  kindId           String?
-  priority         Priority?
-  status           Status        @default(SUBMITTED)
-  visibility       Visibility    @default(PRIVATE)
-  approvedAt       DateTime?
-  approvedById     String?
-  qualifiedAt      DateTime?
-  qualifiedById    String?
   comments         Comment[]
   approvedBy       User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
   category         Category?     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
@@ -122,6 +126,7 @@ model Vote {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, ideaId])
+  @@index([ideaId], map: "votes_ideaId_fkey")
   @@map("votes")
 }
 
@@ -129,14 +134,14 @@ model PlanAction {
   id          String      @id @default(uuid())
   ideaId      String
   title       String
-  description String?
+  description String?     @db.Text
   progress    Int         @default(0)
-  deadline    DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
   status      Plan_Status @default(PENDING)
   tacheId     String?
+  deadline    DateTime?
   assignedTo  String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   assignee    User?       @relation("AssignedActions", fields: [assignedTo], references: [id])
   idea        Idea        @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   taches      Tache[]
@@ -151,13 +156,13 @@ model Tache {
   id           String      @id @default(uuid())
   planActionId String
   title        String
-  description  String?
+  description  String?     @db.Text
   progress     Int         @default(0)
   status       Plan_Status @default(PENDING)
   deadline     DateTime?
+  assignedTo   String?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  assignedTo   String?
   comments     Comment[]
   assignee     User?       @relation("AssignedTaches", fields: [assignedTo], references: [id])
   planAction   PlanAction  @relation(fields: [planActionId], references: [id], onDelete: Cascade)
@@ -171,11 +176,11 @@ model Tache {
 model FormModel {
   id          String        @id @default(uuid())
   name        String        @unique
-  description String?
+  type        String?
+  description String?       @db.Text
   isActive    Boolean       @default(true)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  type        String?
   variants    FormVariant[]
 
   @@map("form_models")
@@ -185,7 +190,7 @@ model FormVariant {
   id          String      @id @default(uuid())
   modelId     String
   name        String
-  description String?
+  description String?     @db.Text
   isDefault   Boolean     @default(false)
   isActive    Boolean     @default(true)
   createdAt   DateTime    @default(now())
@@ -209,10 +214,10 @@ model FormField {
   placeholder String?
   helpText    String?
   order       Int
+  visibleFor  String?     @default("[]")
+  managedOnly Boolean?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  managedOnly Boolean?
-  visibleFor  Role[]      @default([])
   variant     FormVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@unique([variantId, order])
@@ -239,11 +244,11 @@ model FileMetadata {
 model Comment {
   id        String   @id @default(uuid())
   ideaId    String?
+  tacheId   String?
   userId    String
-  content   String
+  content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tacheId   String?
   idea      Idea?    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   tache     Tache?   @relation(fields: [tacheId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -254,6 +259,29 @@ model Comment {
   @@index([createdAt])
   @@map("comments")
 }
+
+model Notification {
+  id          String    @id @default(uuid())
+  title       String
+  message     String     @db.Text
+  type        String
+  userId      String?    
+  target      NotificationTarget @default(USER)
+  read      Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+
+enum NotificationTarget {
+  USER       // une seule personne
+  SYSTEM     // tout le monde dans le système
+}
+
 
 enum Role {
   USER

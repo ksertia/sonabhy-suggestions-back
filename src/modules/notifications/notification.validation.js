@@ -1,44 +1,100 @@
-const { z } = require('zod');
+const { z } = require("zod");
 
-// Get Notifications Schema
+// Allowed enums for safety
+const NotificationTargetEnum = z.enum(["USER", "ROLE", "SYSTEM"]);
+
+
+const createNotificationSchema = z.object({
+  body: z.object({
+    title: z.string().min(1, "Title is required"),
+    message: z.string().min(1, "Message is required"),
+
+    type: z.string().min(1, "Message is required"),
+    target: NotificationTargetEnum.default("USER"),
+
+    // Only required if target = USER
+    userId: z.string().uuid().optional(),
+  }),
+});
+
+// -----------------------------------------
+// GET /notifications
+// -----------------------------------------
 const getNotificationsSchema = z.object({
   query: z.object({
-    page: z.string().regex(/^\d+$/).transform(Number).optional().default('1'),
-    limit: z.string().regex(/^\d+$/).transform(Number).optional().default('20'),
-    isRead: z.string().optional(),
+    page: z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .optional()
+      .default("1"),
+
+    limit: z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .optional()
+      .default("20"),
+
+    read: z
+      .string()
+      .optional()
+      .transform((v) =>
+        v === undefined ? undefined : v === "true" ? true : false
+      ),
+
     type: z.string().optional(),
-    startDate: z.string().datetime().optional(),
-    endDate: z.string().datetime().optional(),
+    target: NotificationTargetEnum.optional(),
+
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
   }),
 });
 
-// Get Notification by ID Schema
+// -----------------------------------------
+// GET /notifications/:id
+// -----------------------------------------
 const getNotificationSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid notification ID'),
+    id: z.string().uuid("Invalid notification ID"),
   }),
 });
 
-// Mark as Read Schema
+// -----------------------------------------
+// PATCH /notifications/:id/read
+// -----------------------------------------
 const markAsReadSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid notification ID'),
+    id: z.string().uuid("Invalid notification ID"),
   }),
 });
 
-// Delete Notification Schema
+// -----------------------------------------
+// DELETE /notifications/:id
+// -----------------------------------------
 const deleteNotificationSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid notification ID'),
+    id: z.string().uuid("Invalid notification ID"),
   }),
 });
 
-// Send Test Notification Schema (for testing)
+// -----------------------------------------
+// POST /notifications/test (for testing)
+// -----------------------------------------
 const sendTestNotificationSchema = z.object({
   body: z.object({
-    type: z.string().min(1, 'Type is required'),
-    message: z.string().min(1, 'Message is required'),
-    metadata: z.object({}).optional(),
+    title: z.string().min(1, "Title is required"),
+    message: z.string().min(1, "Message is required"),
+    type: z.string().min(1, "type is required"),
+
+    // type: NotificationTypeEnum.default("INFO"),
+    target: NotificationTargetEnum.default("USER"),
+
+    userId: z.string().uuid().optional(),
+    role: z.string().optional(),
+
+    entityId: z.string().optional(),
+    entityType: z.string().optional(),
   }),
 });
 
@@ -48,4 +104,5 @@ module.exports = {
   markAsReadSchema,
   deleteNotificationSchema,
   sendTestNotificationSchema,
+  createNotificationSchema
 };

@@ -5,10 +5,11 @@ class NotificationController {
   async getUserNotifications(req, res, next) {
     try {
       const filters = {
-        isRead: req.query.isRead,
+        isRead: req.query.read,
         type: req.query.type,
         startDate: req.query.startDate,
         endDate: req.query.endDate,
+        role: req.user.role,
       };
 
       const pagination = {
@@ -89,6 +90,15 @@ class NotificationController {
       successResponse(res, { notification }, 'Test notification sent successfully', 201);
     } catch (error) {
       next(error);
+    }
+  }
+
+  async createNotification(req, res, next) {
+    try {
+      const notification = await notificationService.createNotification(req.body);
+      successResponse(res, { notification }, 'notification sended');
+    } catch (error) {
+      next(error)
     }
   }
 }

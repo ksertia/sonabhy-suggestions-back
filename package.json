@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend API with Express.js, Prisma, JWT auth, and file upload",
   "main": "src/index.js",
-  "prisma":{
+  "prisma": {
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
@@ -18,7 +18,12 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "node prisma/seed.js"
   },
-  "keywords": ["express", "prisma", "jwt", "api"],
+  "keywords": [
+    "express",
+    "prisma",
+    "jwt",
+    "api"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -31,6 +36,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "zod": "^3.22.4"

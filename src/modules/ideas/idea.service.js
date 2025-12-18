@@ -1,4 +1,5 @@
 const ideaRepository = require('./idea.repository');
+const notificationService = require('../notifications/notification.service');
 const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/errors');
 const path = require('path');
 const fs = require('fs').promises;
@@ -6,11 +7,35 @@ const fs = require('fs').promises;
 class IdeaService {
   async createIdea(data) {
     // If not anonymous, set userId
+    // if (data.isAnonymous) {
+    //   data.userId = null;
+    // } else {
+    //   if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+    // }
+  console.log(data)
     if (data.isAnonymous) {
       data.userId = null;
+      data.firstName=null;
+      data.lastName=null;
+      data.email=null;
     } else {
-      if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+      if(!data.firstName && !data.lastName && !data.email) {
+        if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+      }else {
+        data.userId = null;
+      }
     }
+
+    const message = 'Une nouvelle idée a été cree'
+    const dataNotification = {
+      // userId: data.userId || null,
+      message,
+      title: 'creationIdea',
+      type: 'IDEA',
+      target: 'SYSTEM'
+    };
+
+    await notificationService.createNotification(dataNotification);
 
     const idea = await ideaRepository.create(data);
     return idea;
@@ -203,6 +228,8 @@ class IdeaService {
       ...data,
       ideaId,
     });
+
+
 
     return planAction;
   }
