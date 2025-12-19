@@ -2,7 +2,7 @@ const express = require('express');
 const authController = require('./auth.controller');
 const { validate } = require('../../middleware/validation.middleware');
 const { authenticate } = require('../../middleware/auth.middleware');
-const { registerSchema, loginSchema, refreshTokenSchema } = require('./auth.validation');
+const { registerSchema, loginSchema, refreshTokenSchema, getUserSchema } = require('./auth.validation');
 
 const router = express.Router();
 
@@ -258,5 +258,42 @@ router.post('/logout', validate(refreshTokenSchema), authController.logout);
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/profile', authenticate, authController.getProfile);
+
+/**
+ * @swagger
+ * /auth/{id}:
+ *   patch:
+ *     summary: Activate user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User activated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User activated successfully
+ *       404:
+ *         description: User not found
+ */
+router.patch('/:id', validate(getUserSchema), authController.activeUser);
+
+router.patch('/:id', validate(getUserSchema), authController.activeUser);
 
 module.exports = router;

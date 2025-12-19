@@ -30,8 +30,15 @@ const refreshTokenSchema = z.object({
   }),
 });
 
+const getUserSchema = z.object({
+  params: z.object({
+    id: z.string().uuid('Invalid user ID'),
+  }),
+});
+
 module.exports = {
   registerSchema,
   loginSchema,
   refreshTokenSchema,
+  getUserSchema
 };

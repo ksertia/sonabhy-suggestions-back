@@ -115,6 +115,28 @@ class AuthRepository {
       },
     });
   }
+
+   async updateIsActive(id) {
+      return prisma.user.update({
+        where: { id },
+        data: {
+          isActive: true,
+        },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          username: true,
+          phone: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    }
+
 }
 
 module.exports = new AuthRepository();

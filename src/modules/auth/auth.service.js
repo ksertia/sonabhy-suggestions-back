@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../../utils/jwt');
 const { UnauthorizedError, ConflictError, BadRequestError } = require('../../utils/errors');
 const authRepository = require('./auth.repository');
+const notificationService = require('../notifications/notification.service')
 
 class AuthService {
   async register(data) {
@@ -32,6 +33,15 @@ class AuthService {
       userId: user.id,
       expiresAt,
     });
+
+    const message = `Un nouveau utilisateur a créé son compte du nom de ${user.lastName} ${user.firstName}`
+    await notificationService.createNotification({
+      message,
+      entityId: user.id,
+      type: 'USER',
+      title: 'creation d\'un utilisateur',
+      target: 'SYSTEM'
+    })
 
     return {
       user,
@@ -141,6 +151,25 @@ class AuthService {
       throw new UnauthorizedError('User not found');
     }
     return user;
+  }
+
+  async activeUser(id) {
+    const user = await authRepository.updateIsActive(id);
+    if (!user) {
+      throw new UnauthorizedError('User not found');
+    }
+
+    const message = 'Votre compte a été active avec succes';
+
+    await notificationService.createNotification({
+      message,
+      userId: user.id,
+      title: 'Activation de compte',
+      type: 'USER',
+      // target: 'USER'
+    });
+
+    return 'active avec sucess'
   }
 }
 

@@ -16,7 +16,7 @@ model User {
   phone            String?        @unique
   password         String
   role             Role           @default(USER)
-  isActive         Boolean        @default(true)
+  isActive         Boolean        @default(false)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   comments         Comment[]
@@ -266,6 +266,7 @@ model Notification {
   message     String     @db.Text
   type        String
   userId      String?    
+  entityId    String?
   target      NotificationTarget @default(USER)
   read      Boolean    @default(false)
   createdAt   DateTime   @default(now())
