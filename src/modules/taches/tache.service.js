@@ -68,7 +68,7 @@ class TacheService {
 
     // Notifications (une par tâche)
   await Promise.all(
-    createdTaches
+    result
       .filter(tache => tache.assignee) // sécurité
       .map(tache =>
         notificationService.createNotification({
