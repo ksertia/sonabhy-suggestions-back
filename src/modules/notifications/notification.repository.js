@@ -94,12 +94,9 @@ class NotificationRepository {
     });
   }
 
-  async getUnreadCount(userId) {
+  async getUnreadCount(where) {
     return prisma.notification.count({
-      where: {
-        userId,
-        read: false,
-      },
+      where
     });
   }
 
