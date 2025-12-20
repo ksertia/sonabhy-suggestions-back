@@ -26,18 +26,22 @@ class IdeaService {
       }
     }
 
-    const message = 'Une nouvelle idée a été cree'
+    
+
+    const idea = await ideaRepository.create(data);
+
+    const message = 'Une nouvelle idée a été proposée'
     const dataNotification = {
       // userId: data.userId || null,
       message,
       title: 'creationIdea',
       type: 'IDEA',
-      target: 'SYSTEM'
+      target: 'SYSTEM',
+      entityId: idea.id
     };
 
     await notificationService.createNotification(dataNotification);
 
-    const idea = await ideaRepository.create(data);
     return idea;
   }
 
@@ -244,7 +248,7 @@ class IdeaService {
       type:'PLAN',
       title: 'assigné à un plan d\'action',
       entityId: planAction.id,
-      message: `on vous assigné le plan d'action ${planAction.title}`,
+      message: `On vous a assigné le plan d'action ${planAction.title}`,
     })
 
 
