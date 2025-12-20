@@ -52,34 +52,31 @@ class TacheService {
     }
 
     // Validate existence of PlanAction
-    const exists = tacheRepository.findPlanAction(planActionId);
+   const exists = await tacheRepository.findPlanAction(planActionId);
+      if (!exists) {
+        throw new NotFoundError('PlanAction not found');
+      }
 
-    if (!exists) {
-      throw new NotFoundError('PlanAction not found');
-    }
+      const result = await tacheRepository.createMany(planActionId, taches);
 
-    console.log(taches)
-    if (!Array.isArray(taches) || taches.length === 0) {
-      throw new BadRequestError('taches doit être un tableau non vide');
-    }
+      if (!Array.isArray(result)) {
+        throw new Error('createMany must return an array of created tasks');
+      }
 
-    // Bulk create
-    const result = await tacheRepository.createMany(planActionId, taches);
+      await Promise.all(
+        result
+          .filter(t => t.assignedTo)
+          .map(t =>
+            notificationService.createNotification({
+              userId: t.assignedTo,
+              title: 'Tâche assignée',
+              type: 'TACHE',
+              entityId: t.id,
+              message: `Une tâche "${t.title}" vous a été assignée`
+            })
+          )
+      );
 
-    // Notifications (une par tâche)
-  await Promise.all(
-    result
-      .filter(tache => tache.assignee) // sécurité
-      .map(tache =>
-        notificationService.createNotification({
-          userId: tache.assignee,
-          title: 'Tâche assignée',
-          type: 'TACHE',
-          entityId: tache.id,
-          message: `Une tâche "${tache.title}" vous a été assignée`
-        })
-      )
-  );
 
     await this.updatePlanActionProgress(planActionId);
 
