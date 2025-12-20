@@ -44,7 +44,7 @@ class PlanActionService {
           type:'PLAN',
           title: 'assigné à un plan d\'action',
           entityId: planAction.id,
-          message: `on vous assigné le plan d'action ${planAction.title}`,
+          message: `On vous a assigné le plan d'action ${planAction.title}`,
         })
 
     return planAction;
