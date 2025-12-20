@@ -31,17 +31,34 @@ class TacheRepository {
   // ---------------------------------------------------
   // CREATE MULTIPLE TACHES (bulk)
   // ---------------------------------------------------
-  async createMany(planActionId, taches = []) {
-    if (!Array.isArray(taches) || taches.length === 0)
-      throw new Error("taches doit être un tableau non vide");
+  // async createMany(planActionId, taches = []) {
+  //   if (!Array.isArray(taches) || taches.length === 0)
+  //     throw new Error("taches doit être un tableau non vide");
 
-    return prisma.tache.createMany({
-      data: taches.map(t => ({
-        ...t,
-        planActionId,
-      })),
-    });
+  //   return prisma.tache.createMany({
+  //     data: taches.map(t => ({
+  //       ...t,
+  //       planActionId,
+  //     })),
+  //   });
+  // }
+  async createMany(planActionId, taches = []) {
+    if (!Array.isArray(taches) || taches.length === 0) {
+      throw new Error("taches doit être un tableau non vide");
+    }
+
+    return Promise.all(
+      taches.map(t =>
+        prisma.tache.create({
+          data: {
+            ...t,
+            planActionId,
+          },
+        })
+      )
+    );
   }
+
 
   async updateMany(planActionId, taches = []) {
   const queries = taches.map(t =>
