@@ -86,7 +86,22 @@ class NotificationService {
    * Get unread count
    */
   async getUnreadCount(user) {
-    const count = await notificationRepository.getUnreadCount(user.id);
+    const where={}
+    if(user.role === 'USER') {
+      where= {
+        userId: user.id,
+        read: false,
+      }
+    }else {
+      where= {
+        read: false,
+        OR: [
+      { userId: user.id },
+      { target: 'SYSTEM' }
+    ]
+      }
+    }
+    const count = await notificationRepository.getUnreadCount(where);
     return { count };
   }
 
