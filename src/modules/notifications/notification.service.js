@@ -86,7 +86,7 @@ class NotificationService {
    * Get unread count
    */
   async getUnreadCount(user) {
-    const where={}
+    let where={}
     if(user.role === 'USER') {
       where= {
         userId: user.id,
