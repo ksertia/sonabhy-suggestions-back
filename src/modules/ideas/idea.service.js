@@ -193,6 +193,16 @@ class IdeaService {
       content,
     });
 
+    // const message = `${user.lastName} ${user.firstName} a commenté votre idée`;
+
+    // await notificationService.createNotification({
+    //   message,
+    //   userId:idea.userId,
+    //   title:'commentaire fait',
+    //   type: 'Commentaire',
+    //   entityId: comment.id,
+    // });
+
     return comment;
   }
 
@@ -229,6 +239,13 @@ class IdeaService {
       ideaId,
     });
 
+    await notificationService.createNotification({
+      userId: data.assignedTo,
+      type:'PLAN',
+      title: 'assigné à un plan d\'action',
+      entityId: planAction.id,
+      message: `on vous assigné le plan d'action ${planAction.title}`,
+    })
 
 
     return planAction;
@@ -323,7 +340,25 @@ class IdeaService {
       throw new NotFoundError('userIds doit être un tableau non vide');
     }
 
-    return await ideaRepository.responsibilizeUser(ideaId, data.userIds);
+    const result = await ideaRepository.responsibilizeUser(
+      ideaId,
+      data.userIds
+    );
+
+    // 2. Notifications
+    await Promise.all(
+      data.userIds.map(userId =>
+        notificationService.createNotification({
+          userId,
+          type: 'IDEA',
+          message: `Vous avez été assigné à une idée ${result.title}`,
+          title: 'assigné idée',
+          entityId: ideaId,
+        })
+      )
+    );
+
+    return result;
   }
 }
 

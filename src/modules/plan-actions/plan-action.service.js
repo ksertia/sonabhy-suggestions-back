@@ -1,5 +1,6 @@
 const planActionRepository = require('./plan-action.repository');
 const tacheService = require('../taches/tache.service');
+const notificationService = require('../notifications/notification.service')
 const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/errors');
 
 class PlanActionService {
@@ -38,6 +39,14 @@ class PlanActionService {
       await tacheService.createMultipleTaches(planAction.id, taches, user);
     }
     
+    await notificationService.createNotification({
+          userId: data.assignedTo,
+          type:'PLAN',
+          title: 'assigné à un plan d\'action',
+          entityId: planAction.id,
+          message: `on vous assigné le plan d'action ${planAction.title}`,
+        })
+
     return planAction;
   }
 
@@ -142,10 +151,18 @@ class PlanActionService {
 
   async completePlanAction(id) {
   // 1) Mise à jour de la tâche
-    return await planActionRepository.update(id, {
+    const plan = await planActionRepository.update(id, {
       progress: 100,
       status: "COMPLETED"
     });
+
+    await notificationService.createNotification({
+      title:'Plan complete',
+      type:'PLAN',
+      target: 'SYSTEM',
+      message: `le plan d'actions ${plan.title} est terminé`,
+      entityId: plan.id,
+    })
   }
 
   async updateProgress(id, progress, user) {
@@ -190,6 +207,14 @@ class PlanActionService {
     }
 
     const updated = await planActionRepository.assignUser(id, userId);
+
+    await notificationService.createNotification({
+          userId,
+          type:'PLAN',
+          title: 'assigné à un plan d\'action',
+          entityId: updated.id,
+          message: `on vous assigné le plan d'action ${updated.title}`,
+        })
     return updated;
   }
 

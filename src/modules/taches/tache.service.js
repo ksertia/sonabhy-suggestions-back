@@ -1,5 +1,6 @@
 const { NotFoundError, ForbiddenError, BadRequestError, } = require('../../utils/errors');
 const tacheRepository = require('./tache.repository');
+const notificationService = require('../notifications/notification.service');
 const prisma = require('../../config/database');
 
 class TacheService {
@@ -29,6 +30,14 @@ class TacheService {
     // Create task
     const tache = await tacheRepository.create(data);
 
+    await notificationService.createNotification({
+      userId: data.assignee,
+      title: 'tache assigne',
+      type: 'TACHE',
+      entityId: tache.id,
+      message: `une tache a été créé et vous est assigné du nom de ${tache.title}`
+    })
+
     await this.updatePlanActionProgress(data.planActionId);
 
     return tache;
@@ -56,6 +65,21 @@ class TacheService {
 
     // Bulk create
     const result = await tacheRepository.createMany(planActionId, taches);
+
+    // Notifications (une par tâche)
+  await Promise.all(
+    createdTaches
+      .filter(tache => tache.assignee) // sécurité
+      .map(tache =>
+        notificationService.createNotification({
+          userId: tache.assignee,
+          title: 'Tâche assignée',
+          type: 'TACHE',
+          entityId: tache.id,
+          message: `Une tâche "${tache.title}" vous a été assignée`
+        })
+      )
+  );
 
     await this.updatePlanActionProgress(planActionId);
 
@@ -194,6 +218,15 @@ class TacheService {
       throw new ForbiddenError('You do not have permission to update this task');
     }
 
+    await notificationService.createNotification({
+      // userId: data.assignee,
+      title: 'tache status',
+      type: 'TACHE',
+      entityId: tache.id,
+      message: `la tache ${tache.title} change de status ${tache.status} à ${status}`,
+      target: 'SYSTEM'
+    })
+
     return await tacheRepository.changeStatus(id, status);
   }
 
@@ -203,6 +236,15 @@ class TacheService {
       progress: 100,
       status: "COMPLETED"
     });
+
+    await notificationService.createNotification({
+      // userId: data.assignee,
+      title: 'tache complete',
+      type: 'TACHE',
+      entityId: tache.id,
+      message: `la tache ${tache.title} est terminée`,
+      target: 'SYSTEM'
+    })
 
     // 2) Recalcul automatique
     await this.updatePlanActionProgress(tache.planActionId);
