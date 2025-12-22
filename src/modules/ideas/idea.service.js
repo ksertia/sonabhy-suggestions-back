@@ -34,7 +34,7 @@ class IdeaService {
     const dataNotification = {
       // userId: data.userId || null,
       message,
-      title: 'creationIdea',
+      title: 'Proposition d\'idée',
       type: 'IDEA',
       target: 'SYSTEM',
       entityId: idea.id
@@ -246,7 +246,7 @@ class IdeaService {
     await notificationService.createNotification({
       userId: data.assignedTo,
       type:'PLAN',
-      title: 'assigné à un plan d\'action',
+      title: 'Plan d\'action',
       entityId: planAction.id,
       message: `On vous a assigné le plan d'action ${planAction.title}`,
     })
@@ -356,7 +356,7 @@ class IdeaService {
           userId,
           type: 'IDEA',
           message: `Vous avez été assigné à une idée ${result.title}`,
-          title: 'assigné idée',
+          title: 'Assigné idée',
           entityId: ideaId,
         })
       )
