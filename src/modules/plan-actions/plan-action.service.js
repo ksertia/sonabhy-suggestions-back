@@ -67,10 +67,36 @@ class PlanActionService {
       throw new NotFoundError('Plan action not found');
     }
 
-    // Check permissions: assignee, or manager/admin
-    if (user.role === 'USER' && planAction.assignedTo !== user.id) {
-      throw new ForbiddenError('You do not have permission to view this plan action');
+    // ADMIN / MANAGER : accès total
+    if (user.role !== 'USER') {
+      return planAction;
     }
+
+    // // Check permissions: assignee, or manager/admin
+    // if (user.role === 'USER' && planAction.assignedTo !== user.id) {
+    //   throw new ForbiddenError('You do not have permission to view this plan action');
+    // }
+
+  const isPlanActionAssignee = planAction.assignedTo === user.id;
+
+  const userTasks = planAction.taches?.filter(
+    task => task.assignedTo === user.id
+  ) ?? [];
+
+  // USER non lié du tout
+  if (!isPlanActionAssignee && userTasks.length === 0) {
+    throw new ForbiddenError(
+      'You do not have permission to view this plan action'
+    );
+  }
+
+  // USER assigné uniquement à des tâches → on filtre
+  if (!isPlanActionAssignee) {
+    return {
+      ...planAction,
+      tasks: userTasks,
+    };
+  }
 
     return planAction;
   }
