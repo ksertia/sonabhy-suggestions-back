@@ -68,7 +68,7 @@ router.use(authenticate);
  *       403:
  *         description: Forbidden
  */
-router.get('/', authorize('ADMIN', 'MANAGER'), validate(getUsersSchema), userController.getAllUsers);
+router.get('/', validate(getUsersSchema), userController.getAllUsers);
 
 /**
  * @swagger

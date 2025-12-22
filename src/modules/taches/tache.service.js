@@ -211,7 +211,7 @@ class TacheService {
       throw new NotFoundError('Tache not found');
     }
 
-    if (user.role === 'USER') {
+    if (user.role === 'USER' && user.id !== tache.assignedTo) {
       throw new ForbiddenError('You do not have permission to update this task');
     }
 
