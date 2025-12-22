@@ -58,6 +58,15 @@ class AuthController {
       next(error);
     }
   }
+
+  async deActiveUser(req, res, next) {
+    try {
+      const user = await authService.deActiveUser(req.params.id);
+      successResponse(res, { user }, 'Profile retrieved successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new AuthController();

@@ -261,7 +261,7 @@ router.get('/profile', authenticate, authController.getProfile);
 
 /**
  * @swagger
- * /auth/{id}:
+ * /auth/{id}/activate:
  *   patch:
  *     summary: Activate user
  *     tags: [Authentication]
@@ -292,8 +292,41 @@ router.get('/profile', authenticate, authController.getProfile);
  *       404:
  *         description: User not found
  */
-router.patch('/:id', validate(getUserSchema), authController.activeUser);
+router.patch('/:id/activate', validate(getUserSchema), authController.activeUser);
 
-router.patch('/:id', validate(getUserSchema), authController.activeUser);
+/**
+ * @swagger
+ * /auth/{id}/activate:
+ *   patch:
+ *     summary: Activate user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User activated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User activated successfully
+ *       404:
+ *         description: User not found
+ */
+router.patch('/:id/disable', validate(getUserSchema), authController.deActiveUser);
 
 module.exports = router;

@@ -116,12 +116,10 @@ class AuthRepository {
     });
   }
 
-   async updateIsActive(id) {
+   async updateIsActive(id, data) {
       return prisma.user.update({
         where: { id },
-        data: {
-          isActive: true,
-        },
+        data,
         select: {
           id: true,
           email: true,

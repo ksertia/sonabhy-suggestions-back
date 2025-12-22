@@ -154,7 +154,7 @@ class AuthService {
   }
 
   async activeUser(id) {
-    const user = await authRepository.updateIsActive(id);
+    const user = await authRepository.updateIsActive(id, {isActive: true});
     if (!user) {
       throw new UnauthorizedError('User not found');
     }
@@ -170,6 +170,25 @@ class AuthService {
     });
 
     return 'active avec sucess'
+  }
+
+  async deActiveUser(id) {
+    const user = await authRepository.updateIsActive(id, {isActive: false});
+    if (!user) {
+      throw new UnauthorizedError('User not found');
+    }
+
+    const message = 'Votre compte a été deactive avec succes';
+
+    await notificationService.createNotification({
+      message,
+      userId: user.id,
+      title: 'deactivation de compte',
+      type: 'USER',
+      // target: 'USER'
+    });
+
+    return 'deactivation avec sucess'
   }
 }
 
