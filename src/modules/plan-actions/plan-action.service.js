@@ -94,7 +94,7 @@ class PlanActionService {
   if (!isPlanActionAssignee) {
     return {
       ...planAction,
-      tasks: userTasks,
+      taches: userTasks,
     };
   }
 
