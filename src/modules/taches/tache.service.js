@@ -72,7 +72,7 @@ class TacheService {
               title: 'Tâche assignée',
               type: 'TACHE',
               entityId: t.id,
-              message: `Une tâche "${t.title}" vous a été assignée`
+              message: `Une nouvelle tâche << ${t.title} >> vous a été attribuée`
             })
           )
       );
@@ -214,15 +214,27 @@ class TacheService {
     if (user.role === 'USER' && user.id !== tache.assignedTo) {
       throw new ForbiddenError('You do not have permission to update this task');
     }
-
-    await notificationService.createNotification({
-      // userId: data.assignee,
-      title: 'tache status',
-      type: 'TACHE',
-      entityId: tache.id,
-      message: `la tache ${tache.title} change de status ${tache.status} à ${status}`,
-      target: 'SYSTEM'
-    })
+    
+    if(status === "IN_PROGRES") {
+      await notificationService.createNotification({
+        // userId: data.assignee,
+        title: 'tache status',
+        type: 'TACHE',
+        entityId: tache.id,
+        message: `La tâche << ${tache.title} >> est en cours de traitement`,
+        target: 'SYSTEM'
+      })
+    } else if (status === "CANCELED") {
+      await notificationService.createNotification({
+        // userId: data.assignee,
+        title: 'tache status',
+        type: 'TACHE',
+        entityId: tache.id,
+        message: `La tache << ${tache.title} >> est annulée`,
+        target: 'SYSTEM'
+      })
+    }
+    
 
     return await tacheRepository.changeStatus(id, status);
   }

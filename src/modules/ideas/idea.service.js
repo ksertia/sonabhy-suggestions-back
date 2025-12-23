@@ -248,7 +248,7 @@ class IdeaService {
       type:'PLAN',
       title: 'Plan d\'action',
       entityId: planAction.id,
-      message: `On vous a assigné le plan d'action ${planAction.title}`,
+      message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>`,
     })
 
 
@@ -355,7 +355,7 @@ class IdeaService {
         notificationService.createNotification({
           userId,
           type: 'IDEA',
-          message: `Vous avez été assigné à une idée ${result.title}`,
+          message: `Vous avez été assigné à une idée << ${result.title} >>`,
           title: 'Assigné idée',
           entityId: ideaId,
         })
