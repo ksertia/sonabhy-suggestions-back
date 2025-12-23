@@ -39,13 +39,13 @@ class PlanActionService {
       await tacheService.createMultipleTaches(planAction.id, taches, user);
     }
     
-    await notificationService.createNotification({
-          userId: data.assignedTo,
-          type:'PLAN',
-          title: 'assigné à un plan d\'action',
-          entityId: planAction.id,
-          message: `On vous a assigné le plan d'action ${planAction.title}`,
-        })
+   await notificationService.createNotification({
+         userId: data.assignedTo,
+         type:'PLAN',
+         title: 'Plan d\'action',
+         entityId: planAction.id,
+         message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>`,
+       })
 
     return planAction;
   }
@@ -235,11 +235,11 @@ class PlanActionService {
     const updated = await planActionRepository.assignUser(id, userId);
 
     await notificationService.createNotification({
-          userId,
+          userId: data.assignedTo,
           type:'PLAN',
-          title: 'assigné à un plan d\'action',
-          entityId: updated.id,
-          message: `on vous assigné le plan d'action ${updated.title}`,
+          title: 'Plan d\'action',
+          entityId: planAction.id,
+          message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>`,
         })
     return updated;
   }

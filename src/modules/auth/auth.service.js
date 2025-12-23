@@ -159,7 +159,7 @@ class AuthService {
       throw new UnauthorizedError('User not found');
     }
 
-    const message = 'Votre compte a été active avec succes';
+    const message = 'Votre compte a été activé avec succès';
 
     await notificationService.createNotification({
       message,
@@ -169,7 +169,7 @@ class AuthService {
       // target: 'USER'
     });
 
-    return 'active avec sucess'
+    return 'activation avec succès'
   }
 
   async deActiveUser(id) {
@@ -178,17 +178,17 @@ class AuthService {
       throw new UnauthorizedError('User not found');
     }
 
-    const message = 'Votre compte a été deactive avec succes';
+    const message = 'Votre compte a été désactivé avec succès';
 
     await notificationService.createNotification({
       message,
       userId: user.id,
-      title: 'deactivation de compte',
+      title: 'Désactivation de compte',
       type: 'USER',
       // target: 'USER'
     });
 
-    return 'deactivation avec sucess'
+    return 'désactivation avec succès'
   }
 }
 
