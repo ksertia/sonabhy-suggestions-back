@@ -316,8 +316,8 @@ class IdeaRepository {
 
     if (filters.search) {
       where.OR = [
-        { title: { contains: filters.search, mode: 'insensitive' } },
-        { description: { contains: filters.search, mode: 'insensitive' } },
+        { title: { contains: filters.search, sensitivity: 'insensitive' } },
+        { description: { contains: filters.search, sensitivity: 'insensitive' } },
       ];
     }
 
