@@ -1,9 +1,11 @@
 const prisma = require('../../config/database');
 
 class UserRepository {
-  async findAll(skip = 0, take = 10) {
+  async findAll(filters, skip = 1, take = 10) {
+    const where = this.buildUserWhereClause(filters)
     const [users, total] = await Promise.all([
       prisma.user.findMany({
+        where,
         skip,
         take,
         select: {
@@ -76,6 +78,41 @@ class UserRepository {
       where: { email },
     });
   }
+
+  buildUserWhereClause(filters) {
+    const where= {};
+
+    if (filters.role) {
+      where.role = filters.role;
+    }
+
+    if (filters.isActive !== undefined) {
+      where.isActive = filters.isActive === 'true' || filters.isActive === true;
+    }
+
+    if (filters.search) {
+      where.OR = [
+        { firstName: { contains: filters.search} },
+        { lastName: { contains: filters.search} },
+        { email: { contains: filters.search} },
+        { username: { contains: filters.search} },
+        { phone: { contains: filters.search} },
+      ];
+    }
+
+    if (filters.startDate || filters.endDate) {
+      where.createdAt = {};
+      if (filters.startDate) {
+        where.createdAt.gte = new Date(filters.startDate);
+      }
+      if (filters.endDate) {
+        where.createdAt.lte = new Date(filters.endDate);
+      }
+    }
+
+    return where;
+  }
+
 }
 
 module.exports = new UserRepository();

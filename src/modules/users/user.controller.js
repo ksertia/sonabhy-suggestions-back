@@ -4,8 +4,10 @@ const { successResponse } = require('../../utils/response');
 class UserController {
   async getAllUsers(req, res, next) {
     try {
-      const { page, limit } = req.query;
-      const result = await userService.getAllUsers(parseInt(page), parseInt(limit));
+      // const { page, limit } = req.query;
+      const { page = 1, limit = 10, search, role, isActive, startDate, endDate } = req.query;
+      const filters = { search, role, isActive, startDate, endDate };
+      const result = await userService.getAllUsers(filters, parseInt(page), parseInt(limit));
       successResponse(res, result, 'Users retrieved successfully');
     } catch (error) {
       next(error);

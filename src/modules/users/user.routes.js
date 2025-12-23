@@ -31,44 +31,43 @@ router.use(authenticate);
  *           type: integer
  *           default: 10
  *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term for name, email, username, phone
+ *       - in: query
+ *         name: role
+ *         schema:
+ *           type: string
+ *         description: Filter by role
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *         description: Filter by active status
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start createdAt date filter
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End createdAt date filter
  *     responses:
  *       200:
  *         description: Users retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Users retrieved successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     users:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/User'
- *                     pagination:
- *                       type: object
- *                       properties:
- *                         page:
- *                           type: integer
- *                         limit:
- *                           type: integer
- *                         total:
- *                           type: integer
- *                         totalPages:
- *                           type: integer
  *       401:
  *         description: Unauthorized
  *       403:
  *         description: Forbidden
  */
 router.get('/', validate(getUsersSchema), userController.getAllUsers);
+
 
 /**
  * @swagger

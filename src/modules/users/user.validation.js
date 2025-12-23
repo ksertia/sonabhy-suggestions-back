@@ -34,8 +34,23 @@ const deleteUserSchema = z.object({
 
 const getUsersSchema = z.object({
   query: z.object({
-    page: z.string().regex(/^\d+$/).transform(Number).optional().default('1'),
-    limit: z.string().regex(/^\d+$/).transform(Number).optional().default('10'),
+    page: z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .optional()
+      .default('1'),
+    limit: z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .optional()
+      .default('10'),
+    search: z.string().optional(),
+    role: z.string().optional(),
+    isActive: z.enum(['true', 'false']).optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
   }),
 });
 

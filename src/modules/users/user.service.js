@@ -3,9 +3,9 @@ const userRepository = require('./user.repository');
 const { NotFoundError, ForbiddenError, ConflictError } = require('../../utils/errors');
 
 class UserService {
-  async getAllUsers(page = 1, limit = 10) {
+  async getAllUsers(filters, page = 1, limit = 10) {
     const skip = (page - 1) * limit;
-    const { users, total } = await userRepository.findAll(skip, limit);
+    const { users, total } = await userRepository.findAll(filters, skip, limit);
 
     return {
       users,
