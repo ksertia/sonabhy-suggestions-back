@@ -296,9 +296,9 @@ router.patch('/:id/activate', validate(getUserSchema), authController.activeUser
 
 /**
  * @swagger
- * /auth/{id}/activate:
+ * /auth/{id}/disable:
  *   patch:
- *     summary: Activate user
+ *     summary: Désactivate user
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -323,7 +323,7 @@ router.patch('/:id/activate', validate(getUserSchema), authController.activeUser
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: User activated successfully
+ *                   example: User desactivate successfully
  *       404:
  *         description: User not found
  */

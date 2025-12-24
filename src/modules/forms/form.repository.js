@@ -89,6 +89,18 @@ class FormRepository {
     });
   }
 
+  async setActiveFormModel(id) {
+    return prisma.$transaction([
+      prisma.formModel.updateMany({
+        data: { isActive: false },
+      }),
+      prisma.formModel.update({
+        where: { id },
+        data: { isActive: true },
+      }),
+    ])
+  }
+
   async deleteFormModel(id) {
     return prisma.formModel.delete({
       where: { id },

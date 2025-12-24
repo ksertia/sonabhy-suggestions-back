@@ -32,7 +32,7 @@ class TacheService {
 
     await notificationService.createNotification({
       userId: data.assignee,
-      title: 'tache assigne',
+      title: 'Tâche assignée',
       type: 'TACHE',
       entityId: tache.id,
       message: `une tache a été créé et vous est assigné du nom de ${tache.title}`
@@ -218,7 +218,7 @@ class TacheService {
     if(status === "IN_PROGRES") {
       await notificationService.createNotification({
         // userId: data.assignee,
-        title: 'tache status',
+        title: 'Statut de la tâche',
         type: 'TACHE',
         entityId: tache.id,
         message: `La tâche << ${tache.title} >> est en cours de traitement`,
@@ -227,7 +227,7 @@ class TacheService {
     } else if (status === "CANCELED") {
       await notificationService.createNotification({
         // userId: data.assignee,
-        title: 'tache status',
+        title: 'Statut de la tâche',
         type: 'TACHE',
         entityId: tache.id,
         message: `La tache << ${tache.title} >> est annulée`,
@@ -248,7 +248,7 @@ class TacheService {
 
     await notificationService.createNotification({
       // userId: data.assignee,
-      title: 'tache complete',
+      title: 'Tâche terminée',
       type: 'TACHE',
       entityId: tache.id,
       message: `la tache ${tache.title} est terminée`,

@@ -246,6 +246,29 @@ router.put('/models/:id', authenticate, authorize('ADMIN'), validate(updateFormM
 
 /**
  * @swagger
+ * /forms/models/{id}/activate:
+ *   patch:
+ *     summary: activate form model (Admin/Manager only)
+ *     tags: [Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: form model activate set successfully
+ *       403:
+ *         description: Forbidden - Admin/Manager only
+ */
+router.patch('/models/:id/activate', authenticate, authorize('ADMIN', 'MANAGER'), validate(getFormModelSchema), formController.setActiveModel);
+
+/**
+ * @swagger
  * /forms/models/{id}:
  *   delete:
  *     summary: Delete form model (Admin only)

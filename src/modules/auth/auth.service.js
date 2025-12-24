@@ -39,7 +39,7 @@ class AuthService {
       message,
       entityId: user.id,
       type: 'USER',
-      title: 'creation d\'un utilisateur',
+      title: 'Création d\'un utilisateur',
       target: 'SYSTEM'
     })
 

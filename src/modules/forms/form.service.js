@@ -112,6 +112,21 @@ class FormService {
     return updated;
   }
 
+  async setActiveForm(id, user) {
+    if (user.role === 'USER') {
+      throw new ForbiddenError('Only admins can update form models');
+    }
+
+    const formModel = await formRepository.findFormModelById(id);
+    
+    if (!formModel) {
+      throw new NotFoundError('Form model not found');
+    }
+
+    const updated = await formRepository.setActiveFormModel(id);
+    return updated;
+  }
+
   async deleteFormModel(id, user) {
     // Only admins can delete form models
     if (user.role === 'USER') {

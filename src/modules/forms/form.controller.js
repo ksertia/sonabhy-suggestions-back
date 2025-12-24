@@ -46,6 +46,15 @@ class FormController {
     }
   }
 
+  async setActiveModel(req, res, next) {
+    try {
+      const formModel = await formService.setActiveForm(req.params.id, req.user);
+      successResponse(res, { formModel }, 'Form model set active successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteFormModel(req, res, next) {
     try {
       const result = await formService.deleteFormModel(req.params.id, req.user);
