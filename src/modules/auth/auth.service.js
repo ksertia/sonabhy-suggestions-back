@@ -12,6 +12,11 @@ class AuthService {
       throw new ConflictError('User with this email already exists');
     }
 
+    const existingUsername = await authRepository.findUserByEmail(data.username);
+    if (existingUsername) {
+      throw new ConflictError('User with this username already exists');
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
