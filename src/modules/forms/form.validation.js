@@ -8,6 +8,7 @@ const createFormModelSchema = z.object({
   body: z.object({
     name: z.string().min(3, 'Name must be at least 3 characters').max(100),
     description: z.string().optional(),
+    useBy: z.string().optional(),
     type: z.string().optional(),
     isActive: z.boolean().optional().default(true),
   }),
@@ -20,6 +21,7 @@ const updateFormModelSchema = z.object({
   body: z.object({
     name: z.string().min(3).max(100).optional(),
     description: z.string().optional(),
+    useBy: z.string().optional(),
     type: z.string().optional(),
     isActive: z.boolean().optional(),
   }),
@@ -103,6 +105,7 @@ const createFormFieldSchema = z.object({
   body: z.object({
     variantId: z.string().uuid('Invalid variant ID'),
     label: z.string().min(1, 'Label is required').max(200),
+    fieldName: z.string().min(1, 'Field name is required').max(100).optional(),
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
     required: z.boolean().optional().default(false),
     options: z.any().optional(), // JSON field
@@ -123,6 +126,7 @@ const updateFormFieldSchema = z.object({
   body: z.object({
     label: z.string().min(1).max(200).optional(),
     type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']).optional(),
+    fieldName: z.string().min(1).max(100).optional(),
     required: z.boolean().optional(),
     options: z.any().optional(),
     visibleFor: z.array(
@@ -175,6 +179,7 @@ const bulkCreateFieldsSchema = z.object({
     fields: z.array(
       z.object({
         label: z.string().min(1).max(200),
+        fieldName: z.string().min(1).max(100).optional(),
         type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE', 'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE']),
         required: z.boolean().optional().default(false),
         options: z.any().optional(),
@@ -200,6 +205,7 @@ const bulkUpdateFieldsSchema = z.object({
         id: z.string().uuid('Invalid field ID'), // obligatoire pour update
 
         label: z.string().min(1).max(200).optional(),
+        fieldName: z.string().min(1).max(100).optional(),
         type: z.enum([
           'TEXT', 'TEXTAREA', 'NUMBER', 'EMAIL', 'DATE',
           'SELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO', 'FILE'

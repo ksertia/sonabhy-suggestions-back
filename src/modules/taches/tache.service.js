@@ -35,7 +35,7 @@ class TacheService {
       title: 'Tâche assignée',
       type: 'TACHE',
       entityId: tache.id,
-      message: `une tache a été créé et vous est assigné du nom de ${tache.title}`
+      message: `Une tache a été créé et vous est assigné du nom de ${tache.title}.`
     })
 
     await this.updatePlanActionProgress(data.planActionId);
@@ -72,7 +72,7 @@ class TacheService {
               title: 'Tâche assignée',
               type: 'TACHE',
               entityId: t.id,
-              message: `Une nouvelle tâche << ${t.title} >> vous a été attribuée`
+              message: `Une nouvelle tâche << ${t.title} >> vous a été attribuée.`
             })
           )
       );
@@ -221,7 +221,7 @@ class TacheService {
         title: 'Statut de la tâche',
         type: 'TACHE',
         entityId: tache.id,
-        message: `La tâche << ${tache.title} >> est en cours de traitement`,
+        message: `La tâche << ${tache.title} >> est en cours de traitement.`,
         target: 'SYSTEM'
       })
     } else if (status === "CANCELED") {
@@ -230,7 +230,7 @@ class TacheService {
         title: 'Statut de la tâche',
         type: 'TACHE',
         entityId: tache.id,
-        message: `La tache << ${tache.title} >> est annulée`,
+        message: `La tache << ${tache.title} >> est annulée.`,
         target: 'SYSTEM'
       })
     }
@@ -251,7 +251,7 @@ class TacheService {
       title: 'Tâche terminée',
       type: 'TACHE',
       entityId: tache.id,
-      message: `la tache ${tache.title} est terminée`,
+      message: `La tache ${tache.title} est terminée.`,
       target: 'SYSTEM'
     })
 

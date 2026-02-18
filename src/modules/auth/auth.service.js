@@ -39,7 +39,7 @@ class AuthService {
       expiresAt,
     });
 
-    const message = `Un nouveau utilisateur a créé son compte du nom de ${user.lastName} ${user.firstName}`
+    const message = `Un nouveau utilisateur a créé son compte du nom de ${user.lastName} ${user.firstName}.`
     await notificationService.createNotification({
       message,
       entityId: user.id,
@@ -164,7 +164,7 @@ class AuthService {
       throw new UnauthorizedError('User not found');
     }
 
-    const message = 'Votre compte a été activé avec succès';
+    const message = 'Votre compte a été activé avec succès.';
 
     await notificationService.createNotification({
       message,
@@ -183,7 +183,7 @@ class AuthService {
       throw new UnauthorizedError('User not found');
     }
 
-    const message = 'Votre compte a été désactivé avec succès';
+    const message = 'Votre compte a été désactivé avec succès.';
 
     await notificationService.createNotification({
       message,

@@ -149,6 +149,8 @@ const {
  *                 maxLength: 100
  *               description:
  *                 type: string
+ *               useBy:
+ *                 type: string
  *               type:
  *                 type: string
  *               isActive:
@@ -158,9 +160,9 @@ const {
  *       201:
  *         description: Form model created successfully
  *       403:
- *         description: Forbidden - Admin only
+ *         description: Forbidden - Admin or Manager only
  */
-router.post('/models', authenticate, authorize('ADMIN'), validate(createFormModelSchema), formController.createFormModel);
+router.post('/models', authenticate, authorize('ADMIN', 'MANAGER'), validate(createFormModelSchema), formController.createFormModel);
 
 /**
  * @swagger
@@ -234,6 +236,8 @@ router.get('/models/:id', authenticate, validate(getFormModelSchema), formContro
  *                 type: string
  *               description:
  *                 type: string
+ *               useBy:
+ *                type: string
  *               isActive:
  *                 type: boolean
  *     responses:
@@ -242,7 +246,7 @@ router.get('/models/:id', authenticate, validate(getFormModelSchema), formContro
  *       403:
  *         description: Forbidden - Admin only
  */
-router.put('/models/:id', authenticate, authorize('ADMIN'), validate(updateFormModelSchema), formController.updateFormModel);
+router.put('/models/:id', authenticate, authorize('ADMIN', 'MANAGER'), validate(updateFormModelSchema), formController.updateFormModel);
 
 /**
  * @swagger
@@ -266,6 +270,20 @@ router.put('/models/:id', authenticate, authorize('ADMIN'), validate(updateFormM
  *         description: Forbidden - Admin/Manager only
  */
 router.patch('/models/:id/activate', authenticate, authorize('ADMIN', 'MANAGER'), validate(getFormModelSchema), formController.setActiveModel);
+
+/**
+ * @swagger
+ * /forms/models-active:
+ *   get:
+ *     summary: Get active form models
+ *     tags: [Forms]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Active form models retrieved successfully
+ */
+router.get('/models-active', formController.getActiveFormModels);
 
 /**
  * @swagger

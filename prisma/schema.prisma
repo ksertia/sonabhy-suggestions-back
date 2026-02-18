@@ -49,8 +49,8 @@ model RefreshToken {
 
 model Idea {
   id               String        @id @default(uuid())
-  title            String
-  description      String        @db.Text
+  title            String?
+  description      String?        @db.Text
   data             Json?
   isAnonymous      Boolean       @default(false)
   forVote          Boolean       @default(false)
@@ -61,7 +61,7 @@ model Idea {
   categoryId       String?
   kindId           String?
   userId           String?
-  formVariantId    String
+  formVariantId    String?
   qualifiedById    String?
   qualifiedAt      DateTime?
   approvedById     String?
@@ -75,7 +75,7 @@ model Idea {
   comments         Comment[]
   approvedBy       User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
   category         Category?     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  formVariant      FormVariant   @relation(fields: [formVariantId], references: [id])
+  formVariant      FormVariant?   @relation(fields: [formVariantId], references: [id])
   kind             Kind?         @relation(fields: [kindId], references: [id], onDelete: Restrict)
   metadata         FileMetadata? @relation(fields: [metadataId], references: [id])
   qualifiedBy      User?         @relation("QualifiedBy", fields: [qualifiedById], references: [id])
@@ -177,6 +177,7 @@ model FormModel {
   id          String        @id @default(uuid())
   name        String        @unique
   type        String?
+  useBy       String?
   description String?       @db.Text
   isActive    Boolean       @default(true)
   createdAt   DateTime      @default(now())
@@ -208,6 +209,7 @@ model FormField {
   id          String      @id @default(uuid())
   variantId   String
   label       String
+  fieldName   String?
   type        FieldType
   required    Boolean     @default(false)
   options     Json?

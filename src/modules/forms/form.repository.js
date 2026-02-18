@@ -89,17 +89,37 @@ class FormRepository {
     });
   }
 
-  async setActiveFormModel(id) {
-    return prisma.$transaction([
-      prisma.formModel.updateMany({
-        data: { isActive: false },
-      }),
-      prisma.formModel.update({
+  // async setActiveFormModel(id) {
+  //   return prisma.$transaction([
+  //     prisma.formModel.updateMany({
+  //       data: { isActive: false },
+  //     }),
+  //     prisma.formModel.update({
+  //       where: { id },
+  //       data: { isActive: true },
+  //     }),
+  //   ])
+  // }
+
+  async setActiveFormModel(id, data) {
+    return await prisma.formModel.update({
         where: { id },
-        data: { isActive: true },
-      }),
-    ])
+        data: { isActive: !data },
+      });
   }
+
+  async getActiveFormModels() {
+  return prisma.formModel.findMany({
+    where: { isActive: true },
+    include: {
+      variants: {
+        where: { isDefault: true },
+        select: { id: true } 
+      }
+    }
+  });
+}
+
 
   async deleteFormModel(id) {
     return prisma.formModel.delete({

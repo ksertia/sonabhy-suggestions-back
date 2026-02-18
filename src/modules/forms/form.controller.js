@@ -55,6 +55,14 @@ class FormController {
     }
   }
 
+  async getActiveFormModels(req, res, next) {
+    try {      const formModels = await formService.getActiveFormModels(req.user);
+      successResponse(res, { formModels }, 'Active form models retrieved successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteFormModel(req, res, next) {
     try {
       const result = await formService.deleteFormModel(req.params.id, req.user);

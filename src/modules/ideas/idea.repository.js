@@ -106,6 +106,23 @@ class IdeaRepository {
             },
           },
         },
+        qualifiedBy: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        approvedBy: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,         
+           },
+        },
+        
         metadata: true,
         responsibleUsers: {
           select: {

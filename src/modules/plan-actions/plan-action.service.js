@@ -44,7 +44,7 @@ class PlanActionService {
          type:'PLAN',
          title: 'Plan d\'action',
          entityId: planAction.id,
-         message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>`,
+         message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>.`,
        })
 
     return planAction;
@@ -186,7 +186,7 @@ class PlanActionService {
       title:'Plan complete',
       type:'PLAN',
       target: 'SYSTEM',
-      message: `le plan d'actions ${plan.title} est terminé`,
+      message: `Le plan d'actions ${plan.title} est terminé.`,
       entityId: plan.id,
     })
   }

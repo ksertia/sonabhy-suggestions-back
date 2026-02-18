@@ -30,7 +30,7 @@ class IdeaService {
 
     const idea = await ideaRepository.create(data);
 
-    const message = 'Une nouvelle idée a été proposée'
+    const message = 'Une nouvelle idée a été proposée.'
     const dataNotification = {
       // userId: data.userId || null,
       message,
@@ -60,6 +60,14 @@ class IdeaService {
     
     if (!idea) {
       throw new NotFoundError('Idea not found');
+    }
+
+    if (idea.isAnonymous) {
+      idea.formVariant = {
+        title: idea.title,
+        description: idea.description,
+        cause: idea.data.cause,
+      }
     }
 
     // Check permissions: owner, or manager/admin
@@ -248,7 +256,7 @@ class IdeaService {
       type:'PLAN',
       title: 'Plan d\'action',
       entityId: planAction.id,
-      message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>`,
+      message: `Vous avez été désigné comme responsable du plan d'action << ${planAction.title} >>.`,
     })
 
 
@@ -355,7 +363,7 @@ class IdeaService {
         notificationService.createNotification({
           userId,
           type: 'IDEA',
-          message: `Vous avez été assigné à une idée << ${result.title} >>`,
+          message: `Vous avez été assigné à une idée << ${result.title} >>.`,
           title: 'Assigné idée',
           entityId: ideaId,
         })

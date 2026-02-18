@@ -6,9 +6,9 @@ const createIdeaSchema = z.object({
   body: z.object({
     title: z.string()
       .min(3, "Title must be at least 3 characters")
-      .max(200, "Title must not exceed 200 characters"),
+      .max(200, "Title must not exceed 200 characters").optional(),
     description: z.string()
-      .min(10, "Description must be at least 10 characters"),
+      .min(10, "Description must be at least 10 characters").optional(),
     data: z.any().optional(),
     qualifiedAt: z.string().datetime().nullable().optional(),
     approvedAt: z.string().datetime().nullable().optional(),
@@ -21,13 +21,13 @@ const createIdeaSchema = z.object({
     categoryId: z.string().uuid().nullable().optional(),
     kindId: z.string().uuid().nullable().optional(),
     userId: z.string().uuid().nullable().optional(),
-    qualifiedBy: z.string().uuid().nullable().optional(),
-    approvedBy: z.string().uuid().nullable().optional(),
+    qualifiedById: z.string().uuid().nullable().optional(),
+    approvedById: z.string().uuid().nullable().optional(),
     firstName: z.string().nullable().optional(),
     lastName: z.string().nullable().optional(),
     email: z.string().nullable().optional(),
     metadataId: z.string().uuid().nullable().optional(),
-    formVariantId: z.string().uuid("Invalid form variant ID"),
+    formVariantId: z.string().uuid("Invalid form variant ID").nullable().optional(),
   })
 });
 
@@ -39,8 +39,8 @@ const updateIdeaSchema = z.object({
     id: z.string().uuid("Invalid idea ID"),
   }),
   body: z.object({
-    title: z.string().min(3).max(200).optional(),
-    description: z.string().min(10).optional(),
+    title: z.string().min(3).max(200).nullable().optional(),
+    description: z.string().min(10).nullable().optional(),
     data: z.any().optional(),
     qualifiedAt: z.string().datetime().nullable().optional(),
     approvedAt: z.string().datetime().nullable().optional(),
@@ -53,14 +53,14 @@ const updateIdeaSchema = z.object({
     categoryId: z.string().uuid().nullable().optional(),
     kindId: z.string().uuid().nullable().optional(),
     userId: z.string().uuid().nullable().optional(),
-    qualifiedBy: z.string().uuid().nullable().optional(),
+    qualifiedById: z.string().uuid().nullable().optional(),
     firstName: z.string().nullable().optional(),
     lastName: z.string().nullable().optional(),
     email: z.string().nullable().optional(),
     phone: z.string().nullable().optional(),
-    approvedBy: z.string().uuid().nullable().optional(),
+    approvedById: z.string().uuid().nullable().optional(),
     metadataId: z.string().uuid().nullable().optional(),
-    formVariantId: z.string().uuid().optional(),
+    formVariantId: z.string().uuid().nullable().optional(),
   })
 });
 

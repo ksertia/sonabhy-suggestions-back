@@ -123,8 +123,16 @@ class FormService {
       throw new NotFoundError('Form model not found');
     }
 
-    const updated = await formRepository.setActiveFormModel(id);
+    const updated = await formRepository.setActiveFormModel(id, formModel.isActive);
     return updated;
+  }
+
+  async getActiveFormModels(user) {
+    // if (user.role === 'USER') {
+    //   throw new ForbiddenError('Only admins and managers can get active form models');
+    // }
+
+    return await formRepository.getActiveFormModels();
   }
 
   async deleteFormModel(id, user) {
@@ -515,8 +523,12 @@ class FormService {
   async getDefaultFormStructure(modelId) {
     const structure = await formRepository.getDefaultVariant(modelId);
     
-    if (!structure) {
-      throw new NotFoundError('No default variant found for this model');
+    // if (!structure) {
+    //   throw new NotFoundError('No default variant found for this model');
+    // }
+
+     if (!structure) {
+      return 'No default variant found for this model';
     }
 
     return structure;

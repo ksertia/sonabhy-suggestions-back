@@ -21,6 +21,10 @@ const options = {
         url: `https://idea-box-backend.onrender.com${process.env.API_PREFIX || '/api/v1'}`,
         description: 'Development server',
       },
+      {
+        url: `https://api.bai.sonabhy.kerub.fr${process.env.API_PREFIX || '/api/v1'}`,
+        description: 'Production server',
+      },
     ],
     components: {
       securitySchemes: {
