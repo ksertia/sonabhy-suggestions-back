@@ -35,7 +35,7 @@ class TacheService {
       title: 'Tâche assignée',
       type: 'TACHE',
       entityId: tache.id,
-      message: `Une tache a été créé et vous est assigné du nom de ${tache.title}.`
+      message: `Une tache a été créé et vous est assigné du nom de << ${tache.title} >>.`
     })
 
     await this.updatePlanActionProgress(data.planActionId);
@@ -251,7 +251,7 @@ class TacheService {
       title: 'Tâche terminée',
       type: 'TACHE',
       entityId: tache.id,
-      message: `La tache ${tache.title} est terminée.`,
+      message: `La tache << ${tache.title} >> est terminée.`,
       target: 'SYSTEM'
     })
 

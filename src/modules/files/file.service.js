@@ -15,7 +15,7 @@ class FileService {
       mimeType: file.mimetype,
       size: file.size,
       path: file.path,
-      uploadedById: userId,
+      // uploadedById: userId,
     };
 
     const savedFile = await fileRepository.create(fileData);

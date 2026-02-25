@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ideaController = require('./idea.controller');
+const fileController = require('../files/file.controller');
 const { authenticate } = require('../../middleware/auth.middleware');
 const { authorize } = require('../../middleware/rbac.middleware');
 const { validate } = require('../../middleware/validation.middleware');
@@ -147,13 +148,12 @@ const {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
  *               - title
  *               - description
- *               - formVariantId
  *             properties:
  *               title:
  *                 type: string
@@ -162,54 +162,24 @@ const {
  *               description:
  *                 type: string
  *                 minLength: 10
- *               categoryId:
- *                 type: string
- *                 format: uuid
- *               kindId:
- *                 type: string
- *                 format: uuid
- *               forVote:
- *                 type: boolean
- *               visibility:
- *                 type: string
- *                 enum: [TEAM, PRIVATE, PUBLIC]
- *               impact:
- *                 type: string
- *                 enum: [MINOR, MODERATE, MAJOR, TRANSFORMATIONAL]
- *               priority:
- *                 type: string
- *                 enum: [LOW, MEDIUM, HIGH, CRITICAL]
  *               data:
- *                 type: json
+ *                 type: string
+ *                 description: JSON stringified object
  *               isAnonymous:
  *                 type: boolean
  *                 default: false
- *               formVariantId:
+ *               file:
  *                 type: string
- *                 format: uuid
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Idea created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     idea:
- *                       $ref: '#/components/schemas/Idea'
  *       400:
  *         description: Validation error
  *       401:
  *         description: Unauthorized
  */
-router.post('/', validate(createIdeaSchema), ideaController.createIdea);
+router.post('/', upload.single('file'), validate(createIdeaSchema),fileController.uploadFileIdea, ideaController.createIdea);
 
 /**
  * @swagger

@@ -311,7 +311,7 @@ class IdeaRepository {
       where.priority = filters.priority;
     }
 
-    if (filters.forVote) {
+    if (filters.forVote !== undefined && filters.forVote !== null) {
       where.forVote = filters.forVote;
     }
 

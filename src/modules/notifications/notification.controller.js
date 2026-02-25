@@ -5,7 +5,7 @@ class NotificationController {
   async getUserNotifications(req, res, next) {
     try {
       const filters = {
-        isRead: req.query.read,
+        read: req.query.read,
         type: req.query.type,
         startDate: req.query.startDate,
         endDate: req.query.endDate,

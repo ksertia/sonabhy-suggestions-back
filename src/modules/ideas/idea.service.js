@@ -6,6 +6,8 @@ const fs = require('fs').promises;
 
 class IdeaService {
   async createIdea(data) {
+
+    
     // If not anonymous, set userId
     // if (data.isAnonymous) {
     //   data.userId = null;
@@ -13,6 +15,12 @@ class IdeaService {
     //   if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
     // }
   console.log(data)
+    if (data.isAnonymous === 'true') {
+      data.isAnonymous = true;
+    } else {
+      data.isAnonymous = false;
+    }
+
     if (data.isAnonymous) {
       data.userId = null;
       data.firstName=null;
