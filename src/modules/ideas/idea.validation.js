@@ -4,11 +4,8 @@ const { z } = require('zod');
 // Create Idea Schema
 const createIdeaSchema = z.object({
   body: z.object({
-    title: z.string()
-      .min(3, "Title must be at least 3 characters")
-      .max(200, "Title must not exceed 200 characters").optional(),
-    description: z.string()
-      .min(10, "Description must be at least 10 characters").optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
     data: z.any().optional(),
     qualifiedAt: z.string().datetime().nullable().optional(),
     approvedAt: z.string().datetime().nullable().optional(),

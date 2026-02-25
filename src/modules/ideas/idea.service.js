@@ -7,7 +7,15 @@ const fs = require('fs').promises;
 class IdeaService {
   async createIdea(data) {
 
+    let parsedData = data.data;
+
+    // Si c’est une string → on la convertit
+    if (typeof parsedData === "string") {
+      parsedData = JSON.parse(parsedData);
+    }
     
+    data.data = parsedData;
+
     // If not anonymous, set userId
     // if (data.isAnonymous) {
     //   data.userId = null;
