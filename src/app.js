@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
@@ -34,6 +35,7 @@ app.use(
 // Body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -76,6 +78,7 @@ app.use(`${apiPrefix}/taches`, tacheRoutes);
 app.use(`${apiPrefix}/dashboard`, dashboardRoutes);
 app.use(`${apiPrefix}/notifications`, notificationRoutes);
 
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // Serve uploaded files statically
 // 404 handler
 app.use(notFoundHandler);
 
