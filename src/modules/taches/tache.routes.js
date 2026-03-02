@@ -258,6 +258,56 @@ router.get('/:id', authenticate, tacheController.getTacheById);
 
 /**
  * @swagger
+ * /taches/user/{userId}:
+ *   get:
+ *     summary: Get all tasks for a specific user
+ *     description: Returns the list of all tasks associated with the given user ID.
+ *     tags: [Taches]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The UUID of the user
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 3e2f4370-35b0-4c70-b814-82bd34dd1cd5
+ *       - in: query
+ *         name: status
+ *         required: false
+ *         description: Filter tasks by status (e.g., PENDING, IN_PROGRESS, DONE)
+ *         schema:
+ *           type: string
+ *           example: PENDING
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         description: Page number for pagination (default is 1)
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         description: Number of tasks per page for pagination (default is 25)
+ *         schema:
+ *           type: integer
+ *           example: 25
+ *     responses:
+ *       200:
+ *         description: Tasks retrieved successfullyt
+ *       400:
+ *         description: Invalid user ID supplied
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+router.get('/user/:userId', authenticate, tacheController.getUserTaches);
+/**
+ * @swagger
  * /taches/plan-action/{planActionId}:
  *   get:
  *     summary: Get all taches under a plan action

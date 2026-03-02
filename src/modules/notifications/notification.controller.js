@@ -10,6 +10,7 @@ class NotificationController {
         startDate: req.query.startDate,
         endDate: req.query.endDate,
         role: req.user.role,
+        userId: req.user.id,
       };
 
       const pagination = {

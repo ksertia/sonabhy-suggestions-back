@@ -14,6 +14,22 @@ class TacheController {
     }
   }
 
+  async getUserTaches(req, res, next) {
+    try {
+      const filters = {
+        assignedTo: req.params.userId,
+        limit: parseInt(req.query.limit) || 25,
+        page: parseInt(req.query.page) || 1,
+        status: req.query.status,
+      };
+      const taches = await tacheService.getUserTaches(req.params.userId, req.user, filters);
+
+      successResponse(res, taches, 'User taches retrieved successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // ---------------------------------------------------
   // CREATE MULTIPLE TACHES
   // ---------------------------------------------------

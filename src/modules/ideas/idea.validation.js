@@ -1,5 +1,6 @@
 const { Visibility } = require('@prisma/client');
 const { z } = require('zod');
+const { pl } = require('zod/v4/locales');
 
 // Create Idea Schema
 const createIdeaSchema = z.object({
@@ -9,8 +10,8 @@ const createIdeaSchema = z.object({
     data: z.any().optional(),
     qualifiedAt: z.string().datetime().nullable().optional(),
     approvedAt: z.string().datetime().nullable().optional(),
-    isAnonymous: z.string().optional(),
-    // isAnonymous: z.boolean().default(false),
+    // isAnonymous: z.string().optional(),
+    isAnonymous: z.boolean().default(false),
     forVote: z.boolean().default(false),
     status: z.enum(['SUBMITTED', 'APPROVED', 'REJECTED', 'VALIDATED', 'ACTION_PLAN', 'QUALIFIED']).default('SUBMITTED'),
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
@@ -107,6 +108,7 @@ const listIdeasSchema = z.object({
     priority: z.string().optional(),
     startDate: z.string().datetime().optional(),
     endDate: z.string().datetime().optional(),
+    planAction: z.string().optional(),
   }),
 });
 

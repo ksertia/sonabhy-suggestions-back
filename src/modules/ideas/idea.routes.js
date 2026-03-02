@@ -179,7 +179,7 @@ const {
  *       401:
  *         description: Unauthorized
  */
-router.post('/', upload.single('file'), validate(createIdeaSchema),fileController.uploadFileIdea, ideaController.createIdea);
+router.post('/', validate(createIdeaSchema), ideaController.createIdea);
 
 /**
  * @swagger
@@ -233,6 +233,10 @@ router.post('/', upload.single('file'), validate(createIdeaSchema),fileControlle
  *           type: string
  *       - in: query
  *         name: forVote
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: planAction
  *         schema:
  *           type: boolean
  *       - in: query

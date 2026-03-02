@@ -7,14 +7,14 @@ const fs = require('fs').promises;
 class IdeaService {
   async createIdea(data) {
 
-    let parsedData = data.data;
+    // let parsedData = data.data;
 
-    // Si c’est une string → on la convertit
-    if (typeof parsedData === "string") {
-      parsedData = JSON.parse(parsedData);
-    }
+    // // Si c’est une string → on la convertit
+    // if (typeof parsedData === "string" && parsedData.trim() !== "" && parsedData !== "json") {
+    //   parsedData = JSON.parse(parsedData);
+    //   data.data = parsedData;
+    // }
     
-    data.data = parsedData;
 
     // If not anonymous, set userId
     // if (data.isAnonymous) {
@@ -22,13 +22,16 @@ class IdeaService {
     // } else {
     //   if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
     // }
-  console.log(data)
-    if (data.isAnonymous === 'true') {
-      data.isAnonymous = true;
-    } else {
-      data.isAnonymous = false;
+  // console.log(data)
+  //   if (data.isAnonymous === 'true' || data.isAnonymous === true) {
+  //     data.isAnonymous = true;
+  //   } else {
+  //     data.isAnonymous = false;
+  //   }
+    if (data.titre) {
+      data.title = data.titre;
+      delete data.titre;
     }
-
     if (data.isAnonymous) {
       data.userId = null;
       data.firstName=null;
@@ -66,7 +69,6 @@ class IdeaService {
     // if (user.role === 'USER' && !filters.userId) {
     //   filters.userId = user.id;
     // }
-
     const result = await ideaRepository.findAll(filters, pagination);
     return result;
   }

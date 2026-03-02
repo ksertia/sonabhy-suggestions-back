@@ -2,6 +2,7 @@ const { z } = require("zod");
 
 // Allowed enums for safety
 const NotificationTargetEnum = z.enum(["USER", "ROLE", "SYSTEM"]);
+const NotificationTypeEnum = z.enum(["USER", "IDEA", "PLAN", "TACHE"]);
 
 
 const createNotificationSchema = z.object({

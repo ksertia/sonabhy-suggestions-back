@@ -348,6 +348,12 @@ class IdeaRepository {
       }
     }
 
+    if (filters.planAction === 'true' || filters.planAction === true) {
+      where.planActions = {
+        some: {}
+      };
+    }
+
     return where;
   }
 

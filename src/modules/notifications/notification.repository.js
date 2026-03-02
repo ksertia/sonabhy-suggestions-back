@@ -26,12 +26,13 @@ class NotificationRepository {
     //   ...this.buildWhereClause(filters),
     // };
 
-    const where = {
-      OR: [
-        { userId },
-        this.buildWhereClause(filters),
-      ],
-    };
+    const where = this.buildWhereClause(filters);
+    // {
+      // OR: [
+        // { userId },
+        // this.buildWhereClause(filters),
+      // ],
+    // };
 
     console.log(where)
     const [notifications, total] = await Promise.all([
@@ -114,13 +115,22 @@ class NotificationRepository {
 
   buildWhereClause(filters) {
     const where = {};
+    console.log('Building where clause with filters:', filters);
 
     if (filters.read !== undefined) {
-      where.read = filters.read === 'true' || filters.read === true;
+      console.log('Filtering by read:', filters.read);
+      where.read =  filters.read;
     }
 
     if (filters.role !== 'USER') {
-      where.target = 'SYSTEM';
+      // where.target = 'SYSTEM';
+      where.OR = [
+        { userId: filters.userId },
+        { target: 'SYSTEM' }
+      ];
+    }
+    if (filters.role === 'USER') {
+      where.userId = filters.userId;  
     }
 
     if (filters.type) {

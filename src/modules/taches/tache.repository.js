@@ -322,6 +322,9 @@ class TacheRepository {
     if (filters.planActionId) {
       where.planActionId = filters.planActionId;
     }
+    if (filters.assignedTo) {
+      where.assignedTo = filters.assignedTo;
+    }
     if (filters.assigneeId) {
       // Many-to-Many filter
       where.assignee = {

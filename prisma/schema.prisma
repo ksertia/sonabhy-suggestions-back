@@ -270,7 +270,7 @@ model Notification {
   userId      String?    
   entityId    String?
   target      NotificationTarget @default(USER)
-  read      Boolean    @default(false)
+  read        Boolean    @default(false)
   createdAt   DateTime   @default(now())
   user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 

@@ -1,14 +1,14 @@
 const ideaService = require('./idea.service');
 const { successResponse } = require('../../utils/response');
-const { category } = require('../../config/database');
+const { category, planAction } = require('../../config/database');
 const { Priority } = require('@prisma/client');
 
 class IdeaController {
   async createIdea(req, res, next) {
     try {
-      if (req.file) {
-        req.body.metadataId = req.file.id; // Attach the uploaded file info to the request body for later use
-      }
+      // if (req.file && req.file.id) {
+      //   req.body.metadataId = req.file.id; // Attach the uploaded file info to the request body for later use
+      // }
       const idea = await ideaService.createIdea(req.body);
       successResponse(res, { idea }, 'Idea created successfully', 201);
     } catch (error) {
@@ -29,6 +29,7 @@ class IdeaController {
         priority: req.query.priority,
         startDate: req.query.startDate,
         endDate: req.query.endDate,
+        planAction: req.query.planAction,
       };
 
       const pagination = {

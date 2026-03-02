@@ -124,6 +124,17 @@ class TacheService {
     return await tacheRepository.findAll(filters, pagination);
   }
 
+  async getUserTaches(userId, user, filter = {}) {
+    // Regular users can only see their own tasks
+    if (user.role === 'USER' && user.id !== userId) {
+      throw new ForbiddenError('You do not have permission to view other users\' tasks');
+    }
+
+    const filters = { status: filter.status, assignedTo: userId };
+    const pagination = { page: filter.page, limit: filter.limit }; // Adjust as needed
+    const result = await tacheRepository.findAll(filters, pagination);
+    return result;
+  }
   // ---------------------------------------------------
   // GET BY ID
   // ---------------------------------------------------
