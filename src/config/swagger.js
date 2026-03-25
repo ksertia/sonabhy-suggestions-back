@@ -25,6 +25,10 @@ const options = {
         url: `https://api.bai.sonabhy.kerub.fr${process.env.API_PREFIX || '/api/v1'}`,
         description: 'Production server',
       },
+      {
+        url: `http://102.180.50.92${process.env.API_PREFIX || '/api/v1'}`,
+        description: 'Production server',
+      },
     ],
     components: {
       securitySchemes: {

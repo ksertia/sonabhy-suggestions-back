@@ -2,11 +2,13 @@ const fs = require('fs').promises;
 const path = require('path');
 const fileRepository = require('./file.repository');
 const { NotFoundError, ForbiddenError, BadRequestError } = require('../../utils/errors');
+const { fa } = require('zod/v4/locales');
 
 class FileService {
   async uploadFile(file, userId, ideaId = null) {
     if (!file) {
-      throw new BadRequestError('No file provided');
+      // throw new BadRequestError('No file provided');
+      return false;
     }
 
     const fileData = {
@@ -24,7 +26,8 @@ class FileService {
 
   async uploadMultipleFiles(files, userId, ideaId = null) {
     if (!files || files.length === 0) {
-      throw new BadRequestError('No files provided');
+      // throw new BadRequestError('No files provided');
+      return next();
     }
 
     const uploadedFiles = [];

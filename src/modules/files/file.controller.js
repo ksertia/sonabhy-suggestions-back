@@ -14,16 +14,23 @@ class FileController {
   }
 
   async uploadFileIdea(req, res, next) {
-    try {
-      const file = await fileService.uploadFile(req.file);
-      req.file = file; // Attach the uploaded file info to the request object for later use
-      next(); // Proceed to the next middleware (which will handle associating the file with the idea)
-      // successResponse(res, { file }, 'File uploaded successfully', 201);
+  try {
+    console.log("file info", req.body);
 
-    } catch (error) {
-      next(error);
+    const file = await fileService.uploadFile(req.file);
+
+    if (!file) {
+      delete req.file;
+      return next(); // ✅ return important
     }
+
+    req.file = file;
+
+    return next(); // ✅ return important
+  } catch (error) {
+    return next(error);
   }
+}
 
   async uploadMultipleFiles(req, res, next) {
     try {

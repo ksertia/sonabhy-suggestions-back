@@ -6,9 +6,9 @@ const { Priority } = require('@prisma/client');
 class IdeaController {
   async createIdea(req, res, next) {
     try {
-      // if (req.file && req.file.id) {
-      //   req.body.metadataId = req.file.id; // Attach the uploaded file info to the request body for later use
-      // }
+      if (req.file && req.file.id) {
+        req.body.metadataId = req.file.id; // Attach the uploaded file info to the request body for later use
+      }
       const idea = await ideaService.createIdea(req.body);
       successResponse(res, { idea }, 'Idea created successfully', 201);
     } catch (error) {

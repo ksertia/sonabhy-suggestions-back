@@ -179,7 +179,7 @@ const {
  *       401:
  *         description: Unauthorized
  */
-router.post('/', validate(createIdeaSchema), ideaController.createIdea);
+router.post('/', upload.single('file'), fileController.uploadFileIdea, validate(createIdeaSchema), ideaController.createIdea);
 
 /**
  * @swagger

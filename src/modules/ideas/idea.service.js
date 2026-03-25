@@ -7,42 +7,36 @@ const fs = require('fs').promises;
 class IdeaService {
   async createIdea(data) {
 
-    // let parsedData = data.data;
+    let parsedData = data.data;
 
     // // Si c’est une string → on la convertit
-    // if (typeof parsedData === "string" && parsedData.trim() !== "" && parsedData !== "json") {
-    //   parsedData = JSON.parse(parsedData);
-    //   data.data = parsedData;
-    // }
+    if (typeof parsedData === "string" && parsedData.trim() !== "" && parsedData !== "json") {
+      parsedData = JSON.parse(parsedData);
+      data.data = parsedData;
+      delete data.file;
+    }
     
 
-    // If not anonymous, set userId
-    // if (data.isAnonymous) {
-    //   data.userId = null;
-    // } else {
-    //   if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
-    // }
-  // console.log(data)
-  //   if (data.isAnonymous === 'true' || data.isAnonymous === true) {
-  //     data.isAnonymous = true;
-  //   } else {
-  //     data.isAnonymous = false;
-  //   }
-    if (data.titre) {
-      data.title = data.titre;
-      delete data.titre;
+    console.log(data)
+    if (data.isAnonymous === 'true' || data.isAnonymous === true) {
+      data.isAnonymous = true;
+    } else {
+      data.isAnonymous = false;
     }
+
+    // If not anonymous, set userId
     if (data.isAnonymous) {
       data.userId = null;
       data.firstName=null;
       data.lastName=null;
       data.email=null;
     } else {
-      if(!data.firstName && !data.lastName && !data.email) {
-        if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
-      }else {
-        data.userId = null;
-      }
+      if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+    }
+
+    if (data.titre) {
+      data.title = data.titre;
+      delete data.titre;
     }
 
     
