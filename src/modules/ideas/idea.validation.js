@@ -39,7 +39,7 @@ const updateIdeaSchema = z.object({
   }),
   body: z.object({
     title: z.string().min(3).max(200).nullable().optional(),
-    description: z.string().min(10).nullable().optional(),
+    description: z.string().nullable().optional(),
     data: z.any().optional(),
     qualifiedAt: z.string().datetime().nullable().optional(),
     approvedAt: z.string().datetime().nullable().optional(),
