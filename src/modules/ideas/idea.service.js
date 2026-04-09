@@ -31,7 +31,10 @@ class IdeaService {
       data.lastName=null;
       data.email=null;
     } else {
-      if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+    console.log(data)
+      if (!data.data.firstName && !data.data.lastName) {
+        if(data.userId == null || !data.userId) throw new NotFoundError('You want userId to create idea');
+      }
     }
 
     if (data.titre) {
@@ -74,7 +77,7 @@ class IdeaService {
       throw new NotFoundError('Idea not found');
     }
 
-    if (idea.isAnonymous) {
+    if (idea.isAnonymous && !idea.formVariantId) {
       idea.formVariant = {
         title: idea.title,
         description: idea.description,
